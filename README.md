@@ -1,4 +1,4 @@
-# Hello, World
+# Hello, World!
 
 👋 Hi there! I'm Taylor Dolezal, the Head of Ecosystem at the Cloud Native Computing Foundation. Based in the sunny city of Los Angeles, California, I lead initiatives that cultivate growth and collaboration within the cloud native community.
 
