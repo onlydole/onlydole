@@ -9,7 +9,7 @@ on:
 jobs:
   superlinter:
     name: Super-Linter
-    runs-on: rpi5
+    runs-on: self-hosted
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
