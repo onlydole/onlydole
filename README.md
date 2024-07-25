@@ -3,10 +3,10 @@
 👋 Hi there! I'm Taylor Dolezal, the Head of Ecosystem at the Cloud Native Computing Foundation. Based in the sunny city of Los Angeles, California, I lead initiatives that cultivate growth and collaboration within the Cloud Native community.
 
 <a href="https://github.com/anuraghazra/github-readme-stats">
-  <img height=200 align="center" src="https://github-readme-stats.vercel.app/api?username=onlydole&show_icons=true&theme=transparent" />
+  <img alt="GitHub Stats" height=200 align="center" src="https://github-readme-stats.vercel.app/api?username=onlydole&show_icons=true&theme=transparent" />
 </a>
 <a href="https://github.com/anuraghazra/convoychat">
-  <img height=200 align="center" src="https://github-readme-stats.vercel.app/api/top-langs?username=onlydole&layout=compact&langs_count=8&card_width=320&theme=transparent" />
+  <img alt="Top Languages" height=200 align="center" src="https://github-readme-stats.vercel.app/api/top-langs?username=onlydole&layout=compact&langs_count=8&card_width=320&theme=transparent" />
 </a>
 
 ## Professional Journey
