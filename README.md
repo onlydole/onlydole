@@ -23,4 +23,4 @@
 
 ## Connect with Me
 
-🔗 You can find me on [LinkedIn](https://www.linkedin.com/in/onlydole), [Twitter](https://twitter.com/onlydole), and here on GitHub! Let's work together and make the [Cloud Native Landscape](https://landscape.cncf.io) even more vibrant and dynamic.
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/onlydole) [![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/onlydole) [![Medium](https://img.shields.io/badge/Medium-Read-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@onlydole)
