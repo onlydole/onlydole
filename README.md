@@ -1,6 +1,6 @@
-# Hello, World
+# Hello, I'm Taylor 👋
 
-👋 Hi there! I'm Taylor Dolezal, the Head of Ecosystem at the Cloud Native Computing Foundation. Based in the sunny city of Los Angeles, California, I lead initiatives that cultivate growth and collaboration within the Cloud Native community.
+I'm the Head of Product Engineering & Chief of Staff at [Merly AI](https://merly.ai), where I'm building the future of AI infrastructure. Based in sunny Los Angeles, I've spent my career making complex systems simple and helping teams ship amazing things.
 
 <a href="https://github.com/anuraghazra/github-readme-stats">
   <img alt="GitHub Stats" height=200 align="center" src="https://github-readme-stats.vercel.app/api?username=onlydole&show_icons=true&theme=transparent" />
@@ -9,18 +9,32 @@
   <img alt="Top Languages" height=200 align="center" src="https://github-readme-stats.vercel.app/api/top-langs?username=onlydole&layout=compact&langs_count=8&card_width=320&theme=transparent" />
 </a>
 
-## Professional Journey
+## What I Do
 
-🌐 With a keen interest in all things Cloud Native, I've dedicated my career to nurturing ecosystems that leverage the power of cutting-edge technologies. Working for the Cloud Native Computing Foundation has allowed me to engage with passionate developers, engineers, and visionaries around the globe. Together, we are driving innovation and building resilient, scalable systems.
+I wear two hats at Merly. I lead product engineering while serving as Chief of Staff. I focus on infrastructure tools that drive innovation. Whether it's managing Kubernetes at scale, building AI systems, or creating developer experiences that inspire joy, I am dedicated to making the impossible possible.
 
-## Personal Interests
+### My Journey So Far
 
-📚 Outside of my professional pursuits, I have a passion for reading and exploring the fascinating world of psychology. Whether it's a gripping novel or an insightful psychological study, I'm always eager to learn something new.
+- **Currently**: Head of Product Engineering & Chief of Staff at Merly AI - Building cutting-edge AI infrastructure
+- **Previously**: Head of Ecosystem at CNCF - Worked with 160+ companies including Apple, Intuit, and Mercedes-Benz
+- **Before that**: Lead SRE at Disney Studios - Kept the magic running behind the scenes
 
-## Cloud Native Enthusiast
+## What Drives Me
 
-☁️ My love for Cloud Native topics transcends my job. I actively contribute to various projects, engage in meaningful discussions, and participate in meetups and conferences. If you're interested in Cloud Native technologies or looking to collaborate, feel free to reach out!
+🌊 **Cloud Native**: Still deeply passionate about Kubernetes and the cloud native ecosystem. I contribute to projects, speak at conferences, and love helping teams navigate their cloud journeys.
 
-## Connect with Me
+🤖 **AI Infrastructure**: Exploring the intersection of AI and infrastructure - how we build, deploy, and scale the systems that power tomorrow's intelligence.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/onlydole) [![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/onlydole) [![Medium](https://img.shields.io/badge/Medium-Read-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@onlydole)
+📚 **Learning**: Always have a book in hand. Currently fascinated by psychology, systems thinking, and the occasional sci-fi novel that makes me question everything.
+
+## Let's Connect
+
+I love connecting with fellow builders, dreamers, and infrastructure nerds. Whether you want to chat about Kubernetes, AI, or the best hikes in LA.
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/onlydole)
+[![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/onlydole)
+[![Medium](https://img.shields.io/badge/Medium-Read-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@onlydole)
+
+---
+
+*"Infrastructure is the stage where innovation performs"*
