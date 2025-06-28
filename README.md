@@ -11,7 +11,7 @@ I'm the Head of Product Engineering & Chief of Staff at [Merly AI](https://merly
 
 ## What I Do
 
-I wear two hats at Merly. I lead product engineering while serving as Chief of Staff. I focus on infrastructure tools that drive innovation. Whether it's managing Kubernetes at scale, building AI systems, or creating developer experiences that inspire joy, I am dedicated to making the impossible possible.
+I wear two hats at Merly: I lead product engineering and serve as Chief of Staff. My focus is on developing infrastructure tools that foster innovation. Whether managing Kubernetes at scale, building AI systems, or enhancing developer experiences, I am dedicated to pushing boundaries and turning ambitious ideas into reality.
 
 ### My Journey So Far
 
@@ -32,8 +32,7 @@ I wear two hats at Merly. I lead product engineering while serving as Chief of S
 I love connecting with fellow builders, dreamers, and infrastructure nerds. Whether you want to chat about Kubernetes, AI, or the best hikes in LA.
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/onlydole)
-[![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/onlydole)
-[![Medium](https://img.shields.io/badge/Medium-Read-12100E?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@onlydole)
+[![Bluesky](https://img.shields.io/badge/Bluesky-Follow-0085FF?style=for-the-badge&logo=bluesky&logoColor=white)](https://bsky.app/profile/onlydole.dev)
 [![Substack](https://img.shields.io/badge/Substack-Subscribe-FF6719?style=for-the-badge&logo=substack&logoColor=white)](https://onlydole.substack.com)
 
 ---
