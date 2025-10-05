@@ -1,6 +1,6 @@
 # Hello, I'm Taylor 👋
 
-I'm the Head of Product Engineering & Chief of Staff at [Merly AI](https://merly.ai), where I'm building the future of AI infrastructure. Based in sunny Los Angeles, I've spent my career making complex systems simple and helping teams ship amazing things.
+Based in sunny Los Angeles, I've spent my career making complex systems simple and helping teams ship amazing things.
 
 <a href="https://github.com/anuraghazra/github-readme-stats">
   <img alt="GitHub Stats" height=200 align="center" src="https://github-readme-stats.vercel.app/api?username=onlydole&show_icons=true&theme=transparent" />
