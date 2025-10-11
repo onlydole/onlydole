@@ -9,17 +9,26 @@ Based in sunny Los Angeles, I've spent my career making complex systems simple a
   <img alt="Top Languages" height=200 align="center" src="https://github-readme-stats.vercel.app/api/top-langs?username=onlydole&layout=compact&langs_count=8&card_width=320&theme=transparent" />
 </a>
 
-## What Drives Me
+## Core Expertise
+
+- 🧭 **Open Source Leadership**: Championing sustainable contributor programs and governance at Dosu while applying lessons from stewarding communities across CNCF and Merly.
+- ☁️ **Cloud Native Operations**: Designing resilient Kubernetes platforms, enabling platform engineering teams, and sharing pragmatic guidance from years in production environments.
+- 🤝 **Community Building**: Creating welcoming experiences through summits, working groups, and contributor education that help maintainers and newcomers thrive.
+- 🤖 **AI & Developer Infrastructure Strategy**: Connecting product teams, researchers, and practitioners to ship reliable tooling that accelerates intelligent applications.
+
+## What I'm Focused On
 
 🌊 **Cloud Native**: Still deeply passionate about Kubernetes and the cloud native ecosystem. I contribute to projects, speak at conferences, and love helping teams navigate their cloud journeys.
 
-🤖 **AI Infrastructure**: Exploring the intersection of AI and infrastructure - how we build, deploy, and scale the systems that power tomorrow's intelligence.
+🤖 **AI Infrastructure**: Exploring the intersection of AI and infrastructure—how we build, deploy, and scale the systems that power tomorrow's intelligence.
+
+👐 **Open Source Stewardship**: Growing inclusive contributor experiences, aligning community roadmaps, and celebrating the humans behind the code.
 
 📚 **Learning**: Always have a book in hand. Currently fascinated by psychology, systems thinking, and the occasional sci-fi novel that makes me question everything.
 
 ## Let's Connect
 
-I love connecting with fellow builders, dreamers, and infrastructure nerds. Whether you want to chat about Kubernetes, AI, or the best hikes in LA.
+I love connecting with fellow builders, dreamers, and infrastructure nerds. Whether you want to chat about Kubernetes, AI, open source, or the best hikes in LA.
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/onlydole)
 [![Bluesky](https://img.shields.io/badge/Bluesky-Follow-0085FF?style=for-the-badge&logo=bluesky&logoColor=white)](https://bsky.app/profile/onlydole.dev)
