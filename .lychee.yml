@@ -2,4 +2,5 @@ exclude:
   - '.*substack\.com.*'
 
 accept:
-  - 403
+  - "200..=299"
+  - "403"
