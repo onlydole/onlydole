@@ -1,2 +1,5 @@
 exclude:
   - '.*substack\.com.*'
+
+accept:
+  - 403
