@@ -1,0 +1,5 @@
+# Exclude Substack URLs
+exclude = ['.*substack\.com.*']
+
+# Accept HTTP success codes AND 403
+accept = ["200..=299", "403"]
