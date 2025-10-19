@@ -1,2 +1,2 @@
 exclude:
-  - "https://onlydole.substack.com"
+  - '.*substack\.com.*'
