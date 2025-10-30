@@ -7,9 +7,10 @@ This document outlines the performance optimizations made to the repository's Gi
 ### 1. Concurrency Controls
 
 **Link Checker Workflow** (`linkchecker.yml`):
-- **Added**: Concurrency group to prevent multiple runs of the link checker
-- **Benefit**: Prevents redundant runs from stacking up if previous runs are still in progress
+- **Added**: Concurrency group to prevent multiple runs of the link checker on the same ref
+- **Benefit**: Prevents redundant runs from stacking up on the same branch
 - **Impact**: Reduces wasted compute resources and prevents duplicate issue creation
+- **Note**: `cancel-in-progress` is set to `false` to allow the issue creation process to complete without interruption
 
 **Superlinter Workflow** (`superlinter.yml`):
 - **Added**: PR-specific concurrency control with `cancel-in-progress: true`

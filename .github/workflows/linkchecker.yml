@@ -10,8 +10,8 @@ permissions:
   issues: write
 
 concurrency:
-  group: link-checker
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   linkChecker:
