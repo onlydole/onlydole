@@ -5,6 +5,11 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - '**.md'
+      - '**.yml'
+      - '**.yaml'
+      - '.github/workflows/**'
 
 permissions: read-all
 
