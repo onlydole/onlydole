@@ -11,20 +11,20 @@ Based in sunny Los Angeles, I've spent my career making complex systems simple a
 
 ## Core Expertise
 
-- 🧭 **Open Source Leadership**: Championing sustainable contributor programs and governance at Dosu while applying lessons from stewarding communities across CNCF and Merly.
-- ☁️ **Cloud Native Operations**: Designing resilient Kubernetes platforms, enabling platform engineering teams, and sharing pragmatic guidance from years in production environments.
-- 🤝 **Community Building**: Creating welcoming experiences through summits, working groups, and contributor education that help maintainers and newcomers thrive.
-- 🤖 **AI & Developer Infrastructure Strategy**: Connecting product teams, researchers, and practitioners to ship reliable tooling that accelerates intelligent applications.
+- 🧭 **Open Source Leadership**: As Head of OSS at Dosu, championing sustainable contributor programs and governance while applying lessons from stewarding communities across CNCF and Merly.
+- ☁️ **Cloud Native Operations**: Designing resilient Kubernetes platforms, enabling platform engineering teams, and sharing pragmatic guidance from years running production environments at scale.
+- 🤝 **Community Building**: Creating welcoming experiences through summits, working groups, and contributor education that help maintainers and newcomers thrive—from KubeCon keynotes to intimate working sessions.
+- 🤖 **AI & Developer Infrastructure Strategy**: Connecting product teams, researchers, and practitioners to ship reliable tooling that accelerates intelligent applications in the wild.
 
 ## What I'm Focused On
 
-🌊 **Cloud Native**: Still deeply passionate about Kubernetes and the cloud native ecosystem. I contribute to projects, speak at conferences, and love helping teams navigate their cloud journeys.
+🌊 **Cloud Native**: Still deeply passionate about Kubernetes and the cloud native ecosystem. From KubeCon stages to community working groups, I love helping teams navigate their cloud journeys and build resilient systems.
 
-🤖 **AI Infrastructure**: Exploring the intersection of AI and infrastructure—how we build, deploy, and scale the systems that power tomorrow's intelligence.
+🤖 **AI Infrastructure**: Exploring the intersection of AI and infrastructure—how we build, deploy, and scale the systems that power tomorrow's intelligence. The pace is whirlwind, and I'm here for it.
 
-👐 **Open Source Stewardship**: Growing inclusive contributor experiences, aligning community roadmaps, and celebrating the humans behind the code.
+👐 **Open Source Stewardship**: Growing inclusive contributor experiences, aligning community roadmaps, and celebrating the humans behind the code. Because great software is built by great communities.
 
-📚 **Learning**: Always have a book in hand. Currently fascinated by psychology, systems thinking, and the occasional sci-fi novel that makes me question everything.
+📚 **Learning**: Always have a book in hand. Currently fascinated by psychology, systems thinking, and the occasional sci-fi novel that makes me question everything. Always down to swap book recommendations.
 
 ## Let's Connect
 
