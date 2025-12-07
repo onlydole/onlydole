@@ -6,15 +6,12 @@ I've spent my career refactoring complex systems into intuitive platforms and he
 
 ---
 
-## Quick Stats
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=3B82F6&center=true&vCenter=true&width=435&lines=Cloud+Native+Enthusiast;Open+Source+Leader;Community+Builder;KubeCon+Keynote+Speaker" alt="Typing SVG" />
+</p>
 
 <p align="center">
-  <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img alt="GitHub Stats" height=180 src="https://github-readme-stats.vercel.app/api?username=onlydole&show_icons=true&theme=transparent&hide_border=true" />
-  </a>
-  <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img alt="Top Languages" height=180 src="https://github-readme-stats.vercel.app/api/top-langs?username=onlydole&layout=compact&langs_count=8&card_width=320&theme=transparent&hide_border=true" />
-  </a>
+  <img src="https://skillicons.dev/icons?i=kubernetes,terraform,go,py,gcp,aws,azure,docker,github,linux" alt="Tech Stack" />
 </p>
 
 ---
