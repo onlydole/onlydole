@@ -2,7 +2,7 @@
 
 **Head of Open Source @ [Dosu](https://dosu.dev)** | Los Angeles, CA
 
-I've spent my career making complex systems simple and helping teams ship amazing things. From delivering the opening keynote at KubeCon EU to 10,000+ attendees, to running production systems at Disney Studios, to building contributor programs at CNCF — I'm passionate about the intersection of infrastructure, AI, and community.
+I've spent my career refactoring complex systems into intuitive platforms and helping teams ship incredible products. I'm passionate about the intersection of infrastructure, AI, and community. I've had such a fun career! Giving opening keynotes at KubeCon + CloudNativeCon, running production systems at Disney Studios, and helping enrich the end user ecosystem at CNCF.
 
 ---
 
