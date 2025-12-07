@@ -6,7 +6,7 @@ I've spent my career refactoring complex systems into intuitive platforms and he
 
 ---
 
-### Quick Stats
+## Quick Stats
 
 <p align="center">
   <a href="https://github.com/anuraghazra/github-readme-stats">
@@ -19,7 +19,7 @@ I've spent my career refactoring complex systems into intuitive platforms and he
 
 ---
 
-### What I'm Good At
+## What I'm Good At
 
 **Open Source Leadership.** I champion sustainable contributor programs and governance at Dosu. I've learned so much stewarding communities across CNCF and Merly.
 
@@ -31,7 +31,7 @@ I've spent my career refactoring complex systems into intuitive platforms and he
 
 ---
 
-### Currently Focused On
+## Currently Focused On
 
 **Cloud Native.** Still deeply passionate about Kubernetes and the cloud native ecosystem. Whether it's conference stages or working groups, I love helping teams navigate their cloud journeys and build resilient systems.
 
@@ -43,7 +43,7 @@ I've spent my career refactoring complex systems into intuitive platforms and he
 
 ---
 
-### Let's Connect
+## Let's Connect
 
 I love connecting with fellow builders, dreamers, and infrastructure aficionados. Reach out if you want to chat about Kubernetes, AI, open source, or the best hikes in LA.
 
