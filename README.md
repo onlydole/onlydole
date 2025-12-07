@@ -19,26 +19,27 @@ I've spent my career refactoring complex systems into intuitive platforms and he
 
 ---
 
-### What I Bring to the Table
+### What I'm Good At
 
-| Area | What I Do |
-|------|-----------|
-| **Open Source Leadership** | Championing sustainable contributor programs and governance at Dosu, with lessons learned from stewarding communities across CNCF and Merly |
-| **Cloud Native Operations** | Designing resilient Kubernetes platforms and enabling platform engineering teams — from Disney Studios SRE to HashiCorp advocacy |
-| **Community Building** | Creating welcoming experiences through summits, working groups, and contributor education — helping maintainers and newcomers thrive |
-| **AI & Infrastructure** | Connecting product teams, researchers, and practitioners to ship reliable tooling that accelerates intelligent applications |
+**Open Source Leadership.** I champion sustainable contributor programs and governance at Dosu. I've learned so much stewarding communities across CNCF and Merly.
+
+**Cloud Native Operations.** I design resilient Kubernetes platforms and enable platform engineering teams. My time as an SRE at Disney Studios and as a Developer Advocate at HashiCorp shaped how I think about this stuff.
+
+**Community Building.** I create welcoming experiences through summits, working groups, and contributor education. Helping maintainers and newcomers thrive is something I genuinely love.
+
+**AI and Infrastructure.** I connect product teams, researchers, and practitioners to ship reliable tooling that accelerates intelligent applications.
 
 ---
 
 ### Currently Focused On
 
-**Cloud Native** — Still deeply passionate about Kubernetes and the cloud native ecosystem. From conference stages to working groups, I help teams navigate their cloud journeys and build resilient systems.
+**Cloud Native.** Still deeply passionate about Kubernetes and the cloud native ecosystem. Whether it's conference stages or working groups, I love helping teams navigate their cloud journeys and build resilient systems.
 
-**AI Infrastructure** — Exploring how we build, deploy, and scale the systems that power intelligence. The pace is whirlwind, and I'm here for it.
+**AI Infrastructure.** Exploring how we build, deploy, and scale the systems that power intelligence. The pace is whirlwind, and I'm here for it.
 
-**Open Source Stewardship** — Growing inclusive contributor experiences, aligning community roadmaps, and celebrating the humans behind the code.
+**Open Source Stewardship.** Growing inclusive contributor experiences, aligning community roadmaps, and celebrating the humans behind the code.
 
-**Learning** — Always have a book in hand. Currently fascinated by psychology, systems thinking, and the occasional sci-fi novel that makes me question everything.
+**Learning.** Always have a book in hand. Currently fascinated by psychology, systems thinking, and the occasional sci-fi novel that makes me question everything.
 
 ---
 
