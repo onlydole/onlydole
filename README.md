@@ -1,35 +1,57 @@
-# Hello, I'm Taylor 👋
+# Hey, I'm Taylor Dolezal
 
-Based in sunny Los Angeles, I've spent my career making complex systems simple and helping teams ship amazing things.
+**Head of Open Source @ [Dosu](https://dosu.dev)** | Los Angeles, CA
 
-<a href="https://github.com/anuraghazra/github-readme-stats">
-  <img alt="GitHub Stats" height=200 align="center" src="https://github-readme-stats.vercel.app/api?username=onlydole&show_icons=true&theme=transparent" />
-</a>
-<a href="https://github.com/anuraghazra/convoychat">
-  <img alt="Top Languages" height=200 align="center" src="https://github-readme-stats.vercel.app/api/top-langs?username=onlydole&layout=compact&langs_count=8&card_width=320&theme=transparent" />
-</a>
+I've spent my career refactoring complex systems into intuitive platforms and helping teams ship incredible products. I'm passionate about the intersection of infrastructure, AI, and community. I've had such a fun career! Giving opening keynotes at KubeCon + CloudNativeCon, running production systems at Disney Studios, and helping enrich the end user ecosystem at CNCF.
 
-## Core Expertise
+---
 
-- 🧭 **Open Source Leadership**: As Head of OSS at Dosu, championing sustainable contributor programs and governance while applying lessons from stewarding communities across CNCF and Merly.
-- ☁️ **Cloud Native Operations**: Designing resilient Kubernetes platforms, enabling platform engineering teams, and sharing pragmatic guidance from years running production environments at scale.
-- 🤝 **Community Building**: Creating welcoming experiences through summits, working groups, and contributor education that help maintainers and newcomers thrive—from KubeCon keynotes to intimate working sessions.
-- 🤖 **AI & Developer Infrastructure Strategy**: Connecting product teams, researchers, and practitioners to ship reliable tooling that accelerates intelligent applications in the wild.
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=3B82F6&center=true&vCenter=true&width=435&lines=Cloud+Native+Enthusiast;Open+Source+Leader;Community+Builder;KubeCon+Keynote+Speaker" alt="Typing SVG" />
+</p>
 
-## What I'm Focused On
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=kubernetes,terraform,go,py,gcp,aws,azure,docker,github,linux" alt="Tech Stack" />
+</p>
 
-🌊 **Cloud Native**: Still deeply passionate about Kubernetes and the cloud native ecosystem. From KubeCon stages to community working groups, I love helping teams navigate their cloud journeys and build resilient systems.
+---
 
-🤖 **AI Infrastructure**: Exploring the intersection of AI and infrastructure—how we build, deploy, and scale the systems that power tomorrow's intelligence. The pace is whirlwind, and I'm here for it.
+## What I'm Good At
 
-👐 **Open Source Stewardship**: Growing inclusive contributor experiences, aligning community roadmaps, and celebrating the humans behind the code. Because great software is built by great communities.
+**Open Source Leadership.** I champion sustainable contributor programs and governance at Dosu. I've learned so much stewarding communities across CNCF and Merly.
 
-📚 **Learning**: Always have a book in hand. Currently fascinated by psychology, systems thinking, and the occasional sci-fi novel that makes me question everything. Always down to swap book recommendations.
+**Cloud Native Operations.** I design resilient Kubernetes platforms and enable platform engineering teams. My time as an SRE at Disney Studios and as a Developer Advocate at HashiCorp shaped how I think about this stuff.
+
+**Community Building.** I create welcoming experiences through summits, working groups, and contributor education. Helping maintainers and newcomers thrive is something I genuinely love.
+
+**AI and Infrastructure.** I connect product teams, researchers, and practitioners to ship reliable tooling that accelerates intelligent applications.
+
+---
+
+## Currently Focused On
+
+**Cloud Native.** Still deeply passionate about Kubernetes and the cloud native ecosystem. Whether it's conference stages or working groups, I love helping teams navigate their cloud journeys and build resilient systems.
+
+**AI Infrastructure.** Exploring how we build, deploy, and scale the systems that power intelligence. The pace is whirlwind, and I'm here for it.
+
+**Open Source Stewardship.** Growing inclusive contributor experiences, aligning community roadmaps, and celebrating the humans behind the code.
+
+**Learning.** Always have a book in hand. Currently fascinated by psychology, systems thinking, and the occasional sci-fi novel that makes me question everything.
+
+---
 
 ## Let's Connect
 
-I love connecting with fellow builders, dreamers, and infrastructure aficionados! Reach out if you want to chat about Kubernetes, AI, open source, or the best hikes in LA.
+I love connecting with fellow builders, dreamers, and infrastructure aficionados. Reach out if you want to chat about Kubernetes, AI, open source, or the best hikes in LA.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/onlydole)
-[![Bluesky](https://img.shields.io/badge/Bluesky-Follow-0085FF?style=for-the-badge&logo=bluesky&logoColor=white)](https://bsky.app/profile/onlydole.dev)
-[![Substack](https://img.shields.io/badge/Substack-Subscribe-FF6719?style=for-the-badge&logo=substack&logoColor=white)](https://onlydole.substack.com)
+<p align="center">
+  <a href="https://www.linkedin.com/in/onlydole">
+    <img src="https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn" />
+  </a>
+  <a href="https://bsky.app/profile/onlydole.dev">
+    <img src="https://img.shields.io/badge/Bluesky-Follow-0085FF?style=for-the-badge&logo=bluesky&logoColor=white" alt="Bluesky" />
+  </a>
+  <a href="https://onlydole.substack.com">
+    <img src="https://img.shields.io/badge/Substack-Subscribe-FF6719?style=for-the-badge&logo=substack&logoColor=white" alt="Substack" />
+  </a>
+</p>
