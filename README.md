@@ -1,5 +1,6 @@
+<!-- markdownlint-disable MD041 -->
 <!-- Header Wave -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=Taylor%20Dolezal&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32&desc=Building%20the%20future%20of%20cloud%20native%20%26%20AI&descAlignY=52&descSize=18"/>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=Taylor%20Dolezal&fontSize=42&fontColor=fff&animation=twinkling&fontAlignY=32&desc=Building%20the%20future%20of%20cloud%20native%20%26%20AI&descAlignY=52&descSize=18" alt="Header wave with Taylor Dolezal name and tagline"/>
 
 <p align="center">
   <a href="https://www.linkedin.com/in/onlydole"><img src="https://img.shields.io/badge/-onlydole-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/></a>
@@ -92,12 +93,14 @@ fun_facts:
 <td width="50%" valign="top">
 
 ### 🌐 Open Source Leadership
+
 Championing sustainable contributor programs and governance at Dosu. I've learned invaluable lessons stewarding communities across CNCF and Merly—building frameworks that help maintainers thrive and newcomers feel welcome.
 
 </td>
 <td width="50%" valign="top">
 
 ### ☁️ Cloud Native Operations
+
 Designing resilient Kubernetes platforms and enabling platform engineering teams. My time as an SRE at Disney Studios and as a Developer Advocate at HashiCorp shaped how I think about reliability at scale.
 
 </td>
@@ -106,12 +109,14 @@ Designing resilient Kubernetes platforms and enabling platform engineering teams
 <td width="50%" valign="top">
 
 ### 🤝 Community Building
+
 Creating welcoming experiences through summits, working groups, and contributor education. There's nothing quite like watching someone make their first open source contribution.
 
 </td>
 <td width="50%" valign="top">
 
 ### 🤖 AI & Infrastructure
+
 Connecting product teams, researchers, and practitioners to ship reliable tooling that accelerates intelligent applications. The pace is a whirlwind, and I'm here for every moment of it.
 
 </td>
@@ -156,6 +161,7 @@ Always have a book in hand. Currently fascinated by psychology, systems thinking
 </p>
 
 **Notable Talks:**
+
 - 🎬 **KubeCon NA 2024**: "Above the Clouds: Mountainous Achievements with End Users"
 - 📘 **KubeCon NA 2025**: "The Missing Manual for Open Source Community Sustainability"
 - 🎙️ **Ship It! Podcast**: [The cloud native ecosystem with Taylor Dolezal](https://changelog.com/shipit/69)
@@ -210,4 +216,4 @@ I love connecting with fellow builders, dreamers, and infrastructure aficionados
 </p>
 
 <!-- Footer Wave -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=120&section=footer"/>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=120&section=footer" alt="Footer wave decoration"/>
