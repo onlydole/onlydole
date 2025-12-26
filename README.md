@@ -44,12 +44,8 @@ fun_facts:
 ## 🛠️ Tech Stack & Tools
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=kubernetes,terraform,go,python,typescript,rust&theme=dark" alt="Languages"/>
-</p>
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=gcp,aws,azure,docker,github,gitlab&theme=dark" alt="Cloud & DevOps"/>
-</p>
-<p align="center">
+  <img src="https://skillicons.dev/icons?i=kubernetes,terraform,go,python,typescript,rust&theme=dark" alt="Languages"/><br/>
+  <img src="https://skillicons.dev/icons?i=gcp,aws,azure,docker,github,gitlab&theme=dark" alt="Cloud & DevOps"/><br/>
   <img src="https://skillicons.dev/icons?i=linux,vim,vscode,postgres,redis,grafana&theme=dark" alt="Tools"/>
 </p>
 
@@ -63,7 +59,7 @@ fun_facts:
 </p>
 
 <p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=onlydole&theme=tokyonight&hide_border=true&background=0D1117&stroke=3B82F6&ring=3B82F6&fire=FF6B6B&currStreakLabel=3B82F6" alt="GitHub Streak"/>
+  <img src="https://streak-stats.demolab.com/?user=onlydole&theme=tokyonight&hide_border=true&background=0D1117&stroke=3B82F6&ring=3B82F6&fire=FF6B6B&currStreakLabel=3B82F6" alt="GitHub Streak"/>
 </p>
 
 ---
@@ -129,26 +125,30 @@ Connecting product teams, researchers, and practitioners to ship reliable toolin
 
 <details open>
 <summary><b>🌟 Cloud Native (Click to expand)</b></summary>
-<br/>
+
 Still deeply passionate about Kubernetes and the cloud native ecosystem. Whether it's on conference stages or in working groups, I love helping teams navigate their cloud journeys and build resilient systems. The community we've built is truly special.
+
 </details>
 
 <details>
 <summary><b>🧠 AI Infrastructure</b></summary>
-<br/>
+
 Exploring how we build, deploy, and scale the systems that power intelligence. From LLM orchestration to MLOps pipelines, I'm fascinated by the infrastructure challenges of the AI era.
+
 </details>
 
 <details>
 <summary><b>🌱 Open Source Stewardship</b></summary>
-<br/>
+
 Growing inclusive contributor experiences, aligning community roadmaps, and celebrating the humans behind the code. Sustainability isn't just about code—it's about people.
+
 </details>
 
 <details>
 <summary><b>📖 Continuous Learning</b></summary>
-<br/>
+
 Always have a book in hand. Currently fascinated by psychology, systems thinking, and the occasional sci-fi novel that makes me question everything. Learning never stops.
+
 </details>
 
 ---
@@ -194,10 +194,6 @@ I love connecting with fellow builders, dreamers, and infrastructure aficionados
 </p>
 
 ---
-
-<p align="center">
-  <img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=tokyonight" alt="Random Dev Quote"/>
-</p>
 
 <p align="center">
   <i>"The best way to predict the future is to create it." — Peter Drucker</i>
