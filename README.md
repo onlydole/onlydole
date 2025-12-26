@@ -177,18 +177,6 @@ Always have a book in hand. Currently fascinated by psychology, systems thinking
 
 ---
 
-## 🏗️ 3D Contribution Calendar
-
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./profile-3d-contrib/profile-night-rainbow.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="./profile-3d-contrib/profile-south-season-animate.svg" />
-    <img alt="3D Contribution Graph" src="./profile-3d-contrib/profile-night-rainbow.svg" />
-  </picture>
-</p>
-
----
-
 ## 💬 Let's Connect
 
 I love connecting with fellow builders, dreamers, and infrastructure aficionados. Whether you want to chat about Kubernetes, AI, open source, the best hikes in LA, or just grab a virtual coffee—my inbox is always open.
