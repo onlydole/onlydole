@@ -1,6 +1,7 @@
 # Hey, I'm Taylor Dolezal
 
-**Head of Open Source @ [Dosu](https://dosu.dev)** | Los Angeles, CA
+**Head of Open Source @ [Dosu](https://dosu.dev)**
+Los Angeles, CA
 
 I've spent my career refactoring complex systems into intuitive platforms and helping teams ship incredible products. I'm passionate about the intersection of infrastructure, AI, and community. I've had such a fun career! Giving opening keynotes at KubeCon + CloudNativeCon, running production systems at Disney Studios, and helping enrich the end user ecosystem at CNCF.
 
