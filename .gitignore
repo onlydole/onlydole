@@ -1,0 +1,4 @@
+# Local agent / editor tooling — never publish to the profile repo
+.claude/
+.serena/
+.DS_Store
