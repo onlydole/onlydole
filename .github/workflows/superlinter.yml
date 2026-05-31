@@ -30,3 +30,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
+          # Point markdownlint at our relaxed config. Super-linter's default
+          # filename is .markdown-lint.yml; set this so .markdownlint.yaml
+          # (used by local tooling too) is the single source of truth.
+          MARKDOWN_CONFIG_FILE: .markdownlint.yaml

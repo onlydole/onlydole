@@ -1,0 +1,11 @@
+---
+# Mirror of .markdownlint.yaml under super-linter's historical default
+# filename, so the relaxed ruleset applies regardless of which name the
+# linter version looks for. Keep both files in sync.
+default: true
+# MD013 line-length: badge/image URLs are long by nature.
+MD013: false
+# MD033 inline HTML: required for centered images, <picture>, badges.
+MD033: false
+# MD034 bare URLs: allow occasional bare URLs in generated post lists.
+MD034: false
