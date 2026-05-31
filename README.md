@@ -3,7 +3,7 @@
 **Head of Open Source @ [Dosu](https://dosu.dev)** · CNCF Ambassador · KubeCon & PyTorch keynote speaker · ex-HashiCorp · ex-Disney SRE
 📍 Los Angeles, CA
 
-<!-- PRIMARY CTA: this page asks for exactly one thing — a GitHub follow. -->
+<!-- PRIMARY CTA: follow-first, with a secondary "star my projects" nudge. -->
 <p align="left">
   <a href="https://github.com/onlydole?tab=followers">
     <img src="https://img.shields.io/github/followers/onlydole?style=for-the-badge&logo=github&label=Follow%20%40onlydole&color=3B82F6" alt="Follow @onlydole on GitHub" />
@@ -26,8 +26,8 @@ I refactor complex systems into intuitive platforms and help teams ship incredib
 ## 📊 What I've been building
 
 <p align="center">
-  <img height="165" src="https://github-readme-stats.vercel.app/api?username=onlydole&show_icons=true&include_all_commits=true&hide_border=true&title_color=3B82F6&icon_color=3B82F6" alt="Taylor's GitHub stats" />
-  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=onlydole&layout=compact&langs_count=8&hide_border=true&title_color=3B82F6" alt="Top languages" />
+  <img src="https://github-readme-stats.vercel.app/api?username=onlydole&show_icons=true&include_all_commits=true&hide_border=true&title_color=3B82F6&icon_color=3B82F6" alt="Taylor's GitHub stats" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=onlydole&layout=compact&langs_count=8&hide_border=true&title_color=3B82F6" alt="Top languages" />
 </p>
 <p align="center">
   <img src="https://streak-stats.demolab.com?user=onlydole&hide_border=true&ring=3B82F6&fire=3B82F6&currStreakLabel=3B82F6" alt="GitHub streak" />
