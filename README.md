@@ -1,6 +1,6 @@
 # Hey, I'm Taylor Dolezal 👋
 
-**Head of Open Source @ [Dosu](https://dosu.dev)** · CNCF Ambassador · KubeCon &amp; PyTorch keynote speaker · ex-HashiCorp · ex-Disney SRE
+**Head of Open Source @ [Dosu](https://dosu.dev)** · CNCF Ambassador · KubeCon & PyTorch keynote speaker · ex-HashiCorp · ex-Disney SRE
 📍 Los Angeles, CA
 
 <!-- PRIMARY CTA: this page asks for exactly one thing — a GitHub follow. -->
@@ -46,20 +46,20 @@ Fresh from my [Substack](https://onlydole.substack.com) — this list updates it
 <!-- BLOG-POST-LIST:START -->
 <!-- BLOG-POST-LIST:END -->
 
-➡️ **[Read more &amp; subscribe on Substack](https://onlydole.substack.com)**
+➡️ **[Read more & subscribe on Substack](https://onlydole.substack.com)**
 
 ---
 
 ## 🎤 What I'm good at
 
-- **Open Source Leadership** — sustainable contributor programs &amp; governance at Dosu; community stewardship across CNCF.
+- **Open Source Leadership** — sustainable contributor programs & governance at Dosu; community stewardship across CNCF.
 - **Cloud Native Operations** — resilient Kubernetes platforms and platform-engineering enablement (shaped by years as an SRE at Disney and DevRel at HashiCorp).
 - **Community Building** — summits, working groups, and contributor education; helping maintainers and newcomers thrive.
-- **AI &amp; Infrastructure** — connecting product teams, researchers, and practitioners to ship reliable tooling for intelligent applications.
+- **AI & Infrastructure** — connecting product teams, researchers, and practitioners to ship reliable tooling for intelligent applications.
 
 ## 🌱 Currently focused on
 
-Cloud native &amp; Kubernetes · AI infrastructure · open source stewardship · and always learning (systems thinking, psychology, and the occasional reality-bending sci-fi).
+Cloud native & Kubernetes · AI infrastructure · open source stewardship · and always learning (systems thinking, psychology, and the occasional reality-bending sci-fi).
 
 ---
 
