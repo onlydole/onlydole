@@ -19,11 +19,11 @@
 
 > _The path becomes steady when the center belongs to everyone._
 
-I refactor complex systems into intuitive platforms and help teams ship incredible products — from running production at **Disney Studios**, to developer advocacy at **HashiCorp**, to enriching the end-user ecosystem across **CNCF**. I care about the intersection of **infrastructure, AI, and community**.
+I refactor complex systems into intuitive platforms and help teams ship incredible products — from running production at **Disney Studios**, to developer advocacy at **HashiCorp**, to enriching the end user ecosystem across **CNCF**. I care about the intersection of **infrastructure, AI, and community**.
 
 ---
 
-### 📊 What I've been building
+## 📊 What I've been building
 
 <p align="center">
   <img height="165" src="https://github-readme-stats.vercel.app/api?username=onlydole&show_icons=true&include_all_commits=true&hide_border=true&title_color=3B82F6&icon_color=3B82F6" alt="Taylor's GitHub stats" />
@@ -39,7 +39,7 @@ I refactor complex systems into intuitive platforms and help teams ship incredib
 
 ---
 
-### ✍️ Latest writing
+## ✍️ Latest writing
 
 Fresh from my [Substack](https://onlydole.substack.com) — this list updates itself.
 
@@ -50,14 +50,14 @@ Fresh from my [Substack](https://onlydole.substack.com) — this list updates it
 
 ---
 
-### 🎤 What I'm good at
+## 🎤 What I'm good at
 
 - **Open Source Leadership** — sustainable contributor programs &amp; governance at Dosu; community stewardship across CNCF.
 - **Cloud Native Operations** — resilient Kubernetes platforms and platform-engineering enablement (shaped by years as an SRE at Disney and DevRel at HashiCorp).
 - **Community Building** — summits, working groups, and contributor education; helping maintainers and newcomers thrive.
 - **AI &amp; Infrastructure** — connecting product teams, researchers, and practitioners to ship reliable tooling for intelligent applications.
 
-### 🌱 Currently focused on
+## 🌱 Currently focused on
 
 Cloud native &amp; Kubernetes · AI infrastructure · open source stewardship · and always learning (systems thinking, psychology, and the occasional reality-bending sci-fi).
 
