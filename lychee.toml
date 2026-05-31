@@ -1,5 +1,16 @@
-# Exclude Substack URLs
-exclude = ['.*substack\.com.*']
+# Links the checker should skip:
+#  - Substack (rejects unauthenticated requests)
+#  - dynamic badge/stat image services (rendered images, not pages)
+#  - the snake SVGs on the `output` branch (created by the snake workflow)
+exclude = [
+    '.*substack\.com.*',
+    '.*img\.shields\.io.*',
+    '.*github-readme-stats.*\.vercel\.app.*',
+    '.*streak-stats\.demolab\.com.*',
+    '.*readme-typing-svg\.demolab\.com.*',
+    '.*skillicons\.dev.*',
+    '.*raw\.githubusercontent\.com/onlydole/onlydole/output/.*',
+]
 
-# Accept HTTP success codes AND 403
-accept = ["200..=299", "403"]
+# Accept HTTP success codes, plus 403/429 (some hosts rate-limit or block bots)
+accept = ["200..=299", "403", "429"]

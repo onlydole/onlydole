@@ -1,0 +1,13 @@
+---
+# A GitHub profile README intentionally uses rich inline HTML (centered
+# images, badges) and long lines. Relax the rules that conflict with that,
+# keep everything else on.
+default: true
+
+# MD013 line-length: badge/image URLs are long by nature.
+MD013: false
+# MD033 inline HTML: required for centered images, <picture>, badges.
+MD033: false
+# MD041 first-line-heading: kept on — the file still starts with an H1.
+# MD034 bare URLs: allow occasional bare URLs in generated post lists.
+MD034: false
