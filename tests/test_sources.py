@@ -7,9 +7,9 @@ from generator.sources import (
     ACTIVITY_QUERY,
     SourceError,
     _entry_date,
-    load_reading,
     load_talks,
     parse_activity,
+    parse_goodreads,
     parse_substack,
 )
 
@@ -78,28 +78,6 @@ def test_load_talks_missing_field_raises(tmp_path):
         load_talks(talks)
 
 
-def test_load_reading_returns_current(tmp_path):
-    reading = tmp_path / "reading.yaml"
-    reading.write_text(
-        'current: {title: "Book", author: "Author", note: "Why I like it"}',
-        encoding="utf-8",
-    )
-    book = load_reading(reading)
-    assert book == {
-        "title": "Book",
-        "author": "Author",
-        "url": "",
-        "note": "Why I like it",
-    }
-
-
-def test_load_reading_missing_author_raises(tmp_path):
-    reading = tmp_path / "reading.yaml"
-    reading.write_text('current: {title: "Book"}', encoding="utf-8")
-    with pytest.raises(SourceError):
-        load_reading(reading)
-
-
 def test_parse_activity_skips_deleted_repo_prs():
     payload = {
         "data": {
@@ -138,3 +116,53 @@ def test_entry_date_rejects_out_of_range_dates():
 
 def test_activity_query_requests_multiple_releases_per_repo():
     assert "releases(first: 3" in ACTIVITY_QUERY
+
+
+def test_parse_goodreads_extracts_books():
+    books = parse_goodreads((FIXTURES / "goodreads.xml").read_text(encoding="utf-8"))
+    assert len(books) == 2
+    assert books[0]["title"] == (
+        "Obviously Awesome: How to Nail Product Positioning "
+        "so Customers Get it, Buy it, Love it"
+    )
+    assert books[0]["author"] == "April Dunford"
+    assert books[0]["url"].startswith("https://www.goodreads.com/review/show/")
+    assert books[0]["image_url"].endswith("_SY475_.jpg")
+
+
+def test_parse_goodreads_garbage_raises():
+    with pytest.raises(SourceError):
+        parse_goodreads("complete garbage, not xml")
+
+
+def test_parse_goodreads_caps_at_three():
+    item = (
+        "<item><title>B{i}</title><author_name>A</author_name>"
+        "<link>https://x/{i}</link></item>"
+    )
+    feed = (
+        "<rss><channel>"
+        + "".join(item.format(i=i) for i in range(5))
+        + "</channel></rss>"
+    )
+    assert len(parse_goodreads(feed)) == 3
+
+
+def test_parse_goodreads_image_falls_back_to_small():
+    feed = (
+        "<rss><channel><item><title>B</title><author_name>A</author_name>"
+        "<link>https://x</link><book_image_url>small.jpg</book_image_url>"
+        "</item></channel></rss>"
+    )
+    assert parse_goodreads(feed)[0]["image_url"] == "small.jpg"
+
+
+def test_parse_goodreads_rejects_doctype_and_entities():
+    bomb = (
+        '<?xml version="1.0"?><!DOCTYPE lolz [<!ENTITY lol "lol">]>'
+        "<rss><channel><item><title>&lol;</title>"
+        "<author_name>A</author_name><link>https://x</link>"
+        "</item></channel></rss>"
+    )
+    with pytest.raises(SourceError):
+        parse_goodreads(bomb)

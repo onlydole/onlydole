@@ -3,12 +3,16 @@
 <!-- bento:start -->
 <a href="https://onlydole.dev"><img src="assets/hero.svg" width="100%" alt="Taylor Dolezal — Head of Open Source at Dosu · Open Source Strategy &amp; Ecosystems · Los Angeles"></a>
 <p align="center">
-  <a href="https://onlydole.substack.com/p/i-let-ai-fix-my-printer"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/writing-dark.svg"><img src="assets/writing-light.svg" width="49%" alt="Latest writing: I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02); Making Sense of AGENTS.md (2026-01-18)"></picture></a>
-  <a href="https://github.com/onlydole/awesome-knowledge-infrastructure/pull/4"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="49%" alt="Recently shipped: Drop Substack self-promo; surface Lance… (merged · onlydole/awesome-knowledge-infrastructure · 2026-06-01); Expand and tighten the list; clean up c… (merged · onlydole/awesome-knowledge-infrastructure · 2026-06-01); fix(workflow): raise doc-update max-tur… (merged · onlydole/overdue · 2026-05-14)"></picture></a>
+  <a href="https://onlydole.substack.com/p/i-let-ai-fix-my-printer"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/writing-dark.svg"><img src="assets/writing-light.svg" width="100%" alt="Latest writing: I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02); Making Sense of AGENTS.md (2026-01-18)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://kccncna2025.sched.com/event/51807c07f8572b3211e24e9430ec6f26"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="49%" alt="On stage: The Missing Manual for Open Source Comm… (KubeCon + CloudNativeCon NA, Atlanta · 2025-11-11); Navigating Contributions and Community… (KubeFM podcast · 2025-11-03); Keynote: Above the Clouds — Mountainous… (KubeCon + CloudNativeCon NA, Salt Lake City · 2024-…)"></picture></a>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="49%" alt="Reading now: Thinking in Systems (Donella Meadows); A primer on seeing wholes — systems thinking for everything."></picture>
+  <a href="https://github.com/onlydole/tailord/releases/tag/v1.3.2"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: tailord v1.3.2 (release · 2026-05-09); tailord v1.3.1 (release · 2026-05-09); tailord v1.3.0 (release · 2026-05-09)"></picture></a>
+</p>
+<p align="center">
+  <a href="https://kccncna2025.sched.com/event/51807c07f8572b3211e24e9430ec6f26"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: The Missing Manual for Open Source Community Sustainability (KubeCon + CloudNativeCon NA, Atlanta · 2025-11-11); Navigating Contributions and Community Health in Kubernetes (KubeFM podcast · 2025-11-03); Keynote: Above the Clouds — Mountainous Achievements with End Users (KubeCon + CloudNativeCon NA, Salt Lake City · 2024-11-15)"></picture></a>
+</p>
+<p align="center">
+  <a href="https://www.goodreads.com/review/show/8658061089?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: Obviously Awesome: How to Nail Product Positioning so Customers Get it, Buy it, Love it (April Dunford); Dungeon Crawler Carl (Dungeon Crawler Carl, #1) (Matt Dinniman); The Stranger (Albert Camus)"></picture></a>
 </p>
 <p align="center">
   <a href="https://onlydole.substack.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/chip-substack-dark.svg"><img src="assets/chip-substack-light.svg" width="150" alt="Substack"></picture></a>

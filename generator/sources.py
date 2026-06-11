@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime
 from pathlib import Path
+from xml.etree import ElementTree
 
 import feedparser
 import httpx
@@ -14,6 +15,12 @@ SUBSTACK_FEED = "https://onlydole.substack.com/feed"
 GITHUB_LOGIN = "onlydole"
 PROFILE_REPO = "onlydole/onlydole"
 GRAPHQL_URL = "https://api.github.com/graphql"
+GOODREADS_USER_ID = "22801001"
+GOODREADS_FEED = (
+    "https://www.goodreads.com/review/list_rss/"
+    f"{GOODREADS_USER_ID}?shelf=currently-reading"
+)
+USER_AGENT = "Mozilla/5.0 (compatible; onlydole-profile-bot/1.0)"
 
 
 class SourceError(RuntimeError):
@@ -164,22 +171,56 @@ def load_talks(path: Path | None = None) -> list[dict]:
     ]
 
 
-def load_reading(path: Path | None = None) -> dict:
-    path = path or REPO_ROOT / "data" / "reading.yaml"
-    data = _load_yaml(path)
-    current = (data or {}).get("current") or {}
-    if not (current.get("title") and current.get("author")):
-        raise SourceError("reading.yaml needs current.title and current.author")
-    return {
-        "title": current["title"],
-        "author": current["author"],
-        "url": current.get("url") or "",
-        "note": current.get("note") or "",
-    }
-
-
 def _load_yaml(path: Path):
     try:
         return yaml.safe_load(path.read_text(encoding="utf-8"))
     except (OSError, yaml.YAMLError) as exc:
         raise SourceError(f"{path.name}: {exc}") from exc
+
+
+def parse_goodreads(feed_text: str) -> list[dict]:
+    """Parse a Goodreads shelf RSS feed into up to 3 book dicts.
+
+    Rejects any document carrying DTD or entity declarations before
+    parsing. That closes the XXE and entity-expansion attack classes
+    without a defusedxml dependency, and real Goodreads feeds never
+    include a DOCTYPE. Python 3.12's expat amplification limits are the
+    second layer.
+    """
+    lowered = feed_text.lower()
+    if "<!doctype" in lowered or "<!entity" in lowered:
+        raise SourceError("feed contains DTD or entity declarations")
+    try:
+        root = ElementTree.fromstring(feed_text)
+    except ElementTree.ParseError as exc:
+        raise SourceError(f"unparsable goodreads feed: {exc}") from exc
+    books = []
+    for item in root.iter("item"):
+        title = (item.findtext("title") or "").strip()
+        author = (item.findtext("author_name") or "").strip()
+        url = (item.findtext("link") or "").strip()
+        image = (item.findtext("book_large_image_url") or "").strip() or (
+            item.findtext("book_image_url") or ""
+        ).strip()
+        if not (title and author and url):
+            continue
+        books.append({"title": title, "author": author, "url": url, "image_url": image})
+        if len(books) == 3:
+            break
+    if not books:
+        raise SourceError("goodreads shelf feed had no usable items")
+    return books
+
+
+def fetch_goodreads() -> list[dict]:
+    try:
+        resp = httpx.get(
+            GOODREADS_FEED,
+            timeout=30,
+            follow_redirects=True,
+            headers={"User-Agent": USER_AGENT},
+        )
+        resp.raise_for_status()
+    except httpx.HTTPError as exc:
+        raise SourceError(f"goodreads fetch failed: {exc}") from exc
+    return parse_goodreads(resp.text)
