@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Taylor's bookshelf: currently-reading</title>
+    <item>
+      <guid><![CDATA[https://www.goodreads.com/review/show/8658061089?utm_medium=api&utm_source=rss]]></guid>
+      <pubDate><![CDATA[Thu, 04 Jun 2026 00:38:25 -0700]]></pubDate>
+      <title><![CDATA[Obviously Awesome: How to Nail Product Positioning so Customers Get it, Buy it, Love it]]></title>
+      <link><![CDATA[https://www.goodreads.com/review/show/8658061089?utm_medium=api&utm_source=rss]]></link>
+      <book_id>247591327</book_id>
+      <book_image_url><![CDATA[https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1770225651l/247591327._SY75_.jpg]]></book_image_url>
+      <book_large_image_url><![CDATA[https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1770225651l/247591327._SY475_.jpg]]></book_large_image_url>
+      <author_name>April Dunford</author_name>
+      <user_shelves>currently-reading</user_shelves>
+    </item>
+    <item>
+      <guid><![CDATA[https://www.goodreads.com/review/show/9000000001]]></guid>
+      <pubDate><![CDATA[Mon, 01 Jun 2026 09:00:00 -0700]]></pubDate>
+      <title><![CDATA[Thinking in Systems]]></title>
+      <link><![CDATA[https://www.goodreads.com/review/show/9000000001]]></link>
+      <book_id>3828902</book_id>
+      <book_image_url><![CDATA[https://i.gr-assets.com/images/S/books/3828902._SY75_.jpg]]></book_image_url>
+      <book_large_image_url><![CDATA[https://i.gr-assets.com/images/S/books/3828902._SY475_.jpg]]></book_large_image_url>
+      <author_name>Donella H. Meadows</author_name>
+      <user_shelves>currently-reading</user_shelves>
+    </item>
+  </channel>
+</rss>
