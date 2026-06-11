@@ -151,10 +151,14 @@ def fetch_activity(token: str) -> list[dict]:
 
 
 def _rfc822_date(value: str | None) -> str | None:
-    """ISO date from an RFC 822 pubDate, or None if absent/invalid."""
+    """ISO date from an RFC 822 pubDate, or None if absent/invalid.
+
+    OverflowError covers absurd years (e.g. 14 digits), which
+    parsedate_to_datetime raises instead of ValueError.
+    """
     try:
         return parsedate_to_datetime(value).date().isoformat()
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return None
 
 
