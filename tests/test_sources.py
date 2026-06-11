@@ -4,7 +4,9 @@ from pathlib import Path
 import pytest
 
 from generator.sources import (
+    ACTIVITY_QUERY,
     SourceError,
+    _entry_date,
     load_reading,
     load_talks,
     parse_activity,
@@ -96,3 +98,43 @@ def test_load_reading_missing_author_raises(tmp_path):
     reading.write_text('current: {title: "Book"}', encoding="utf-8")
     with pytest.raises(SourceError):
         load_reading(reading)
+
+
+def test_parse_activity_skips_deleted_repo_prs():
+    payload = {
+        "data": {
+            "user": {
+                "repositories": {"nodes": []},
+                "pullRequests": {
+                    "nodes": [
+                        {
+                            "title": "Ghost PR",
+                            "url": "https://x/1",
+                            "mergedAt": "2026-01-01T00:00:00Z",
+                            "repository": None,
+                        },
+                        {
+                            "title": "Live PR",
+                            "url": "https://x/2",
+                            "mergedAt": "2026-01-02T00:00:00Z",
+                            "repository": {
+                                "nameWithOwner": "a/b",
+                                "isPrivate": False,
+                            },
+                        },
+                    ]
+                },
+            }
+        }
+    }
+    assert [i["title"] for i in parse_activity(payload)] == ["Live PR"]
+
+
+def test_entry_date_rejects_out_of_range_dates():
+    assert _entry_date((0, 0, 0, 0, 0, 0, 0, 0, 0)) is None
+    assert _entry_date(None) is None
+    assert _entry_date((2026, 6, 8, 12, 0, 0, 0, 160, 0)) == "2026-06-08"
+
+
+def test_activity_query_requests_multiple_releases_per_repo():
+    assert "releases(first: 3" in ACTIVITY_QUERY

@@ -40,9 +40,20 @@ HERO_ALT = (
 EMPTY_LINES = [{"primary": "—", "secondary": ""}]
 
 
+def _load_cache() -> dict:
+    if not CACHE.exists():
+        return {}
+    try:
+        cache = json.loads(CACHE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"warning: cache unreadable ({exc}); starting fresh", file=sys.stderr)
+        return {}
+    return cache if isinstance(cache, dict) else {}
+
+
 def gather(today: str) -> dict:
     """Fetch every source; fall back to last-good cache on failure."""
-    cache = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.exists() else {}
+    cache = _load_cache()
     fetchers = {
         "writing": lambda: sources.fetch_substack(),
         "shipped": lambda: sources.fetch_activity(os.environ["GITHUB_TOKEN"]),
@@ -68,10 +79,10 @@ def gather(today: str) -> dict:
 def _summary(lines: list[dict]) -> str:
     parts = []
     for line in lines:
-        if line["secondary"]:
+        if line["primary"] and line["secondary"]:
             parts.append(f"{line['primary']} ({line['secondary']})")
-        elif line["primary"]:
-            parts.append(line["primary"])
+        elif line["primary"] or line["secondary"]:
+            parts.append(line["primary"] or line["secondary"])
     return "; ".join(parts) or "no items"
 
 
@@ -109,12 +120,19 @@ def tile_contexts(data: dict) -> list[dict]:
         else EMPTY_LINES
     )
 
-    reading = data.get("reading")
+    raw_reading = data.get("reading")
+    reading = (
+        raw_reading
+        if isinstance(raw_reading, dict)
+        and raw_reading.get("title")
+        and raw_reading.get("author")
+        else None
+    )
     if reading:
         reading_lines = [
             {"primary": fit(reading["title"], 38), "secondary": reading["author"]}
         ]
-        if reading["note"]:
+        if reading.get("note"):
             reading_lines.append({"primary": "", "secondary": fit(reading["note"], 60)})
     else:
         reading_lines = EMPTY_LINES
@@ -147,7 +165,7 @@ def tile_contexts(data: dict) -> list[dict]:
             "key": "reading",
             "header": "📚 READING NOW",
             "lines": reading_lines,
-            "url": reading["url"] if reading else "",
+            "url": reading.get("url", "") if reading else "",
             "alt": "Reading now: " + _summary(reading_lines),
         },
     ]

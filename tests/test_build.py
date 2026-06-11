@@ -104,3 +104,23 @@ def test_dead_source_with_no_cache_renders_empty_state(workspace, monkeypatch):
     assert build.main() == 0
     readme = build.README.read_text(encoding="utf-8")
     assert '<a href="https://onlydole.substack.com">' in readme  # fallback link
+
+
+def test_corrupted_cache_is_ignored(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    build.ASSETS.mkdir(parents=True, exist_ok=True)
+    build.CACHE.write_text("{not valid json", encoding="utf-8")
+    assert build.main() == 0
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["writing"] == WRITING
+
+
+def test_summary_uses_secondary_alone_when_primary_empty():
+    assert build._summary([{"primary": "", "secondary": "a note"}]) == "a note"
+
+
+def test_tile_contexts_treats_incomplete_reading_as_missing():
+    tiles = build.tile_contexts({"reading": {}})
+    reading = next(t for t in tiles if t["key"] == "reading")
+    assert reading["lines"] == build.EMPTY_LINES
+    assert reading["url"] == ""

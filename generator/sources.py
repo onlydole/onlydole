@@ -20,20 +20,28 @@ class SourceError(RuntimeError):
     """A content source could not be fetched or parsed."""
 
 
+def _entry_date(published) -> str | None:
+    """ISO date from a feedparser struct_time, or None if absent/invalid."""
+    try:
+        return datetime.date(*published[:3]).isoformat()
+    except (TypeError, ValueError):
+        return None
+
+
 def parse_substack(feed_text: str) -> list[dict]:
     parsed = feedparser.parse(feed_text)
     if parsed.bozo and not parsed.entries:
         raise SourceError(f"unparsable feed: {parsed.bozo_exception}")
     posts = []
     for entry in parsed.entries[:3]:
-        published = entry.get("published_parsed")
-        if not (entry.get("title") and entry.get("link") and published):
+        date = _entry_date(entry.get("published_parsed"))
+        if not (entry.get("title") and entry.get("link") and date):
             continue
         posts.append(
             {
                 "title": entry["title"],
                 "url": entry["link"],
-                "date": datetime.date(*published[:3]).isoformat(),
+                "date": date,
             }
         )
     if not posts:
@@ -58,7 +66,7 @@ query($login: String!) {
       nodes {
         name
         url
-        releases(first: 1, orderBy: {field: CREATED_AT, direction: DESC}) {
+        releases(first: 3, orderBy: {field: CREATED_AT, direction: DESC}) {
           nodes { tagName publishedAt url }
         }
       }
@@ -98,8 +106,8 @@ def parse_activity(payload: dict) -> list[dict]:
                 }
             )
     for pr in pr_nodes:
-        repo = pr["repository"]
-        if repo["isPrivate"] or repo["nameWithOwner"] == PROFILE_REPO:
+        repo = pr["repository"]  # null when the repository was deleted
+        if not repo or repo["isPrivate"] or repo["nameWithOwner"] == PROFILE_REPO:
             continue
         if not pr.get("mergedAt"):
             continue
