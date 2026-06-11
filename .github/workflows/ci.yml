@@ -1,0 +1,24 @@
+---
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Run tests
+        run: uv run --project generator pytest tests/ -v
+
+      - name: Lint generator
+        run: uvx ruff check generator tests

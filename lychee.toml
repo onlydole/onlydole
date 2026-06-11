@@ -1,5 +1,8 @@
-# Exclude Substack URLs
-exclude = ['.*substack\.com.*']
+# Substack and LinkedIn block automated checkers; badge-style hosts rate-limit.
+exclude = [
+  '.*substack\.com.*',
+  '.*linkedin\.com.*',
+]
 
-# Accept HTTP success codes AND 403
-accept = ["200..=299", "403"]
+# Accept success, 403 (bot-blocked but alive), and 429 (rate-limited).
+accept = ["200..=299", "403", "429"]
