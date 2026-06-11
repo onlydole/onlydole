@@ -4,13 +4,11 @@ from __future__ import annotations
 
 import datetime
 from email.utils import parsedate_to_datetime
-from pathlib import Path
 from xml.etree import ElementTree
 
 import feedparser
 import httpx
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
 SUBSTACK_FEED = "https://onlydole.substack.com/feed"
 GITHUB_LOGIN = "onlydole"
 PROFILE_REPO = "onlydole/onlydole"
