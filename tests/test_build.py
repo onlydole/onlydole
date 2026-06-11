@@ -1,5 +1,6 @@
 import json
 
+import httpx
 import pytest
 
 from generator import build, sources
@@ -189,25 +190,51 @@ def test_old_yaml_cache_shape_treated_as_absent(workspace, monkeypatch):
     assert "Old Book" not in svg
 
 
-class _FakeResponse:
+class _FakeStream:
     def __init__(self, content, content_type="image/jpeg"):
-        self.content = content
+        self._content = content
         self.headers = {"content-type": content_type}
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        return False
 
     def raise_for_status(self):
         return None
 
+    def iter_bytes(self):
+        chunk = 16_384
+        for i in range(0, len(self._content), chunk):
+            yield self._content[i : i + chunk]
 
-def test_download_cover_skips_oversized_images(monkeypatch):
+
+def test_download_cover_aborts_oversized_stream(monkeypatch):
     big = b"x" * (build.COVER_MAX_BYTES + 1)
-    monkeypatch.setattr(build.httpx, "get", lambda *a, **k: _FakeResponse(big))
+    monkeypatch.setattr(build.httpx, "stream", lambda *a, **k: _FakeStream(big))
     assert build._download_cover("https://img/big.jpg") is None
 
 
 def test_download_cover_encodes_within_cap(monkeypatch):
-    monkeypatch.setattr(build.httpx, "get", lambda *a, **k: _FakeResponse(b"ABC"))
+    monkeypatch.setattr(build.httpx, "stream", lambda *a, **k: _FakeStream(b"ABC"))
     cover = build._download_cover("https://img/c.jpg")
     assert cover == {"url": "https://img/c.jpg", "b64": "QUJD", "mime": "image/jpeg"}
+
+
+def test_download_cover_rejects_non_image_mime(monkeypatch):
+    monkeypatch.setattr(
+        build.httpx, "stream", lambda *a, **k: _FakeStream(b"<html>", "text/html")
+    )
+    assert build._download_cover("https://img/c.jpg") is None
+
+
+def test_download_cover_handles_malformed_url(monkeypatch):
+    def raise_invalid(*args, **kwargs):
+        raise httpx.InvalidURL("bad url")
+
+    monkeypatch.setattr(build.httpx, "stream", raise_invalid)
+    assert build._download_cover("ht!tp:::not-a-url") is None
 
 
 def test_goodreads_outage_serves_new_shape_cache(workspace, monkeypatch):

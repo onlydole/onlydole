@@ -61,23 +61,32 @@ def _load_cache() -> dict:
 
 def _download_cover(url: str) -> dict | None:
     try:
-        resp = httpx.get(
+        with httpx.stream(
+            "GET",
             url,
             timeout=30,
             follow_redirects=True,
             headers={"User-Agent": sources.USER_AGENT},
-        )
-        resp.raise_for_status()
-    except httpx.HTTPError as exc:
+        ) as resp:
+            resp.raise_for_status()
+            mime = resp.headers.get("content-type", "image/jpeg").split(";")[0]
+            if not mime.startswith("image/"):
+                print(f"warning: cover is not an image ({mime})", file=sys.stderr)
+                return None
+            chunks = []
+            total = 0
+            for chunk in resp.iter_bytes():
+                total += len(chunk)
+                if total > COVER_MAX_BYTES:
+                    print("warning: cover exceeds size cap, skipping", file=sys.stderr)
+                    return None
+                chunks.append(chunk)
+    except (httpx.HTTPError, httpx.InvalidURL) as exc:
         print(f"warning: cover download failed: {exc}", file=sys.stderr)
         return None
-    if len(resp.content) > COVER_MAX_BYTES:
-        print("warning: cover exceeds size cap, skipping", file=sys.stderr)
-        return None
-    mime = resp.headers.get("content-type", "image/jpeg").split(";")[0]
     return {
         "url": url,
-        "b64": base64.b64encode(resp.content).decode(),
+        "b64": base64.b64encode(b"".join(chunks)).decode(),
         "mime": mime,
     }
 
