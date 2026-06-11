@@ -1,0 +1,5 @@
+[MESSAGES CONTROL]
+# C0114 = missing-module-docstring
+# C0116 = missing-function-docstring
+# These conventions are not enforced for test files and internal helpers.
+disable=C0114,C0116

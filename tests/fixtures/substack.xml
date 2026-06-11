@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Taylor's Substack</title>
+    <item>
+      <title>Newest fixture post</title>
+      <link>https://onlydole.substack.com/p/newest</link>
+      <pubDate>Mon, 08 Jun 2026 12:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Middle fixture post</title>
+      <link>https://onlydole.substack.com/p/middle</link>
+      <pubDate>Mon, 01 Jun 2026 12:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Oldest fixture post</title>
+      <link>https://onlydole.substack.com/p/oldest</link>
+      <pubDate>Sun, 24 May 2026 12:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Fourth post beyond the cap</title>
+      <link>https://onlydole.substack.com/p/fourth</link>
+      <pubDate>Sun, 17 May 2026 12:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
