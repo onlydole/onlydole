@@ -142,7 +142,7 @@ def _summary(lines: list[dict]) -> str:
 def tile_contexts(data: dict) -> list[dict]:
     writing = data.get("writing")
     writing_lines = (
-        [{"primary": fit(p["title"], 84), "secondary": p["date"]} for p in writing]
+        [{"primary": fit(p["title"], 92), "secondary": p["date"]} for p in writing]
         if writing
         else EMPTY_LINES
     )
@@ -151,7 +151,7 @@ def tile_contexts(data: dict) -> list[dict]:
     shipped_lines = (
         [
             {
-                "primary": fit(i["title"], 84),
+                "primary": fit(i["title"], 92),
                 "secondary": fit(f"{i['detail']} · {i['date']}", 110),
             }
             for i in shipped
@@ -164,7 +164,7 @@ def tile_contexts(data: dict) -> list[dict]:
     stage_lines = (
         [
             {
-                "primary": fit(t["title"], 84),
+                "primary": fit(t["title"], 92),
                 "secondary": fit(f"{t['venue']} · {t['date']}", 110),
             }
             for t in stage
@@ -177,7 +177,8 @@ def tile_contexts(data: dict) -> list[dict]:
     books = (reading or {}).get("books") or []
     if books:
         reading_lines = [
-            {"primary": fit(b["title"], 84), "secondary": b["author"]} for b in books
+            {"primary": fit(b["title"], 92), "secondary": fit(b["author"], 110)}
+            for b in books
         ]
     else:
         reading_lines = EMPTY_LINES

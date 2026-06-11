@@ -187,3 +187,41 @@ def test_old_yaml_cache_shape_treated_as_absent(workspace, monkeypatch):
     assert build.main() == 0
     svg = (build.ASSETS / "reading-dark.svg").read_text(encoding="utf-8")
     assert "Old Book" not in svg
+
+
+class _FakeResponse:
+    def __init__(self, content, content_type="image/jpeg"):
+        self.content = content
+        self.headers = {"content-type": content_type}
+
+    def raise_for_status(self):
+        return None
+
+
+def test_download_cover_skips_oversized_images(monkeypatch):
+    big = b"x" * (build.COVER_MAX_BYTES + 1)
+    monkeypatch.setattr(build.httpx, "get", lambda *a, **k: _FakeResponse(big))
+    assert build._download_cover("https://img/big.jpg") is None
+
+
+def test_download_cover_encodes_within_cap(monkeypatch):
+    monkeypatch.setattr(build.httpx, "get", lambda *a, **k: _FakeResponse(b"ABC"))
+    cover = build._download_cover("https://img/c.jpg")
+    assert cover == {"url": "https://img/c.jpg", "b64": "QUJD", "mime": "image/jpeg"}
+
+
+def test_goodreads_outage_serves_new_shape_cache(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+
+    def boom():
+        raise sources.SourceError("goodreads is down")
+
+    _patch_sources(monkeypatch)
+    monkeypatch.setattr(sources, "fetch_goodreads", boom)
+    assert build.main() == 0
+    svg = (build.ASSETS / "reading-dark.svg").read_text(encoding="utf-8")
+    assert "Book" in svg
+    assert "data:image/jpeg;base64,QUJD" in svg
+    readme = build.README.read_text(encoding="utf-8")
+    assert '<a href="https://gr/b">' in readme

@@ -12,7 +12,7 @@
   <a href="https://kccncna2025.sched.com/event/51807c07f8572b3211e24e9430ec6f26"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: The Missing Manual for Open Source Community Sustainability (KubeCon + CloudNativeCon NA, Atlanta · 2025-11-11); Navigating Contributions and Community Health in Kubernetes (KubeFM podcast · 2025-11-03); Keynote: Above the Clouds — Mountainous Achievements with End Users (KubeCon + CloudNativeCon NA, Salt Lake City · 2024-11-15)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://www.goodreads.com/review/show/8658061089?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: Obviously Awesome: How to Nail Product Positioning so Customers Get it, Buy it, Lov… (April Dunford); Dungeon Crawler Carl (Dungeon Crawler Carl, #1) (Matt Dinniman); The Stranger (Albert Camus)"></picture></a>
+  <a href="https://www.goodreads.com/review/show/8658061089?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: Obviously Awesome: How to Nail Product Positioning so Customers Get it, Buy it, Love it (April Dunford); Dungeon Crawler Carl (Dungeon Crawler Carl, #1) (Matt Dinniman); The Stranger (Albert Camus)"></picture></a>
 </p>
 <p align="center">
   <a href="https://onlydole.substack.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/chip-substack-dark.svg"><img src="assets/chip-substack-light.svg" width="150" alt="Substack"></picture></a>

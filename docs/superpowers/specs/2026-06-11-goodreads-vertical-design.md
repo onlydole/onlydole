@@ -26,7 +26,7 @@ characters and the live stage tile shows mid-word ellipses).
 | Books shown | Up to 3 from the shelf |
 | Reading row link | First book's Goodreads page |
 | Attribution | Small "via Goodreads" credit in the reading row header |
-| Truncation budgets | Titles 84 chars (was 40), detail lines 110 (was 52) |
+| Truncation budgets | Titles 92 chars (was 40), detail lines 110 (was 52) |
 
 ## Part 1 — The Artifact
 
@@ -41,13 +41,13 @@ characters and the live stage tile shows mid-word ellipses).
   unchanged. Tile order stays writing, shipped, on stage, reading.
 - Entry typography keeps the current sizes (25px primary, 17px secondary,
   same palette tokens). Exact spacing may be tuned during visual QA.
-- `fit()` budgets rise to 84 (primary) and 110 (secondary). The ellipsis
+- `fit()` budgets rise to 92 (primary) and 110 (secondary). The ellipsis
   remains as a safety net only.
 
 ### Reading row (Goodreads-powered)
 
 - Lists up to 3 books from the currently-reading shelf. Each book renders
-  as primary = title (fit 84), secondary = author name.
+  as primary = title (fit 92), secondary = author name.
 - The first book's cover renders at the left of the row, approximately
   92px wide (aspect preserved), from the feed's large image variant,
   embedded as a base64 data URI. Text block shifts right when the cover
@@ -126,7 +126,7 @@ characters and the live stage tile shows mid-word ellipses).
 
 ## Acceptance criteria
 
-1. No ellipsis appears for any title up to 84 characters. The three live
+1. No ellipsis appears for any title up to 92 characters. The three live
    talk titles and the current book title render whole.
 2. The profile renders hero, four full-width rows, chips, About, stamp,
    correct in dark and light themes.
