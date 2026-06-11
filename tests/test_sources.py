@@ -7,10 +7,10 @@ from generator.sources import (
     ACTIVITY_QUERY,
     SourceError,
     _entry_date,
-    load_talks,
     parse_activity,
     parse_goodreads,
     parse_substack,
+    parse_talks,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -57,25 +57,71 @@ def test_parse_activity_bad_shape_raises():
         parse_activity({"data": {"user": None}})
 
 
-def test_load_talks_sorts_desc_and_caps_at_three(tmp_path):
-    talks = tmp_path / "talks.yaml"
-    talks.write_text(
-        "\n".join(
-            f'- {{title: "T{i}", venue: "V", date: 2026-01-0{i}, url: "https://x/{i}"}}'
-            for i in (2, 4, 1, 3)
-        ),
-        encoding="utf-8",
+def test_parse_talks_extracts_fields():
+    talks = parse_talks((FIXTURES / "talks.xml").read_text(encoding="utf-8"))
+    assert len(talks) == 3
+    assert talks[0] == {
+        "title": "The Missing Manual for Open Source Community Sustainability",
+        "venue": "KubeCon + CloudNativeCon North America, Atlanta",
+        "date": "2025-11-11",
+        "url": "https://youtu.be/FPQB7hQL4Vw",
+        "kind": "talk",
+    }
+
+
+def test_parse_talks_sorts_desc_and_caps_at_three():
+    talks = parse_talks((FIXTURES / "talks.xml").read_text(encoding="utf-8"))
+    assert [t["date"] for t in talks] == ["2025-11-11", "2025-11-03", "2025-03-27"]
+
+
+def test_parse_talks_defaults_kind_and_skips_incomplete_items():
+    feed = (
+        "<rss><channel>"
+        "<item><title>No venue</title><link>https://x/1</link>"
+        "<pubDate>Tue, 11 Nov 2025 12:00:00 +0000</pubDate></item>"
+        "<item><title>Good</title><link>https://x/2</link>"
+        "<description>Venue</description>"
+        "<pubDate>Mon, 03 Nov 2025 12:00:00 +0000</pubDate></item>"
+        "</channel></rss>"
     )
-    loaded = load_talks(talks)
-    assert [t["title"] for t in loaded] == ["T4", "T3", "T2"]
-    assert loaded[0]["kind"] == "talk"
+    talks = parse_talks(feed)
+    assert [t["title"] for t in talks] == ["Good"]
+    assert talks[0]["kind"] == "talk"
+    assert talks[0]["date"] == "2025-11-03"
 
 
-def test_load_talks_missing_field_raises(tmp_path):
-    talks = tmp_path / "talks.yaml"
-    talks.write_text('- {title: "T", venue: "V", date: 2026-01-01}', encoding="utf-8")
+def test_parse_talks_bad_pubdate_skipped():
+    feed = (
+        "<rss><channel>"
+        "<item><title>Bad date</title><link>https://x/1</link>"
+        "<description>V</description><pubDate>not a date</pubDate></item>"
+        "<item><title>Good</title><link>https://x/2</link>"
+        "<description>V</description>"
+        "<pubDate>Mon, 03 Nov 2025 12:00:00 +0000</pubDate></item>"
+        "</channel></rss>"
+    )
+    assert [t["title"] for t in parse_talks(feed)] == ["Good"]
+
+
+def test_parse_talks_garbage_raises():
     with pytest.raises(SourceError):
-        load_talks(talks)
+        parse_talks("complete garbage, not xml")
+
+
+def test_parse_talks_empty_feed_raises():
+    with pytest.raises(SourceError):
+        parse_talks("<rss><channel></channel></rss>")
+
+
+def test_parse_talks_rejects_doctype_and_entities():
+    bomb = (
+        '<?xml version="1.0"?><!DOCTYPE lolz [<!ENTITY lol "lol">]>'
+        "<rss><channel><item><title>&lol;</title><link>https://x</link>"
+        "<description>V</description>"
+        "<pubDate>Tue, 11 Nov 2025 12:00:00 +0000</pubDate></item></channel></rss>"
+    )
+    with pytest.raises(SourceError):
+        parse_talks(bomb)
 
 
 def test_parse_activity_skips_deleted_repo_prs():

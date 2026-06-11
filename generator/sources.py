@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 import datetime
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from xml.etree import ElementTree
 
 import feedparser
 import httpx
-import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SUBSTACK_FEED = "https://onlydole.substack.com/feed"
@@ -20,6 +20,7 @@ GOODREADS_FEED = (
     "https://www.goodreads.com/review/list_rss/"
     f"{GOODREADS_USER_ID}?shelf=currently-reading"
 )
+TALKS_FEED = "https://onlydole.dev/feeds/talks.xml"
 USER_AGENT = "Mozilla/5.0 (compatible; onlydole-profile-bot/1.0)"
 
 
@@ -149,33 +150,58 @@ def fetch_activity(token: str) -> list[dict]:
     return parse_activity(payload)
 
 
-def load_talks(path: Path | None = None) -> list[dict]:
-    path = path or REPO_ROOT / "data" / "talks.yaml"
-    entries = _load_yaml(path)
-    if not isinstance(entries, list) or not entries:
-        raise SourceError("talks.yaml must be a non-empty list")
-    for entry in entries:
-        for field in ("title", "venue", "date", "url"):
-            if not entry.get(field):
-                raise SourceError(f"talks.yaml entry missing {field!r}")
-    entries.sort(key=lambda e: str(e["date"]), reverse=True)
-    return [
-        {
-            "title": e["title"],
-            "venue": e["venue"],
-            "date": str(e["date"]),
-            "url": e["url"],
-            "kind": e.get("kind", "talk"),
-        }
-        for e in entries[:3]
-    ]
-
-
-def _load_yaml(path: Path):
+def _rfc822_date(value: str | None) -> str | None:
+    """ISO date from an RFC 822 pubDate, or None if absent/invalid."""
     try:
-        return yaml.safe_load(path.read_text(encoding="utf-8"))
-    except (OSError, yaml.YAMLError) as exc:
-        raise SourceError(f"{path.name}: {exc}") from exc
+        return parsedate_to_datetime(value).date().isoformat()
+    except (TypeError, ValueError):
+        return None
+
+
+def parse_talks(feed_text: str) -> list[dict]:
+    """Parse the onlydole.dev talks RSS feed into up to 3 talk dicts.
+
+    Same DTD and entity rejection guard as parse_goodreads. The feed
+    carries the venue in each item's description and the kind in its
+    category, per the producer spec in onlydole.github.io.
+    """
+    lowered = feed_text.lower()
+    if "<!doctype" in lowered or "<!entity" in lowered:
+        raise SourceError("feed contains DTD or entity declarations")
+    try:
+        root = ElementTree.fromstring(feed_text)
+    except ElementTree.ParseError as exc:
+        raise SourceError(f"unparsable talks feed: {exc}") from exc
+    talks = []
+    for item in root.iter("item"):
+        title = (item.findtext("title") or "").strip()
+        url = (item.findtext("link") or "").strip()
+        venue = (item.findtext("description") or "").strip()
+        kind = (item.findtext("category") or "").strip() or "talk"
+        date = _rfc822_date(item.findtext("pubDate"))
+        if not (title and url and venue and date):
+            continue
+        talks.append(
+            {"title": title, "venue": venue, "date": date, "url": url, "kind": kind}
+        )
+    if not talks:
+        raise SourceError("talks feed had no usable items")
+    talks.sort(key=lambda t: t["date"], reverse=True)
+    return talks[:3]
+
+
+def fetch_talks() -> list[dict]:
+    try:
+        resp = httpx.get(
+            TALKS_FEED,
+            timeout=30,
+            follow_redirects=True,
+            headers={"User-Agent": USER_AGENT},
+        )
+        resp.raise_for_status()
+    except httpx.HTTPError as exc:
+        raise SourceError(f"talks fetch failed: {exc}") from exc
+    return parse_talks(resp.text)
 
 
 def parse_goodreads(feed_text: str) -> list[dict]:

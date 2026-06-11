@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Taylor Dolezal · Talks</title>
+    <link>https://onlydole.dev/#speaking</link>
+    <description>Talks, keynotes, panels, and podcast appearances by Taylor Dolezal.</description>
+    <atom:link href="https://onlydole.dev/feeds/talks.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Tue, 11 Nov 2025 12:00:00 +0000</lastBuildDate>
+    <item>
+      <title>The Missing Manual for Open Source Community Sustainability</title>
+      <link>https://youtu.be/FPQB7hQL4Vw</link>
+      <description>KubeCon + CloudNativeCon North America, Atlanta</description>
+      <category>talk</category>
+      <pubDate>Tue, 11 Nov 2025 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2025-11-missing-manual</guid>
+    </item>
+    <item>
+      <title>Navigating Contributions and Community Health in Kubernetes</title>
+      <link>https://kube.fm/navigating-contributions-community-taylor</link>
+      <description>KubeFM podcast</description>
+      <category>podcast</category>
+      <pubDate>Mon, 03 Nov 2025 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2025-11-kubefm-contributions</guid>
+    </item>
+    <item>
+      <title>The Whirlwind Pace of AI</title>
+      <link>https://www.heavybit.com/library/podcasts/open-source-ready/ep-10-the-whirlwind-pace-of-ai-with-taylor-dolezal</link>
+      <description>Open Source Ready, Episode 10</description>
+      <category>podcast</category>
+      <pubDate>Thu, 27 Mar 2025 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2025-03-open-source-ready</guid>
+    </item>
+    <item>
+      <title>Taylor Dolezal on Kube Cuddle</title>
+      <link>https://kubecuddle.transistor.fm/episodes/taylor-dolezal</link>
+      <description>Kube Cuddle, Episode 25</description>
+      <category>podcast</category>
+      <pubDate>Wed, 15 Jan 2025 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2025-01-kube-cuddle</guid>
+    </item>
+    <item>
+      <title>CNCF Projects and Open Source Evolution</title>
+      <link>https://www.theiacpodcast.com/episode/cncf-projects-and-open-source-evolution-with-taylor-dolezal</link>
+      <description>The IaC Podcast</description>
+      <category>podcast</category>
+      <pubDate>Tue, 10 Dec 2024 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2024-12-iac-podcast</guid>
+    </item>
+    <item>
+      <title>Above the Clouds. Mountainous Achievements with End Users</title>
+      <link>https://www.youtube.com/watch?v=TnYupUh6OIg</link>
+      <description>KubeCon + CloudNativeCon North America, Salt Lake City</description>
+      <category>keynote</category>
+      <pubDate>Thu, 14 Nov 2024 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2024-11-above-the-clouds</guid>
+    </item>
+    <item>
+      <title>From Containers to Cognition. Conducting the AI Orchestra</title>
+      <link>https://www.youtube.com/watch?v=MWmOeXI17Kg</link>
+      <description>PyTorch Conference, San Francisco</description>
+      <category>keynote</category>
+      <pubDate>Wed, 18 Sep 2024 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2024-09-pytorch-cognition</guid>
+    </item>
+    <item>
+      <title>Revolutionizing Cloud Native Architectures with WebAssembly</title>
+      <link>https://www.youtube.com/watch?v=tu8a-GefJL8</link>
+      <description>KubeCon + CloudNativeCon Europe, Paris</description>
+      <category>panel</category>
+      <pubDate>Thu, 21 Mar 2024 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2024-03-paris-wasm-panel</guid>
+    </item>
+    <item>
+      <title>Hip, Hip, Beret! No Cap, Just Cloud Native Facts</title>
+      <link>https://www.youtube.com/watch?v=MICHGBAe8gc</link>
+      <description>KubeCon + CloudNativeCon Europe, Paris</description>
+      <category>keynote</category>
+      <pubDate>Thu, 21 Mar 2024 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2024-03-paris-keynote</guid>
+    </item>
+    <item>
+      <title>The Kubernetes Ecosystem</title>
+      <link>https://cloudnativenowpodcast.podbean.com/e/the-kubernetes-ecosystem-with-cncfs-taylor-dolezal/</link>
+      <description>Cloud Native Now, EP7</description>
+      <category>podcast</category>
+      <pubDate>Mon, 18 Mar 2024 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2024-03-cloud-native-now</guid>
+    </item>
+    <item>
+      <title>Windy City Whirlwind. Stirring Up the Cloud Native Ecosystem</title>
+      <link>https://www.youtube.com/watch?v=6mwuXLxwYTg</link>
+      <description>KubeCon + CloudNativeCon North America, Chicago</description>
+      <category>keynote</category>
+      <pubDate>Tue, 07 Nov 2023 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2023-11-windy-city-whirlwind</guid>
+    </item>
+    <item>
+      <title>Blueprint Banter. Cloud Native Conversations by the Fireside</title>
+      <link>https://youtu.be/yVyMveT6RCA</link>
+      <description>KubeCon + CloudNativeCon North America, Chicago</description>
+      <category>panel</category>
+      <pubDate>Tue, 07 Nov 2023 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2023-11-blueprint-banter</guid>
+    </item>
+    <item>
+      <title>What Will Be Hot at KubeCon? Platform Engineering, of Course</title>
+      <link>https://thenewstack.io/what-will-be-hot-at-kubecon-platform-engineering-of-course/</link>
+      <description>The New Stack Makers</description>
+      <category>podcast</category>
+      <pubDate>Tue, 31 Oct 2023 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2023-10-new-stack-kubecon</guid>
+    </item>
+    <item>
+      <title>Live from KubeCon. Insider Insights with CNCF's Head of Ecosystem</title>
+      <link>https://www.youtube.com/watch?v=a9D5p0SaKL8</link>
+      <description>OpenObservability Talks</description>
+      <category>podcast</category>
+      <pubDate>Thu, 20 Apr 2023 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2023-04-openobservability</guid>
+    </item>
+    <item>
+      <title>Cappucci-Know. Percolating EU End User Insights in the Cloud Native Café</title>
+      <link>https://www.youtube.com/watch?v=4xYH36akGSE</link>
+      <description>KubeCon + CloudNativeCon Europe, Amsterdam</description>
+      <category>panel</category>
+      <pubDate>Wed, 19 Apr 2023 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2023-04-cappucci-know</guid>
+    </item>
+    <item>
+      <title>Tulips, Terabytes, and Transformations. Blooming Innovations in the Cloud Native Garden</title>
+      <link>https://www.youtube.com/watch?v=-hJAoeV3U3o</link>
+      <description>KubeCon + CloudNativeCon Europe, Amsterdam</description>
+      <category>keynote</category>
+      <pubDate>Wed, 19 Apr 2023 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2023-04-amsterdam-keynote</guid>
+    </item>
+    <item>
+      <title>The Cloud Native Ecosystem</title>
+      <link>https://changelog.com/shipit/69</link>
+      <description>Ship It! Podcast, Episode 69</description>
+      <category>podcast</category>
+      <pubDate>Thu, 08 Sep 2022 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2022-09-ship-it-69</guid>
+    </item>
+    <item>
+      <title>Wandering in the Wonders of the End User Community</title>
+      <link>https://ossna2022.sched.com/event/11Qje/keynote-wandering-in-the-wonders-of-the-end-user-community-taylor-dolezal-head-of-ecosystem-cloud-native-computing-foundation</link>
+      <description>Open Source Summit North America, Austin</description>
+      <category>keynote</category>
+      <pubDate>Thu, 23 Jun 2022 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2022-06-oss-summit-end-users</guid>
+    </item>
+    <item>
+      <title>Navigating an Infinite Landscape</title>
+      <link>https://www.youtube.com/watch?v=-kmSQRsTOxs</link>
+      <description>PlatformCon 2022</description>
+      <category>keynote</category>
+      <pubDate>Fri, 10 Jun 2022 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2022-06-platformcon</guid>
+    </item>
+    <item>
+      <title>End User Ecosystem Update</title>
+      <link>https://www.youtube.com/watch?v=XqEflGXlErA&amp;t=2662s</link>
+      <description>KubeCon + CloudNativeCon Europe, Valencia</description>
+      <category>keynote</category>
+      <pubDate>Wed, 18 May 2022 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2022-05-valencia-end-user</guid>
+    </item>
+    <item>
+      <title>Crafting Kubernetes with Functions. EKS and the CDK for Terraform</title>
+      <link>https://enterprise.ng-conf.org/session/crafting-kubernetes-with-functions/</link>
+      <description>EnterpriseNG 2021</description>
+      <category>talk</category>
+      <pubDate>Fri, 03 Dec 2021 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2021-12-enterpriseng</guid>
+    </item>
+    <item>
+      <title>Optimizing AWS Workflows with the CDK for Terraform</title>
+      <link>https://www.youtube.com/watch?v=7SluZSZntKA</link>
+      <description>AWS re:Invent 2021, Las Vegas</description>
+      <category>talk</category>
+      <pubDate>Mon, 29 Nov 2021 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2021-11-reinvent-cdktf</guid>
+    </item>
+    <item>
+      <title>Layered Governance for Your Infrastructure with Kubernetes, OPA, and Terraform</title>
+      <link>https://www.hashicorp.com/resources/layered-governance-for-your-infrastructure-with-kubernetes-opa-and-terraform</link>
+      <description>HashiTalks 2021</description>
+      <category>talk</category>
+      <pubDate>Wed, 17 Feb 2021 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2021-02-hashitalks-governance</guid>
+    </item>
+    <item>
+      <title>Layered Governance for Infrastructure with Kubernetes, OPA, and Terraform</title>
+      <link>https://archive.fosdem.org/2021/schedule/event/kubernetes_layered_governance/</link>
+      <description>FOSDEM 2021</description>
+      <category>talk</category>
+      <pubDate>Sat, 06 Feb 2021 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2021-02-fosdem-governance</guid>
+    </item>
+    <item>
+      <title>Kubernetes 1.19 Release</title>
+      <link>https://kubernetespodcast.com/episode/118-kubernetes-1.19/</link>
+      <description>Kubernetes Podcast from Google, Episode 118</description>
+      <category>podcast</category>
+      <pubDate>Tue, 25 Aug 2020 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2020-08-kubernetes-podcast-118</guid>
+    </item>
+    <item>
+      <title>From Provisioning to Production. Automating Observability Principles with Terraform</title>
+      <link>https://speakerdeck.com/ksatirli/from-provisioning-to-production</link>
+      <description>Dash by Datadog 2020</description>
+      <category>talk</category>
+      <pubDate>Tue, 11 Aug 2020 12:00:00 +0000</pubDate>
+      <guid isPermaLink="false">https://onlydole.dev/talks/2020-08-dash-datadog</guid>
+    </item>
+  </channel>
+</rss>
