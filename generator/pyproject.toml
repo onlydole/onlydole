@@ -12,11 +12,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "black>=26.5.1",
-    "flake8>=7.3.0",
-    "isort>=8.0.1",
-    "pylint>=4.0.5",
     "pytest>=8.0",
+    "ruff>=0.9",
 ]
 
 [tool.ruff]
