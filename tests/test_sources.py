@@ -3,7 +3,13 @@ from pathlib import Path
 
 import pytest
 
-from generator.sources import SourceError, load_reading, load_talks, parse_activity, parse_substack
+from generator.sources import (
+    SourceError,
+    load_reading,
+    load_talks,
+    parse_activity,
+    parse_substack,
+)
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -77,7 +83,12 @@ def test_load_reading_returns_current(tmp_path):
         encoding="utf-8",
     )
     book = load_reading(reading)
-    assert book == {"title": "Book", "author": "Author", "url": "", "note": "Why I like it"}
+    assert book == {
+        "title": "Book",
+        "author": "Author",
+        "url": "",
+        "note": "Why I like it",
+    }
 
 
 def test_load_reading_missing_author_raises(tmp_path):

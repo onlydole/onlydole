@@ -86,7 +86,10 @@ def tile_contexts(data: dict) -> list[dict]:
     shipped = data.get("shipped")
     shipped_lines = (
         [
-            {"primary": fit(i["title"], 40), "secondary": f"{i['detail']} · {i['date']}"}
+            {
+                "primary": fit(i["title"], 40),
+                "secondary": f"{i['detail']} · {i['date']}",
+            }
             for i in shipped
         ]
         if shipped
@@ -96,7 +99,10 @@ def tile_contexts(data: dict) -> list[dict]:
     stage = data.get("stage")
     stage_lines = (
         [
-            {"primary": fit(t["title"], 40), "secondary": fit(f"{t['venue']} · {t['date']}", 52)}
+            {
+                "primary": fit(t["title"], 40),
+                "secondary": fit(f"{t['venue']} · {t['date']}", 52),
+            }
             for t in stage
         ]
         if stage
@@ -125,7 +131,9 @@ def tile_contexts(data: dict) -> list[dict]:
             "key": "shipped",
             "header": "🔨 RECENTLY SHIPPED",
             "lines": shipped_lines,
-            "url": shipped[0]["url"] if shipped else f"https://github.com/{sources.GITHUB_LOGIN}",
+            "url": shipped[0]["url"]
+            if shipped
+            else f"https://github.com/{sources.GITHUB_LOGIN}",
             "alt": "Recently shipped: " + _summary(shipped_lines),
         },
         {

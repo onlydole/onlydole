@@ -11,8 +11,23 @@ README_FRAME = (
 )
 
 WRITING = [{"title": "Post", "url": "https://s/p", "date": "2026-06-08"}]
-SHIPPED = [{"title": "repo v1", "detail": "release", "url": "https://g/r", "date": "2026-06-05"}]
-TALKS = [{"title": "Talk", "venue": "Conf", "date": "2026-04-01", "url": "https://t/1", "kind": "talk"}]
+SHIPPED = [
+    {
+        "title": "repo v1",
+        "detail": "release",
+        "url": "https://g/r",
+        "date": "2026-06-05",
+    }
+]
+TALKS = [
+    {
+        "title": "Talk",
+        "venue": "Conf",
+        "date": "2026-04-01",
+        "url": "https://t/1",
+        "kind": "talk",
+    }
+]
 READING = {"title": "Book", "author": "Author", "url": "", "note": ""}
 
 
@@ -46,11 +61,16 @@ def test_main_builds_assets_readme_and_cache(workspace, monkeypatch):
     assert "prose stays" in readme
     for name in (
         "hero.svg",
-        "writing-dark.svg", "writing-light.svg",
-        "shipped-dark.svg", "shipped-light.svg",
-        "stage-dark.svg", "stage-light.svg",
-        "reading-dark.svg", "reading-light.svg",
-        "chip-substack-dark.svg", "chip-website-light.svg",
+        "writing-dark.svg",
+        "writing-light.svg",
+        "shipped-dark.svg",
+        "shipped-light.svg",
+        "stage-dark.svg",
+        "stage-light.svg",
+        "reading-dark.svg",
+        "reading-light.svg",
+        "chip-substack-dark.svg",
+        "chip-website-light.svg",
     ):
         assert (build.ASSETS / name).exists(), name
     cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
@@ -70,8 +90,8 @@ def test_dead_source_falls_back_to_cache(workspace, monkeypatch):
     monkeypatch.setenv("BUILD_DATE", "2026-06-11")
     assert build.main() == 0
     second = build.README.read_text(encoding="utf-8")
-    assert '<a href="https://s/p">' in second          # cached writing link survives
-    assert "Last refreshed: 2026-06-11" in second      # stamp still advanced
+    assert '<a href="https://s/p">' in second  # cached writing link survives
+    assert "Last refreshed: 2026-06-11" in second  # stamp still advanced
 
 
 def test_dead_source_with_no_cache_renders_empty_state(workspace, monkeypatch):

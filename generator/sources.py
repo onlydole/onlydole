@@ -23,7 +23,7 @@ class SourceError(RuntimeError):
 def parse_substack(feed_text: str) -> list[dict]:
     parsed = feedparser.parse(feed_text)
     if parsed.bozo and not parsed.entries:
-        raise SourceError(f"unparseable feed: {parsed.bozo_exception}")
+        raise SourceError(f"unparsable feed: {parsed.bozo_exception}")
     posts = []
     for entry in parsed.entries[:3]:
         published = entry.get("published_parsed")
