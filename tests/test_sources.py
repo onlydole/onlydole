@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from generator.sources import SourceError, parse_activity, parse_substack
+from generator.sources import SourceError, load_reading, load_talks, parse_activity, parse_substack
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -47,9 +47,6 @@ def test_parse_activity_skips_private_and_profile_repo():
 def test_parse_activity_bad_shape_raises():
     with pytest.raises(SourceError):
         parse_activity({"data": {"user": None}})
-
-
-from generator.sources import load_reading, load_talks
 
 
 def test_load_talks_sorts_desc_and_caps_at_three(tmp_path):
