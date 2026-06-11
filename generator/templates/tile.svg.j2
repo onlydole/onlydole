@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" role="img" aria-label="{{ aria }}">
+  <rect x="1.5" y="1.5" width="597" height="337" rx="16" fill="{{ theme.bg }}" stroke="{{ theme.border }}" stroke-width="2"/>
+  <text x="36" y="62" font-family="{{ font }}" font-size="22" font-weight="700" letter-spacing="2.5" fill="{{ theme.accent }}">{{ header }}</text>
+{% for line in lines %}
+  <text x="36" y="{{ 122 + loop.index0 * 74 }}" font-family="{{ font }}" font-size="25" fill="{{ theme.text }}">{{ line.primary }}</text>
+  <text x="36" y="{{ 152 + loop.index0 * 74 }}" font-family="{{ font }}" font-size="17" fill="{{ theme.muted }}">{{ line.secondary }}</text>
+{% endfor %}
+</svg>
