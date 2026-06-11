@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import base64
 import datetime
 import html
+import httpx
 import json
 import os
 import sys
@@ -57,6 +59,51 @@ def _load_cache() -> dict:
     return cache if isinstance(cache, dict) else {}
 
 
+def _download_cover(url: str) -> dict | None:
+    try:
+        resp = httpx.get(
+            url,
+            timeout=30,
+            follow_redirects=True,
+            headers={"User-Agent": sources.USER_AGENT},
+        )
+        resp.raise_for_status()
+    except httpx.HTTPError as exc:
+        print(f"warning: cover download failed: {exc}", file=sys.stderr)
+        return None
+    if len(resp.content) > COVER_MAX_BYTES:
+        print("warning: cover exceeds size cap, skipping", file=sys.stderr)
+        return None
+    mime = resp.headers.get("content-type", "image/jpeg").split(";")[0]
+    return {
+        "url": url,
+        "b64": base64.b64encode(resp.content).decode(),
+        "mime": mime,
+    }
+
+
+def _resolve_reading(cache: dict) -> dict | None:
+    """Fetch Goodreads books, reusing or downloading the first cover."""
+    cached = cache.get("reading")
+    if not isinstance(cached, dict) or "books" not in cached:
+        cached = None
+    try:
+        books = sources.fetch_goodreads()
+    except sources.SourceError as exc:
+        print(f"warning: reading: {exc}; using last-good data", file=sys.stderr)
+        return cached
+    cover = None
+    image_url = books[0].get("image_url") or ""
+    cached_cover = (cached or {}).get("cover") or {}
+    if image_url and cached_cover.get("url") == image_url and cached_cover.get("b64"):
+        cover = cached_cover
+    elif image_url:
+        cover = _download_cover(image_url)
+    fresh = {"books": books, "cover": cover}
+    cache["reading"] = fresh
+    return fresh
+
+
 def gather(today: str) -> dict:
     """Fetch every source; fall back to last-good cache on failure."""
     cache = _load_cache()
@@ -64,7 +111,6 @@ def gather(today: str) -> dict:
         "writing": lambda: sources.fetch_substack(),
         "shipped": lambda: sources.fetch_activity(os.environ["GITHUB_TOKEN"]),
         "stage": lambda: sources.load_talks(),
-        "reading": lambda: sources.load_reading(),
     }
     data = {}
     for key, fetch in fetchers.items():
@@ -74,6 +120,7 @@ def gather(today: str) -> dict:
         except (sources.SourceError, KeyError) as exc:
             print(f"warning: {key}: {exc}; using last-good data", file=sys.stderr)
             data[key] = cache.get(key)
+    data["reading"] = _resolve_reading(cache)
     cache["updated"] = today
     ASSETS.mkdir(exist_ok=True)
     CACHE.write_text(
@@ -126,20 +173,12 @@ def tile_contexts(data: dict) -> list[dict]:
         else EMPTY_LINES
     )
 
-    raw_reading = data.get("reading")
-    reading = (
-        raw_reading
-        if isinstance(raw_reading, dict)
-        and raw_reading.get("title")
-        and raw_reading.get("author")
-        else None
-    )
-    if reading:
+    reading = data.get("reading")
+    books = (reading or {}).get("books") or []
+    if books:
         reading_lines = [
-            {"primary": fit(reading["title"], 84), "secondary": reading["author"]}
+            {"primary": fit(b["title"], 84), "secondary": b["author"]} for b in books
         ]
-        if reading.get("note"):
-            reading_lines.append({"primary": "", "secondary": fit(reading["note"], 110)})
     else:
         reading_lines = EMPTY_LINES
 
@@ -170,8 +209,10 @@ def tile_contexts(data: dict) -> list[dict]:
         {
             "key": "reading",
             "header": "📚 READING NOW",
+            "header_note": "via Goodreads" if books else "",
+            "cover": (reading or {}).get("cover") if books else None,
             "lines": reading_lines,
-            "url": reading.get("url", "") if reading else "",
+            "url": books[0]["url"] if books else "",
             "alt": "Reading now: " + _summary(reading_lines),
         },
     ]

@@ -171,20 +171,6 @@ def load_talks(path: Path | None = None) -> list[dict]:
     ]
 
 
-def load_reading(path: Path | None = None) -> dict:
-    path = path or REPO_ROOT / "data" / "reading.yaml"
-    data = _load_yaml(path)
-    current = (data or {}).get("current") or {}
-    if not (current.get("title") and current.get("author")):
-        raise SourceError("reading.yaml needs current.title and current.author")
-    return {
-        "title": current["title"],
-        "author": current["author"],
-        "url": current.get("url") or "",
-        "note": current.get("note") or "",
-    }
-
-
 def _load_yaml(path: Path):
     try:
         return yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -218,9 +204,7 @@ def parse_goodreads(feed_text: str) -> list[dict]:
         ).strip()
         if not (title and author and url):
             continue
-        books.append(
-            {"title": title, "author": author, "url": url, "image_url": image}
-        )
+        books.append({"title": title, "author": author, "url": url, "image_url": image})
         if len(books) == 3:
             break
     if not books:
