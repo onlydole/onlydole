@@ -1,0 +1,69 @@
+{
+  "writing": [
+    {
+      "title": "I let AI fix my printer",
+      "url": "https://onlydole.substack.com/p/i-let-ai-fix-my-printer",
+      "date": "2026-02-14"
+    },
+    {
+      "title": "Who Are You When the Code Writes Itself?",
+      "url": "https://onlydole.substack.com/p/who-are-you-when-the-code-writes",
+      "date": "2026-02-02"
+    },
+    {
+      "title": "Making Sense of AGENTS.md",
+      "url": "https://onlydole.substack.com/p/making-sense-of-agentsmd",
+      "date": "2026-01-18"
+    }
+  ],
+  "shipped": [
+    {
+      "title": "tailord v1.3.2",
+      "detail": "release",
+      "url": "https://github.com/onlydole/tailord/releases/tag/v1.3.2",
+      "date": "2026-05-09"
+    },
+    {
+      "title": "overdue v1.0.0",
+      "detail": "release",
+      "url": "https://github.com/onlydole/overdue/releases/tag/v1.0.0",
+      "date": "2026-03-05"
+    },
+    {
+      "title": "defense-up v0.0.7",
+      "detail": "release",
+      "url": "https://github.com/onlydole/defense-up/releases/tag/v0.0.7",
+      "date": "2025-06-24"
+    }
+  ],
+  "stage": [
+    {
+      "title": "The Missing Manual for Open Source Community Sustainability",
+      "venue": "KubeCon + CloudNativeCon NA, Atlanta",
+      "date": "2025-11-11",
+      "url": "https://kccncna2025.sched.com/event/51807c07f8572b3211e24e9430ec6f26",
+      "kind": "talk"
+    },
+    {
+      "title": "Navigating Contributions and Community Health in Kubernetes",
+      "venue": "KubeFM podcast",
+      "date": "2025-11-03",
+      "url": "https://kube.fm/navigating-contributions-community-taylor",
+      "kind": "podcast"
+    },
+    {
+      "title": "Keynote: Above the Clouds — Mountainous Achievements with End Users",
+      "venue": "KubeCon + CloudNativeCon NA, Salt Lake City",
+      "date": "2024-11-15",
+      "url": "https://www.youtube.com/watch?v=TnYupUh6OIg",
+      "kind": "keynote"
+    }
+  ],
+  "reading": {
+    "title": "Thinking in Systems",
+    "author": "Donella Meadows",
+    "url": "",
+    "note": "A primer on seeing wholes — systems thinking for everything."
+  },
+  "updated": "2026-06-11"
+}
