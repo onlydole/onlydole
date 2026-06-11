@@ -119,7 +119,7 @@ def gather(today: str) -> dict:
     fetchers = {
         "writing": lambda: sources.fetch_substack(),
         "shipped": lambda: sources.fetch_activity(os.environ["GITHUB_TOKEN"]),
-        "stage": lambda: sources.load_talks(),
+        "stage": lambda: sources.fetch_talks(),
     }
     data = {}
     for key, fetch in fetchers.items():

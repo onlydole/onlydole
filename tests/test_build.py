@@ -56,7 +56,7 @@ def workspace(tmp_path, monkeypatch):
 def _patch_sources(monkeypatch, writing=WRITING):
     monkeypatch.setattr(sources, "fetch_substack", lambda: writing)
     monkeypatch.setattr(sources, "fetch_activity", lambda token: SHIPPED)
-    monkeypatch.setattr(sources, "load_talks", lambda path=None: TALKS)
+    monkeypatch.setattr(sources, "fetch_talks", lambda: TALKS)
     monkeypatch.setattr(sources, "fetch_goodreads", lambda: list(BOOKS))
     monkeypatch.setattr(build, "_download_cover", lambda url: dict(COVER))
 
@@ -115,6 +115,21 @@ def test_dead_source_with_no_cache_renders_empty_state(workspace, monkeypatch):
     assert build.main() == 0
     readme = build.README.read_text(encoding="utf-8")
     assert '<a href="https://onlydole.substack.com">' in readme  # fallback link
+
+
+def test_dead_talks_feed_falls_back_to_cache(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+
+    def boom():
+        raise sources.SourceError("talks feed is down")
+
+    _patch_sources(monkeypatch)
+    monkeypatch.setattr(sources, "fetch_talks", boom)
+    monkeypatch.setenv("BUILD_DATE", "2026-06-11")
+    assert build.main() == 0
+    svg = (build.ASSETS / "stage-dark.svg").read_text(encoding="utf-8")
+    assert "Talk" in svg  # cached talk title survives the outage
 
 
 def test_corrupted_cache_is_ignored(workspace, monkeypatch):
