@@ -1,14 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" role="img" aria-label="On stage: The Missing Manual for Open Source Comm… (KubeCon + CloudNativeCon NA, Atlanta · 2025-11-11); Navigating Contributions and Community… (KubeFM podcast · 2025-11-03); Keynote: Above the Clouds — Mountainous… (KubeCon + CloudNativeCon NA, Salt Lake City · 2024-…)">
-  <rect x="1.5" y="1.5" width="597" height="337" rx="16" fill="#fff6f0" stroke="#f3ddd0" stroke-width="2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 336" role="img" aria-label="On stage: The Missing Manual for Open Source Community Sustainability (KubeCon + CloudNativeCon NA, Atlanta · 2025-11-11); Navigating Contributions and Community Health in Kubernetes (KubeFM podcast · 2025-11-03); Keynote: Above the Clouds — Mountainous Achievements with End Users (KubeCon + CloudNativeCon NA, Salt Lake City · 2024-11-15)">
+  <rect x="1.5" y="1.5" width="1197" height="333" rx="16" fill="#fff6f0" stroke="#f3ddd0" stroke-width="2"/>
+
   <text x="36" y="62" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2.5" fill="#c2414f">🎤 ON STAGE</text>
 
-  <text x="36" y="122" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="25" fill="#44322e">The Missing Manual for Open Source Comm…</text>
+
+  <text x="36" y="122" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="25" fill="#44322e">The Missing Manual for Open Source Community Sustainability</text>
   <text x="36" y="152" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="17" fill="#8a6f66">KubeCon + CloudNativeCon NA, Atlanta · 2025-11-11</text>
 
-  <text x="36" y="196" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="25" fill="#44322e">Navigating Contributions and Community…</text>
+  <text x="36" y="196" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="25" fill="#44322e">Navigating Contributions and Community Health in Kubernetes</text>
   <text x="36" y="226" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="17" fill="#8a6f66">KubeFM podcast · 2025-11-03</text>
 
-  <text x="36" y="270" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="25" fill="#44322e">Keynote: Above the Clouds — Mountainous…</text>
-  <text x="36" y="300" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="17" fill="#8a6f66">KubeCon + CloudNativeCon NA, Salt Lake City · 2024-…</text>
+  <text x="36" y="270" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="25" fill="#44322e">Keynote: Above the Clouds — Mountainous Achievements with End Users</text>
+  <text x="36" y="300" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="17" fill="#8a6f66">KubeCon + CloudNativeCon NA, Salt Lake City · 2024-11-15</text>
 
 </svg>
