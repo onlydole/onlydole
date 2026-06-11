@@ -8,7 +8,7 @@ CASES = {
         {
             "font": FONT_STACK,
             "aria": "Taylor Dolezal — Head of Open Source at Dosu · "
-                    "CNCF Ambassador · Los Angeles",
+            "CNCF Ambassador · Los Angeles",
             "name": "Taylor Dolezal",
             "role": "Head of Open Source @ Dosu · CNCF Ambassador · Los Angeles",
             "cred": "KubeCon keynoter · ex-Disney Studios SRE · ex-HashiCorp",
@@ -23,7 +23,10 @@ CASES = {
             "aria": "Latest writing: Fixture post (2026-01-02)",
             "lines": [
                 {"primary": "Fixture post", "secondary": "2026-01-02"},
-                {"primary": "Second post with <angle> & amp", "secondary": "2026-01-01"},
+                {
+                    "primary": "Second post with <angle> & amp",
+                    "secondary": "2026-01-01",
+                },
             ],
         },
     ),
