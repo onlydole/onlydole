@@ -132,3 +132,46 @@ def fetch_activity(token: str) -> list[dict]:
     if payload.get("errors"):
         raise SourceError(f"graphql errors: {payload['errors']}")
     return parse_activity(payload)
+
+
+def load_talks(path: Path | None = None) -> list[dict]:
+    path = path or REPO_ROOT / "data" / "talks.yaml"
+    entries = _load_yaml(path)
+    if not isinstance(entries, list) or not entries:
+        raise SourceError("talks.yaml must be a non-empty list")
+    for entry in entries:
+        for field in ("title", "venue", "date", "url"):
+            if not entry.get(field):
+                raise SourceError(f"talks.yaml entry missing {field!r}")
+    entries.sort(key=lambda e: str(e["date"]), reverse=True)
+    return [
+        {
+            "title": e["title"],
+            "venue": e["venue"],
+            "date": str(e["date"]),
+            "url": e["url"],
+            "kind": e.get("kind", "talk"),
+        }
+        for e in entries[:3]
+    ]
+
+
+def load_reading(path: Path | None = None) -> dict:
+    path = path or REPO_ROOT / "data" / "reading.yaml"
+    data = _load_yaml(path)
+    current = (data or {}).get("current") or {}
+    if not (current.get("title") and current.get("author")):
+        raise SourceError("reading.yaml needs current.title and current.author")
+    return {
+        "title": current["title"],
+        "author": current["author"],
+        "url": current.get("url") or "",
+        "note": current.get("note") or "",
+    }
+
+
+def _load_yaml(path: Path):
+    try:
+        return yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        raise SourceError(f"{path.name}: {exc}") from exc

@@ -47,3 +47,44 @@ def test_parse_activity_skips_private_and_profile_repo():
 def test_parse_activity_bad_shape_raises():
     with pytest.raises(SourceError):
         parse_activity({"data": {"user": None}})
+
+
+from generator.sources import load_reading, load_talks
+
+
+def test_load_talks_sorts_desc_and_caps_at_three(tmp_path):
+    talks = tmp_path / "talks.yaml"
+    talks.write_text(
+        "\n".join(
+            f'- {{title: "T{i}", venue: "V", date: 2026-01-0{i}, url: "https://x/{i}"}}'
+            for i in (2, 4, 1, 3)
+        ),
+        encoding="utf-8",
+    )
+    loaded = load_talks(talks)
+    assert [t["title"] for t in loaded] == ["T4", "T3", "T2"]
+    assert loaded[0]["kind"] == "talk"
+
+
+def test_load_talks_missing_field_raises(tmp_path):
+    talks = tmp_path / "talks.yaml"
+    talks.write_text('- {title: "T", venue: "V", date: 2026-01-01}', encoding="utf-8")
+    with pytest.raises(SourceError):
+        load_talks(talks)
+
+
+def test_load_reading_returns_current(tmp_path):
+    reading = tmp_path / "reading.yaml"
+    reading.write_text(
+        'current: {title: "Book", author: "Author", note: "Why I like it"}',
+        encoding="utf-8",
+    )
+    book = load_reading(reading)
+    assert book == {"title": "Book", "author": "Author", "url": "", "note": "Why I like it"}
+
+
+def test_load_reading_missing_author_raises(tmp_path):
+    reading = tmp_path / "reading.yaml"
+    reading.write_text('current: {title: "Book"}', encoding="utf-8")
+    with pytest.raises(SourceError):
+        load_reading(reading)
