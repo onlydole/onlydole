@@ -5,10 +5,6 @@
     "indentWidth": 2
   },
   "files": {
-    "includes": [
-      "**",
-      "!assets/**",
-      "!generator/uv.lock"
-    ]
+    "includes": ["**", "!assets", "!generator/uv.lock", "!tests/fixtures"]
   }
 }
