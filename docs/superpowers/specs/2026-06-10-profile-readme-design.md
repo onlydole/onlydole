@@ -163,11 +163,12 @@ current:
    `<!-- stamp:start -->…<!-- stamp:end -->`): image embeds with fresh alt
    text and link targets, and the freshness stamp. Static prose outside the
    markers is never touched.
-4. **Per-source failure isolation:** if a source fails (network error, malformed
-   feed, API error), skip re-rendering that tile — its committed SVG and its
-   README alt text stay at last-good state. Log a warning, continue with the
-   healthy sources, exit 0. A wholesale failure (all sources down) still exits 0
-   with everything untouched.
+4. **Per-source failure isolation:** every successful fetch is persisted to a
+   committed cache (`assets/data-cache.json`). If a source fails (network
+   error, malformed feed, API error), its tile renders from the cached
+   last-good data instead — same SVG, same alt text, never blank. Log a
+   warning, continue with the healthy sources, exit 0. A source that has never
+   succeeded renders a quiet "—" empty state.
 5. The build receives "now" as an injected value so templates stay
    deterministic and golden-testable.
 
