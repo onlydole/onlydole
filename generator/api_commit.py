@@ -49,6 +49,12 @@ def plan_changes(porcelain: str) -> dict:
     return {"additions": additions, "deletions": deletions}
 
 
+def _stale_data_only(errors: list[dict]) -> bool:
+    """True when every error is STALE_DATA — i.e. another run already
+    committed and moved the branch, so there is nothing left to do."""
+    return bool(errors) and all(e.get("type") == "STALE_DATA" for e in errors)
+
+
 def _git(*args: str) -> str:
     return subprocess.run(
         ["git", *args],
@@ -90,6 +96,9 @@ def main() -> int:
     resp.raise_for_status()
     body = resp.json()
     if body.get("errors"):
+        if _stale_data_only(body["errors"]):
+            print("branch advanced during run; a concurrent refresh already landed")
+            return 0
         print(f"error: {body['errors']}", file=sys.stderr)
         return 1
     commit = body["data"]["createCommitOnBranch"]["commit"]
