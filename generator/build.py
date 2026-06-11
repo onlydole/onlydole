@@ -31,11 +31,12 @@ CHIPS = [
 ]
 HERO = {
     "name": "Taylor Dolezal",
-    "role": "Head of Open Source @ Dosu · CNCF Ambassador · Los Angeles",
+    "role": "Head of Open Source @ Dosu · CNCF Ambassador Emeritus · Los Angeles",
     "cred": "KubeCon keynoter · ex-Disney Studios SRE · ex-HashiCorp",
 }
 HERO_ALT = (
-    "Taylor Dolezal — Head of Open Source at Dosu · CNCF Ambassador · Los Angeles"
+    "Taylor Dolezal — Head of Open Source at Dosu · "
+    "CNCF Ambassador Emeritus · Los Angeles"
 )
 EMPTY_LINES = [{"primary": "—", "secondary": ""}]
 

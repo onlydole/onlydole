@@ -18,22 +18,22 @@
   ],
   "shipped": [
     {
-      "title": "Drop Substack self-promo; surface LanceDB near the top",
-      "detail": "merged · onlydole/awesome-knowledge-infrastructure",
-      "url": "https://github.com/onlydole/awesome-knowledge-infrastructure/pull/4",
-      "date": "2026-06-01"
+      "title": "tailord v1.3.2",
+      "detail": "release",
+      "url": "https://github.com/onlydole/tailord/releases/tag/v1.3.2",
+      "date": "2026-05-09"
     },
     {
-      "title": "Expand and tighten the list; clean up curator attribution",
-      "detail": "merged · onlydole/awesome-knowledge-infrastructure",
-      "url": "https://github.com/onlydole/awesome-knowledge-infrastructure/pull/3",
-      "date": "2026-06-01"
+      "title": "tailord v1.3.1",
+      "detail": "release",
+      "url": "https://github.com/onlydole/tailord/releases/tag/v1.3.1",
+      "date": "2026-05-09"
     },
     {
-      "title": "fix(workflow): raise doc-update max-turns to 25",
-      "detail": "merged · onlydole/overdue",
-      "url": "https://github.com/onlydole/overdue/pull/86",
-      "date": "2026-05-14"
+      "title": "tailord v1.3.0",
+      "detail": "release",
+      "url": "https://github.com/onlydole/tailord/releases/tag/v1.3.0",
+      "date": "2026-05-09"
     }
   ],
   "stage": [
