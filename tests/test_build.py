@@ -56,6 +56,7 @@ def test_main_builds_assets_readme_and_cache(workspace, monkeypatch):
     assert build.main() == 0
     readme = build.README.read_text(encoding="utf-8")
     assert 'srcset="assets/writing-dark.svg"' in readme
+    assert 'src="assets/writing-light.svg" width="100%"' in readme
     assert '<a href="https://s/p">' in readme
     assert "Last refreshed: 2026-06-10" in readme
     assert "prose stays" in readme

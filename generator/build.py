@@ -40,6 +40,11 @@ HERO_ALT = (
 )
 EMPTY_LINES = [{"primary": "—", "secondary": ""}]
 
+TILE_WIDTH = 1200
+TEXT_X = 36
+TEXT_X_WITH_COVER = 156
+COVER_MAX_BYTES = 80_000
+
 
 def _load_cache() -> dict:
     if not CACHE.exists():
@@ -90,7 +95,7 @@ def _summary(lines: list[dict]) -> str:
 def tile_contexts(data: dict) -> list[dict]:
     writing = data.get("writing")
     writing_lines = (
-        [{"primary": fit(p["title"], 40), "secondary": p["date"]} for p in writing]
+        [{"primary": fit(p["title"], 84), "secondary": p["date"]} for p in writing]
         if writing
         else EMPTY_LINES
     )
@@ -99,8 +104,8 @@ def tile_contexts(data: dict) -> list[dict]:
     shipped_lines = (
         [
             {
-                "primary": fit(i["title"], 40),
-                "secondary": f"{i['detail']} · {i['date']}",
+                "primary": fit(i["title"], 84),
+                "secondary": fit(f"{i['detail']} · {i['date']}", 110),
             }
             for i in shipped
         ]
@@ -112,8 +117,8 @@ def tile_contexts(data: dict) -> list[dict]:
     stage_lines = (
         [
             {
-                "primary": fit(t["title"], 40),
-                "secondary": fit(f"{t['venue']} · {t['date']}", 52),
+                "primary": fit(t["title"], 84),
+                "secondary": fit(f"{t['venue']} · {t['date']}", 110),
             }
             for t in stage
         ]
@@ -131,10 +136,10 @@ def tile_contexts(data: dict) -> list[dict]:
     )
     if reading:
         reading_lines = [
-            {"primary": fit(reading["title"], 38), "secondary": reading["author"]}
+            {"primary": fit(reading["title"], 84), "secondary": reading["author"]}
         ]
         if reading.get("note"):
-            reading_lines.append({"primary": "", "secondary": fit(reading["note"], 60)})
+            reading_lines.append({"primary": "", "secondary": fit(reading["note"], 110)})
     else:
         reading_lines = EMPTY_LINES
 
@@ -172,6 +177,17 @@ def tile_contexts(data: dict) -> list[dict]:
     ]
 
 
+def _tile_geometry(tile: dict) -> dict:
+    height = 88 + 74 * len(tile["lines"]) + 26
+    if tile.get("cover"):
+        height = max(height, 250)
+    return {
+        "width": TILE_WIDTH,
+        "height": height,
+        "text_x": TEXT_X_WITH_COVER if tile.get("cover") else TEXT_X,
+    }
+
+
 def write_assets(tiles: list[dict]) -> None:
     ASSETS.mkdir(exist_ok=True)
     hero_ctx = {"font": FONT_STACK, "aria": HERO_ALT, **HERO}
@@ -180,6 +196,7 @@ def write_assets(tiles: list[dict]) -> None:
     )
     themes = (("dark", DARK), ("light", LIGHT))
     for tile in tiles:
+        geometry = _tile_geometry(tile)
         for theme_name, theme in themes:
             svg = render_svg(
                 "tile.svg.j2",
@@ -189,6 +206,9 @@ def write_assets(tiles: list[dict]) -> None:
                     "lines": tile["lines"],
                     "header": tile["header"],
                     "aria": tile["alt"],
+                    "cover": tile.get("cover"),
+                    "header_note": tile.get("header_note", ""),
+                    **geometry,
                 },
             )
             (ASSETS / f"{tile['key']}-{theme_name}.svg").write_text(
@@ -220,15 +240,13 @@ def bento_html(tiles: list[dict]) -> str:
         f'<a href="{SITE}"><img src="assets/hero.svg" width="100%" '
         f'alt="{_esc(HERO_ALT)}"></a>'
     ]
-    for pair in (tiles[0:2], tiles[2:4]):
-        cells = []
-        for tile in pair:
-            picture = _picture(tile["key"], tile["alt"], "49%")
-            if tile["url"]:
-                cells.append(f'<a href="{_esc(tile["url"])}">{picture}</a>')
-            else:
-                cells.append(picture)
-        rows.append('<p align="center">\n  ' + "\n  ".join(cells) + "\n</p>")
+    for tile in tiles:
+        picture = _picture(tile["key"], tile["alt"], "100%")
+        if tile["url"]:
+            cell = f'<a href="{_esc(tile["url"])}">{picture}</a>'
+        else:
+            cell = picture
+        rows.append(f'<p align="center">\n  {cell}\n</p>')
     chips = [
         f'<a href="{_esc(url)}">{_picture("chip-" + key, label, "150")}</a>'
         for key, label, url in CHIPS

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 250" role="img" aria-label="Reading now: Fixture book (Fixture author)">
+  <rect x="1.5" y="1.5" width="1197" height="247" rx="16" fill="#1a1417" stroke="#463038" stroke-width="2"/>
+
+  <image x="36" y="56" width="92" height="138" preserveAspectRatio="xMidYMid meet" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="/>
+
+  <text x="156" y="62" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2.5" fill="#ff9d76">📚 READING NOW</text>
+
+  <text x="1164" y="62" text-anchor="end" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="15" fill="#a08a84">via Goodreads</text>
+
+
+  <text x="156" y="122" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="25" fill="#e6ddd9">Fixture book</text>
+  <text x="156" y="152" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="17" fill="#a08a84">Fixture author</text>
+
+</svg>
