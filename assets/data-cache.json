@@ -18,6 +18,12 @@
   ],
   "shipped": [
     {
+      "title": "Make talks data the source of truth, add an RSS feed",
+      "detail": "merged · onlydole/onlydole.github.io",
+      "url": "https://github.com/onlydole/onlydole.github.io/pull/8",
+      "date": "2026-06-11"
+    },
+    {
       "title": "Drop Substack self-promo; surface LanceDB near the top",
       "detail": "merged · onlydole/awesome-knowledge-infrastructure",
       "url": "https://github.com/onlydole/awesome-knowledge-infrastructure/pull/4",
@@ -28,20 +34,14 @@
       "detail": "merged · onlydole/awesome-knowledge-infrastructure",
       "url": "https://github.com/onlydole/awesome-knowledge-infrastructure/pull/3",
       "date": "2026-06-01"
-    },
-    {
-      "title": "fix(workflow): raise doc-update max-turns to 25",
-      "detail": "merged · onlydole/overdue",
-      "url": "https://github.com/onlydole/overdue/pull/86",
-      "date": "2026-05-14"
     }
   ],
   "stage": [
     {
       "title": "The Missing Manual for Open Source Community Sustainability",
-      "venue": "KubeCon + CloudNativeCon NA, Atlanta",
+      "venue": "KubeCon + CloudNativeCon North America, Atlanta",
       "date": "2025-11-11",
-      "url": "https://kccncna2025.sched.com/event/51807c07f8572b3211e24e9430ec6f26",
+      "url": "https://youtu.be/FPQB7hQL4Vw",
       "kind": "talk"
     },
     {
@@ -52,11 +52,11 @@
       "kind": "podcast"
     },
     {
-      "title": "Keynote: Above the Clouds — Mountainous Achievements with End Users",
-      "venue": "KubeCon + CloudNativeCon NA, Salt Lake City",
-      "date": "2024-11-15",
-      "url": "https://www.youtube.com/watch?v=TnYupUh6OIg",
-      "kind": "keynote"
+      "title": "The Whirlwind Pace of AI",
+      "venue": "Open Source Ready, Episode 10",
+      "date": "2025-03-27",
+      "url": "https://www.heavybit.com/library/podcasts/open-source-ready/ep-10-the-whirlwind-pace-of-ai-with-taylor-dolezal",
+      "kind": "podcast"
     }
   ],
   "reading": {
