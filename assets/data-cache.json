@@ -18,6 +18,12 @@
   ],
   "shipped": [
     {
+      "title": "Show the latest Substack posts in the Writing section",
+      "detail": "merged · onlydole/onlydole.github.io",
+      "url": "https://github.com/onlydole/onlydole.github.io/pull/10",
+      "date": "2026-06-12"
+    },
+    {
       "title": "Make talks data the source of truth, add an RSS feed",
       "detail": "merged · onlydole/onlydole.github.io",
       "url": "https://github.com/onlydole/onlydole.github.io/pull/8",
@@ -27,12 +33,6 @@
       "title": "Drop Substack self-promo; surface LanceDB near the top",
       "detail": "merged · onlydole/awesome-knowledge-infrastructure",
       "url": "https://github.com/onlydole/awesome-knowledge-infrastructure/pull/4",
-      "date": "2026-06-01"
-    },
-    {
-      "title": "Expand and tighten the list; clean up curator attribution",
-      "detail": "merged · onlydole/awesome-knowledge-infrastructure",
-      "url": "https://github.com/onlydole/awesome-knowledge-infrastructure/pull/3",
       "date": "2026-06-01"
     }
   ],
@@ -86,5 +86,5 @@
       "mime": "image/jpeg"
     }
   },
-  "updated": "2026-06-11"
+  "updated": "2026-06-12"
 }
