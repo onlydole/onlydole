@@ -18,6 +18,12 @@
   ],
   "shipped": [
     {
+      "title": "fix(security): object-level auth, CORS/session/secret hardening, dep CVEs",
+      "detail": "merged · onlydole/overdue",
+      "url": "https://github.com/onlydole/overdue/pull/96",
+      "date": "2026-06-13"
+    },
+    {
       "title": "Show the latest Substack posts in the Writing section",
       "detail": "merged · onlydole/onlydole.github.io",
       "url": "https://github.com/onlydole/onlydole.github.io/pull/10",
@@ -28,12 +34,6 @@
       "detail": "merged · onlydole/onlydole.github.io",
       "url": "https://github.com/onlydole/onlydole.github.io/pull/8",
       "date": "2026-06-11"
-    },
-    {
-      "title": "Drop Substack self-promo; surface LanceDB near the top",
-      "detail": "merged · onlydole/awesome-knowledge-infrastructure",
-      "url": "https://github.com/onlydole/awesome-knowledge-infrastructure/pull/4",
-      "date": "2026-06-01"
     }
   ],
   "stage": [
@@ -86,5 +86,5 @@
       "mime": "image/jpeg"
     }
   },
-  "updated": "2026-06-13"
+  "updated": "2026-06-14"
 }

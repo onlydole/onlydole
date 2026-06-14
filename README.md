@@ -6,7 +6,7 @@
   <a href="https://onlydole.substack.com/p/i-let-ai-fix-my-printer"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/writing-dark.svg"><img src="assets/writing-light.svg" width="100%" alt="Latest writing: I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02); Making Sense of AGENTS.md (2026-01-18)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://github.com/onlydole/onlydole.github.io/pull/10"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: Show the latest Substack posts in the Writing section (merged · onlydole/onlydole.github.io · 2026-06-12); Make talks data the source of truth, add an RSS feed (merged · onlydole/onlydole.github.io · 2026-06-11); Drop Substack self-promo; surface LanceDB near the top (merged · onlydole/awesome-knowledge-infrastructure · 2026-06-01)"></picture></a>
+  <a href="https://github.com/onlydole/overdue/pull/96"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: fix(security): object-level auth, CORS/session/secret hardening, dep CVEs (merged · onlydole/overdue · 2026-06-13); Show the latest Substack posts in the Writing section (merged · onlydole/onlydole.github.io · 2026-06-12); Make talks data the source of truth, add an RSS feed (merged · onlydole/onlydole.github.io · 2026-06-11)"></picture></a>
 </p>
 <p align="center">
   <a href="https://youtu.be/FPQB7hQL4Vw"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: The Missing Manual for Open Source Community Sustainability (KubeCon + CloudNativeCon North America, Atlanta · 2025-11-11); Navigating Contributions and Community Health in Kubernetes (KubeFM podcast · 2025-11-03); The Whirlwind Pace of AI (Open Source Ready, Episode 10 · 2025-03-27)"></picture></a>
@@ -32,6 +32,6 @@ maintainers, newcomers, and the communities that keep this ecosystem
 thriving. Reach out about Kubernetes, AI infrastructure, open source — or
 the best hikes in LA.
 
-<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-06-13<!-- stamp:end --> · rebuilt daily by
+<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-06-14<!-- stamp:end --> · rebuilt daily by
 [GitHub Actions](.github/workflows/build-profile.yml) ·
 [how it works](generator/)</sub>
