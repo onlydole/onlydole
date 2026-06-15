@@ -12,7 +12,7 @@
   <a href="https://youtu.be/FPQB7hQL4Vw"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: The Missing Manual for Open Source Community Sustainability (KubeCon + CloudNativeCon North America, Atlanta · 2025-11-11); Navigating Contributions and Community Health in Kubernetes (KubeFM podcast · 2025-11-03); The Whirlwind Pace of AI (Open Source Ready, Episode 10 · 2025-03-27)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://www.goodreads.com/review/show/8658061089?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: Obviously Awesome: How to Nail Product Positioning so Customers Get it, Buy it, Love it (April Dunford); Dungeon Crawler Carl (Dungeon Crawler Carl, #1) (Matt Dinniman); The Stranger (Albert Camus)"></picture></a>
+  <a href="https://www.goodreads.com/review/show/8685356766?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: Carl&#x27;s Doomsday Scenario (Dungeon Crawler Carl, #2) (Matt Dinniman); Obviously Awesome: How to Nail Product Positioning so Customers Get it, Buy it, Love it (April Dunford); The Stranger (Albert Camus)"></picture></a>
 </p>
 <p align="center">
   <a href="https://onlydole.substack.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/chip-substack-dark.svg"><img src="assets/chip-substack-light.svg" width="150" alt="Substack"></picture></a>
@@ -32,6 +32,6 @@ maintainers, newcomers, and the communities that keep this ecosystem
 thriving. Reach out about Kubernetes, AI infrastructure, open source — or
 the best hikes in LA.
 
-<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-06-14<!-- stamp:end --> · rebuilt daily by
+<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-06-15<!-- stamp:end --> · rebuilt daily by
 [GitHub Actions](.github/workflows/build-profile.yml) ·
 [how it works](generator/)</sub>
