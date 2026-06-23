@@ -32,6 +32,6 @@ maintainers, newcomers, and the communities that keep this ecosystem
 thriving. Reach out about Kubernetes, AI infrastructure, open source — or
 the best hikes in LA.
 
-<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-06-22<!-- stamp:end --> · rebuilt daily by
+<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-06-23<!-- stamp:end --> · rebuilt daily by
 [GitHub Actions](.github/workflows/build-profile.yml) ·
 [how it works](generator/)</sub>
