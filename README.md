@@ -12,7 +12,7 @@
   <a href="https://youtu.be/FPQB7hQL4Vw"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: The Missing Manual for Open Source Community Sustainability (KubeCon + CloudNativeCon North America, Atlanta · 2025-11-11); Navigating Contributions and Community Health in Kubernetes (KubeFM podcast · 2025-11-03); The Whirlwind Pace of AI (Open Source Ready, Episode 10 · 2025-03-27)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://www.goodreads.com/review/show/8658061089?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: Obviously Awesome: How to Nail Product Positioning so Customers Get it, Buy it, Love it (April Dunford); The Stranger (Albert Camus); The Algorithm: The Hypergrowth Formula That Transformed Tesla, Lululemon, General Motors, a… (Jonathan McNeill)"></picture></a>
+  <a href="https://www.goodreads.com/review/show/8720710227?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: The Gate of the Feral Gods (Dungeon Crawler Carl, #4) (Matt Dinniman); Obviously Awesome: How to Nail Product Positioning so Customers Get it, Buy it, Love it (April Dunford); The Stranger (Albert Camus)"></picture></a>
 </p>
 <p align="center">
   <a href="https://onlydole.substack.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/chip-substack-dark.svg"><img src="assets/chip-substack-light.svg" width="150" alt="Substack"></picture></a>
@@ -32,6 +32,6 @@ maintainers, newcomers, and the communities that keep this ecosystem
 thriving. Reach out about Kubernetes, AI infrastructure, open source — or
 the best hikes in LA.
 
-<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-06-27<!-- stamp:end --> · rebuilt daily by
+<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-06-28<!-- stamp:end --> · rebuilt daily by
 [GitHub Actions](.github/workflows/build-profile.yml) ·
 [how it works](generator/)</sub>
