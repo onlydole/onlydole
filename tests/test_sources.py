@@ -197,6 +197,62 @@ def test_parse_goodreads_caps_at_three():
     assert len(parse_goodreads(feed)) == 3
 
 
+def _goodreads_feed(*items: tuple[str, str | None]) -> str:
+    """Build a shelf feed from (title, pubDate) pairs; None omits pubDate."""
+    body = ""
+    for title, pub_date in items:
+        date_el = f"<pubDate>{pub_date}</pubDate>" if pub_date else ""
+        body += (
+            f"<item><title>{title}</title><author_name>A</author_name>"
+            f"<link>https://x/{title}</link>{date_el}</item>"
+        )
+    return f"<rss><channel>{body}</channel></rss>"
+
+
+def test_parse_goodreads_takes_most_recently_shelved():
+    feed = _goodreads_feed(
+        ("Oldest", "Mon, 01 Jun 2026 09:00:00 -0700"),
+        ("Newest", "Sat, 04 Jul 2026 10:45:34 -0700"),
+        ("Fourth", "Fri, 01 May 2026 09:00:00 -0700"),
+        ("Middle", "Thu, 04 Jun 2026 00:38:25 -0700"),
+    )
+    assert [b["title"] for b in parse_goodreads(feed)] == [
+        "Newest",
+        "Middle",
+        "Oldest",
+    ]
+
+
+def test_parse_goodreads_orders_same_day_shelvings_by_time():
+    feed = _goodreads_feed(
+        ("Morning", "Sat, 27 Jun 2026 08:33:59 -0700"),
+        ("Evening", "Sat, 27 Jun 2026 19:54:16 -0700"),
+    )
+    assert [b["title"] for b in parse_goodreads(feed)] == ["Evening", "Morning"]
+
+
+def test_parse_goodreads_compares_across_timezone_offsets():
+    # 16:00 -0700 is 23:00 UTC, so it is newer than 20:00 +0000 the same day.
+    feed = _goodreads_feed(
+        ("Utc", "Sat, 27 Jun 2026 20:00:00 +0000"),
+        ("Pacific", "Sat, 27 Jun 2026 16:00:00 -0700"),
+    )
+    assert [b["title"] for b in parse_goodreads(feed)] == ["Pacific", "Utc"]
+
+
+def test_parse_goodreads_undated_items_sort_last_in_feed_order():
+    feed = _goodreads_feed(
+        ("NoDate1", None),
+        ("Dated", "Mon, 01 Jun 2026 09:00:00 -0700"),
+        ("NoDate2", "not a date at all"),
+    )
+    assert [b["title"] for b in parse_goodreads(feed)] == [
+        "Dated",
+        "NoDate1",
+        "NoDate2",
+    ]
+
+
 def test_parse_goodreads_image_falls_back_to_small():
     feed = (
         "<rss><channel><item><title>B</title><author_name>A</author_name>"
