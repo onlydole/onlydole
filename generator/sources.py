@@ -160,6 +160,23 @@ def _rfc822_date(value: str | None) -> str | None:
         return None
 
 
+def _rfc822_sort_key(value: str | None) -> datetime.datetime:
+    """Sortable datetime from an RFC 822 pubDate.
+
+    Absent or malformed dates sort oldest. Callers sort with a stable
+    sort, so those items keep their feed order behind the dated ones.
+    Naive timestamps are read as UTC so they stay comparable with the
+    offset-aware ones Goodreads normally sends.
+    """
+    try:
+        parsed = parsedate_to_datetime(value)
+    except (TypeError, ValueError, OverflowError):
+        return datetime.datetime.min.replace(tzinfo=datetime.timezone.utc)
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=datetime.timezone.utc)
+    return parsed
+
+
 def parse_talks(feed_text: str) -> list[dict]:
     """Parse the onlydole.dev talks RSS feed into up to 3 talk dicts.
 
@@ -209,6 +226,14 @@ def fetch_talks() -> list[dict]:
 def parse_goodreads(feed_text: str) -> list[dict]:
     """Parse a Goodreads shelf RSS feed into up to 3 book dicts.
 
+    The three books are the three most recently shelved, chosen by each
+    item's pubDate (Goodreads sets it to the date the book landed on the
+    shelf). The feed usually arrives in that order already, but the
+    ordering is not part of the feed's contract, so taking the first
+    three in document order would silently pick arbitrary books off a
+    long shelf. Sorting here makes "most recently shelved" explicit,
+    matching parse_talks and parse_activity.
+
     Rejects any document carrying DTD or entity declarations before
     parsing. That closes the XXE and entity-expansion attack classes
     without a defusedxml dependency, and real Goodreads feeds never
@@ -232,12 +257,16 @@ def parse_goodreads(feed_text: str) -> list[dict]:
         ).strip()
         if not (title and author and url):
             continue
-        books.append({"title": title, "author": author, "url": url, "image_url": image})
-        if len(books) == 3:
-            break
+        books.append(
+            (
+                _rfc822_sort_key(item.findtext("pubDate")),
+                {"title": title, "author": author, "url": url, "image_url": image},
+            )
+        )
     if not books:
         raise SourceError("goodreads shelf feed had no usable items")
-    return books
+    books.sort(key=lambda entry: entry[0], reverse=True)
+    return [book for _key, book in books[:3]]
 
 
 def fetch_goodreads() -> list[dict]:
