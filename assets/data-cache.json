@@ -18,22 +18,22 @@
   ],
   "shipped": [
     {
+      "title": "Drop the scheduled writing refresh",
+      "detail": "merged · onlydole/onlydole.github.io",
+      "url": "https://github.com/onlydole/onlydole.github.io/pull/12",
+      "date": "2026-08-03"
+    },
+    {
+      "title": "First-visit intro, OG/SEO coverage, podcast RSS feed, Episode 3 articles, full-screen artifacts",
+      "detail": "merged · alexagriffith/attention-deficit",
+      "url": "https://github.com/alexagriffith/attention-deficit/pull/1",
+      "date": "2026-08-03"
+    },
+    {
       "title": "fix(security): object-level auth, CORS/session/secret hardening, dep CVEs",
       "detail": "merged · onlydole/overdue",
       "url": "https://github.com/onlydole/overdue/pull/96",
       "date": "2026-06-13"
-    },
-    {
-      "title": "Show the latest Substack posts in the Writing section",
-      "detail": "merged · onlydole/onlydole.github.io",
-      "url": "https://github.com/onlydole/onlydole.github.io/pull/10",
-      "date": "2026-06-12"
-    },
-    {
-      "title": "Make talks data the source of truth, add an RSS feed",
-      "detail": "merged · onlydole/onlydole.github.io",
-      "url": "https://github.com/onlydole/onlydole.github.io/pull/8",
-      "date": "2026-06-11"
     }
   ],
   "stage": [
