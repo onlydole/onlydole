@@ -18,22 +18,22 @@
   ],
   "shipped": [
     {
-      "title": "Drop the scheduled writing refresh",
-      "detail": "merged · onlydole/onlydole.github.io",
-      "url": "https://github.com/onlydole/onlydole.github.io/pull/12",
-      "date": "2026-08-03"
-    },
-    {
-      "title": "First-visit intro, OG/SEO coverage, podcast RSS feed, Episode 3 articles, full-screen artifacts",
-      "detail": "merged · alexagriffith/attention-deficit",
-      "url": "https://github.com/alexagriffith/attention-deficit/pull/1",
-      "date": "2026-08-03"
-    },
-    {
-      "title": "fix(security): object-level auth, CORS/session/secret hardening, dep CVEs",
+      "title": "ci: run tests, lint and types in parallel on every PR",
       "detail": "merged · onlydole/overdue",
-      "url": "https://github.com/onlydole/overdue/pull/96",
-      "date": "2026-06-13"
+      "url": "https://github.com/onlydole/overdue/pull/118",
+      "date": "2026-08-05"
+    },
+    {
+      "title": "style+types: fix all 120 ruff and 188 mypy errors",
+      "detail": "merged · onlydole/overdue",
+      "url": "https://github.com/onlydole/overdue/pull/117",
+      "date": "2026-08-05"
+    },
+    {
+      "title": "chore(deps): integrate and verify dependabot PRs #110-#114",
+      "detail": "merged · onlydole/overdue",
+      "url": "https://github.com/onlydole/overdue/pull/115",
+      "date": "2026-08-05"
     }
   ],
   "stage": [
@@ -86,5 +86,5 @@
       "mime": "image/jpeg"
     }
   },
-  "updated": "2026-08-05"
+  "updated": "2026-08-06"
 }
