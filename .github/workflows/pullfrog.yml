@@ -8,6 +8,7 @@ on:
       prompt:
         type: string
         description: Agent prompt
+        required: true
       name:
         type: string
         description: Run name
@@ -18,6 +19,7 @@ permissions:
 jobs:
   pullfrog:
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     permissions:
       id-token: write
       contents: read
@@ -27,10 +29,11 @@ jobs:
         with:
           fetch-depth: 1
       - name: Run agent
-        uses: pullfrog/pullfrog@0657d542f2e34565c6254d5c84581313e631cd90 # v0.1.57
+        uses: pullfrog/pullfrog@0657d542f2e34565c6254d5c84581313e631cd90  # v0.1.57
         with:
           prompt: ${{ inputs.prompt }}
           model: openai-compatible/byok
+          push: restricted
         env:
           OPENAI_COMPATIBLE_BASE_URL: https://ollama.com/v1
           OPENAI_COMPATIBLE_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
