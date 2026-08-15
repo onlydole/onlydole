@@ -1,5 +1,7 @@
+---
 name: Pullfrog
 run-name: ${{ inputs.name || github.workflow }}
+# checkov:skip=CKV_GHA_7:the console passes the prompt via dispatch inputs
 on:
   workflow_dispatch:
     inputs:
