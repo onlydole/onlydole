@@ -27,6 +27,23 @@ def test_parse_substack_takes_three_newest():
     assert posts[0]["date"] == "2026-06-08"
 
 
+def test_parse_substack_skips_bad_entries_without_shrinking():
+    items = "".join(
+        f"<item><title>Post {n}</title>"
+        f"<link>https://onlydole.substack.com/p/{n}</link>"
+        f"<pubDate>Mon, 0{n} Jun 2026 12:00:00 GMT</pubDate></item>"
+        for n in (1, 2, 3)
+    )
+    feed = (
+        "<rss><channel>"
+        "<item><title>No date or link</title></item>"
+        f"{items}"
+        "</channel></rss>"
+    )
+    posts = parse_substack(feed)
+    assert [p["title"] for p in posts] == ["Post 1", "Post 2", "Post 3"]
+
+
 def test_parse_substack_garbage_raises():
     with pytest.raises(SourceError):
         parse_substack("complete garbage, not xml")
