@@ -6,13 +6,13 @@
   <a href="https://onlydole.substack.com/p/i-let-ai-fix-my-printer"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/writing-dark.svg"><img src="assets/writing-light.svg" width="100%" alt="Latest writing: I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02); Making Sense of AGENTS.md (2026-01-18)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://github.com/projectbluefin/testsuite/pull/724"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: feat(common): add non-interactive devmode coverage via bctl (merged · projectbluefin/testsuite · 2026-08-07); ci: run tests, lint and types in parallel on every PR (merged · onlydole/overdue · 2026-08-05); style+types: fix all 120 ruff and 188 mypy errors (merged · onlydole/overdue · 2026-08-05)"></picture></a>
+  <a href="https://github.com/onlydole/onlydole.github.io/pull/14"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: Add three 2025-2026 appearances, fix canonical URLs, bump actions (merged · onlydole/onlydole.github.io · 2026-08-16); ci: add Pullfrog agent workflow (merged · onlydole/overdue · 2026-08-15); Add Pullfrog agent workflow (merged · onlydole/onlydole.github.io · 2026-08-15)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://youtu.be/FPQB7hQL4Vw"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: The Missing Manual for Open Source Community Sustainability (KubeCon + CloudNativeCon North America, Atlanta · 2025-11-11); Navigating Contributions and Community Health in Kubernetes (KubeFM podcast · 2025-11-03); The Whirlwind Pace of AI (Open Source Ready, Episode 10 · 2025-03-27)"></picture></a>
+  <a href="https://creators.spotify.com/pod/profile/alexagriffith/episodes/Paying-Attention-in-the-Age-of-Agents-e3m9i24"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: Paying Attention in the Age of Agents (Alexa&#x27;s Input (AI), panel episode · 2026-07-20); Lambda&#x27;s Long Game, Claude&#x27;s Complexity, and the AI Adoption Gap (LogiCast, Season 5 Episode 16 · 2026-04-29); Shaping the Future of Documentation. OSS, Knowledge, and Dosu (Software Plaza · 2025-12-05)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://www.goodreads.com/review/show/8826127703?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: You Can Just Do Things: How High-Agency People Get What They Want Out of Life (Cate Hall); This Inevitable Ruin (Dungeon Crawler Carl, #7) (Matt Dinniman); Obviously Awesome: How to Nail Product Positioning so Customers Get it, Buy it, Love it (April Dunford)"></picture></a>
+  <a href="https://www.goodreads.com/review/show/8863496208?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: All That&#x27;s Unseen: An Appalachian Memoir (Emilee Hackney); You Can Just Do Things: How High-Agency People Get What They Want Out of Life (Cate Hall); This Inevitable Ruin (Dungeon Crawler Carl, #7) (Matt Dinniman)"></picture></a>
 </p>
 <p align="center">
   <a href="https://onlydole.substack.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/chip-substack-dark.svg"><img src="assets/chip-substack-light.svg" width="150" alt="Substack"></picture></a>
@@ -32,6 +32,6 @@ maintainers, newcomers, and the communities that keep this ecosystem
 thriving. Reach out about Kubernetes, AI infrastructure, open source — or
 the best hikes in LA.
 
-<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-08-15<!-- stamp:end --> · rebuilt daily by
+<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-08-16<!-- stamp:end --> · rebuilt daily by
 [GitHub Actions](.github/workflows/build-profile.yml) ·
 [how it works](generator/)</sub>
