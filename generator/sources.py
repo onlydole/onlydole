@@ -39,7 +39,7 @@ def parse_substack(feed_text: str) -> list[dict]:
     if parsed.bozo and not parsed.entries:
         raise SourceError(f"unparsable feed: {parsed.bozo_exception}")
     posts = []
-    for entry in parsed.entries[:3]:
+    for entry in parsed.entries:
         date = _entry_date(entry.get("published_parsed"))
         if not (entry.get("title") and entry.get("link") and date):
             continue
@@ -50,6 +50,8 @@ def parse_substack(feed_text: str) -> list[dict]:
                 "date": date,
             }
         )
+        if len(posts) == 3:
+            break
     if not posts:
         raise SourceError("feed contained no usable entries")
     return posts
