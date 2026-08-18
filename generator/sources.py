@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime
+import json
 from email.utils import parsedate_to_datetime
 from xml.etree import ElementTree
 
@@ -144,7 +145,12 @@ def fetch_activity(token: str) -> list[dict]:
         resp.raise_for_status()
     except httpx.HTTPError as exc:
         raise SourceError(f"github fetch failed: {exc}") from exc
-    payload = resp.json()
+    try:
+        payload = resp.json()
+    except json.JSONDecodeError as exc:
+        raise SourceError(f"github returned invalid JSON: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise SourceError("github response was not a JSON object")
     if payload.get("errors"):
         raise SourceError(f"graphql errors: {payload['errors']}")
     return parse_activity(payload)

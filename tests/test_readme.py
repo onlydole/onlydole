@@ -23,6 +23,12 @@ def test_replace_region_missing_markers_raises():
         replace_region("no markers here", "bento", "NEW")
 
 
+def test_replace_region_duplicate_markers_raise():
+    duplicated = DOC + DOC
+    with pytest.raises(MarkerError, match="exactly one"):
+        replace_region(duplicated, "bento", "NEW")
+
+
 def test_replace_region_body_with_regex_specials():
     out = replace_region(DOC, "bento", r"path\1 and \g<0> and $&")
     assert r"path\1 and \g<0> and $&" in out

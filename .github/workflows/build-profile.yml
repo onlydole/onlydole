@@ -21,14 +21,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
-      - uses: astral-sh/setup-uv@v10.0.1
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
 
       - name: Rebuild dashboard
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uv run --project generator python generator/build.py
+        run: uv run --locked --project generator python generator/build.py
 
       # The ruleset on main requires verified signatures, which rejects plain
       # `git push` from Actions. createCommitOnBranch commits are signed by
@@ -36,4 +38,4 @@ jobs:
       - name: Commit via API if changed
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uv run --project generator python generator/api_commit.py
+        run: uv run --locked --project generator python generator/api_commit.py
