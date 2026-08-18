@@ -1,8 +1,10 @@
 import json
 from pathlib import Path
 
+import httpx
 import pytest
 
+from generator import sources
 from generator.sources import (
     ACTIVITY_QUERY,
     SourceError,
@@ -72,6 +74,42 @@ def test_parse_activity_skips_private_and_profile_repo():
 def test_parse_activity_bad_shape_raises():
     with pytest.raises(SourceError):
         parse_activity({"data": {"user": None}})
+
+
+def test_fetch_activity_invalid_json_raises_source_error(monkeypatch):
+    response = httpx.Response(
+        200,
+        content=b"not-json",
+        request=httpx.Request("POST", sources.GRAPHQL_URL),
+    )
+    monkeypatch.setattr(sources.httpx, "post", lambda *args, **kwargs: response)
+
+    with pytest.raises(SourceError, match="invalid JSON"):
+        sources.fetch_activity("test-token")
+
+
+def test_fetch_activity_invalid_encoding_raises_source_error(monkeypatch):
+    response = httpx.Response(
+        200,
+        content=b"\xff",
+        request=httpx.Request("POST", sources.GRAPHQL_URL),
+    )
+    monkeypatch.setattr(sources.httpx, "post", lambda *args, **kwargs: response)
+
+    with pytest.raises(SourceError, match="invalid JSON"):
+        sources.fetch_activity("test-token")
+
+
+def test_fetch_activity_non_object_json_raises_source_error(monkeypatch):
+    response = httpx.Response(
+        200,
+        json=[],
+        request=httpx.Request("POST", sources.GRAPHQL_URL),
+    )
+    monkeypatch.setattr(sources.httpx, "post", lambda *args, **kwargs: response)
+
+    with pytest.raises(SourceError, match="JSON object"):
+        sources.fetch_activity("test-token")
 
 
 def test_parse_talks_extracts_fields():
