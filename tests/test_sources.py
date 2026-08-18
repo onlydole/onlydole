@@ -88,6 +88,18 @@ def test_fetch_activity_invalid_json_raises_source_error(monkeypatch):
         sources.fetch_activity("test-token")
 
 
+def test_fetch_activity_invalid_encoding_raises_source_error(monkeypatch):
+    response = httpx.Response(
+        200,
+        content=b"\xff",
+        request=httpx.Request("POST", sources.GRAPHQL_URL),
+    )
+    monkeypatch.setattr(sources.httpx, "post", lambda *args, **kwargs: response)
+
+    with pytest.raises(SourceError, match="invalid JSON"):
+        sources.fetch_activity("test-token")
+
+
 def test_fetch_activity_non_object_json_raises_source_error(monkeypatch):
     response = httpx.Response(
         200,

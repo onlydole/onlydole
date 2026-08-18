@@ -147,7 +147,7 @@ def fetch_activity(token: str) -> list[dict]:
         raise SourceError(f"github fetch failed: {exc}") from exc
     try:
         payload = resp.json()
-    except json.JSONDecodeError as exc:
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise SourceError(f"github returned invalid JSON: {exc}") from exc
     if not isinstance(payload, dict):
         raise SourceError("github response was not a JSON object")
