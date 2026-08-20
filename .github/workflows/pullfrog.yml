@@ -38,7 +38,9 @@ jobs:
         env:
           OPENAI_COMPATIBLE_BASE_URL: https://ollama.com/v1
           OPENAI_COMPATIBLE_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
-          OPENAI_COMPATIBLE_MODEL: glm-5.2
-          # GLM 5.2 limits per docs.z.ai — Pullfrog requires both
+          OPENAI_COMPATIBLE_MODEL: deepseek-v4-pro:0813-cloud
+          # DeepSeek V4 Pro limits — Pullfrog requires both.
+          # Output is the 65536 cap Ollama Cloud enforces, not the 384K
+          # the model spec advertises (ollama/ollama#16890).
           OPENAI_COMPATIBLE_CONTEXT: "1000000"
-          OPENAI_COMPATIBLE_MAX_OUTPUT: "128000"
+          OPENAI_COMPATIBLE_MAX_OUTPUT: "65536"
