@@ -12,7 +12,7 @@
   <a href="https://creators.spotify.com/pod/profile/alexagriffith/episodes/Paying-Attention-in-the-Age-of-Agents-e3m9i24"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: Paying Attention in the Age of Agents (Alexa&#x27;s Input (AI), panel episode · 2026-07-20); Lambda&#x27;s Long Game, Claude&#x27;s Complexity, and the AI Adoption Gap (LogiCast, Season 5 Episode 16 · 2026-04-29); Shaping the Future of Documentation. OSS, Knowledge, and Dosu (Software Plaza · 2025-12-05)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://www.goodreads.com/review/show/8863496208?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: All That&#x27;s Unseen: An Appalachian Memoir (Emilee Hackney); You Can Just Do Things: How High-Agency People Get What They Want Out of Life (Cate Hall); This Inevitable Ruin (Dungeon Crawler Carl, #7) (Matt Dinniman)"></picture></a>
+  <a href="https://www.goodreads.com/review/show/8886300863?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: Beyond Belief: The Science-Backed Way to Stop Limiting Yourself and Achieve Breakthrough Re… (Nir Eyal); All That&#x27;s Unseen: An Appalachian Memoir (Emilee Hackney); You Can Just Do Things: How High-Agency People Get What They Want Out of Life (Cate Hall)"></picture></a>
 </p>
 <p align="center">
   <a href="https://onlydole.substack.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/chip-substack-dark.svg"><img src="assets/chip-substack-light.svg" width="150" alt="Substack"></picture></a>
@@ -32,6 +32,6 @@ maintainers, newcomers, and the communities that keep this ecosystem
 thriving. Reach out about Kubernetes, AI infrastructure, open source — or
 the best hikes in LA.
 
-<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-08-23<!-- stamp:end --> · rebuilt daily by
+<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-08-24<!-- stamp:end --> · rebuilt daily by
 [GitHub Actions](.github/workflows/build-profile.yml) ·
 [how it works](generator/)</sub>
