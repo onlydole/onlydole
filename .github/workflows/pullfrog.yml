@@ -38,9 +38,10 @@ jobs:
         env:
           OPENAI_COMPATIBLE_BASE_URL: https://ollama.com/v1
           OPENAI_COMPATIBLE_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
-          OPENAI_COMPATIBLE_MODEL: deepseek-v4-pro:0813-cloud
-          # DeepSeek V4 Pro limits — Pullfrog requires both.
-          # Output is the 65536 cap Ollama Cloud enforces, not the 384K
-          # the model spec advertises (ollama/ollama#16890).
-          OPENAI_COMPATIBLE_CONTEXT: "1000000"
-          OPENAI_COMPATIBLE_MAX_OUTPUT: "65536"
+          OPENAI_COMPATIBLE_MODEL: glm-5.3-flash:cloud
+          # GLM 5.3 Flash limits — Pullfrog requires both. Context is the 1M
+          # window the Ollama library page lists for glm-5.3-flash:cloud.
+          # Output is GLM-5.3-Flash's documented ceiling — docs.z.ai lists
+          # 65536 default, 131072 maximum.
+          OPENAI_COMPATIBLE_CONTEXT: "1048576"
+          OPENAI_COMPATIBLE_MAX_OUTPUT: "131072"
