@@ -9,6 +9,8 @@ from xml.etree import ElementTree
 
 import feedparser
 import httpx
+from curl_cffi import requests as substack_http
+from curl_cffi.requests.exceptions import RequestException
 
 SUBSTACK_FEED = "https://onlydole.substack.com/feed"
 PODCAST_FEED = "https://attentiondeficitpod.substack.com/feed"
@@ -61,27 +63,25 @@ def parse_substack(feed_text: str) -> list[dict]:
 def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
     """Use RSS first, then the publication's public archive if RSS is blocked."""
     try:
-        resp = httpx.get(
+        resp = substack_http.get(
             feed_url,
             timeout=30,
-            follow_redirects=True,
-            headers={
-                "User-Agent": USER_AGENT,
-                "Accept": "application/rss+xml, application/xml",
-            },
+            allow_redirects=True,
+            impersonate="chrome",
+            headers={"Accept": "application/rss+xml, application/xml"},
         )
         resp.raise_for_status()
         return parse_substack(resp.text)
-    except (httpx.HTTPError, SourceError):
+    except (RequestException, httpx.HTTPError, SourceError):
         # Substack sometimes blocks RSS on hosted runners. The archive is a
         # public endpoint, not an authenticated dashboard or paywall bypass.
         try:
-            resp = httpx.get(
+            resp = substack_http.get(
                 feed_url.removesuffix("/feed") + "/api/v1/archive",
                 params={"sort": "new", "limit": 10},
-                headers={"User-Agent": USER_AGENT},
+                impersonate="chrome",
                 timeout=30,
-                follow_redirects=True,
+                allow_redirects=True,
             )
             resp.raise_for_status()
             payload = resp.json()
@@ -106,7 +106,13 @@ def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
                 raise SourceError("archive contained no usable posts")
             posts.sort(key=lambda post: post["date"], reverse=True)
             return posts[:3]
-        except (httpx.HTTPError, ValueError, UnicodeDecodeError, SourceError) as exc:
+        except (
+            RequestException,
+            httpx.HTTPError,
+            ValueError,
+            UnicodeDecodeError,
+            SourceError,
+        ) as exc:
             raise SourceError(f"substack RSS and archive unavailable: {exc}") from exc
 
 

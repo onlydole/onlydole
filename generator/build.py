@@ -295,6 +295,9 @@ def write_assets(tiles: list[dict]) -> None:
     (ASSETS / "hero.svg").write_text(
         render_svg("hero.svg.j2", hero_ctx), encoding="utf-8"
     )
+    (ASSETS / "hero-mobile.svg").write_text(
+        render_svg("hero-mobile.svg.j2", hero_ctx), encoding="utf-8"
+    )
     themes = (("dark", DARK), ("light", LIGHT))
     accents = {
         "writing": ("#ffad87", "#a33a35"),
@@ -327,6 +330,29 @@ def write_assets(tiles: list[dict]) -> None:
             (ASSETS / f"{tile['key']}-{theme_name}.svg").write_text(
                 svg, encoding="utf-8"
             )
+            mobile = render_svg(
+                "tile.svg.j2",
+                {
+                    "font": FONT_STACK,
+                    "theme": {
+                        **theme,
+                        "accent": accents[tile["key"]][
+                            0 if theme_name == "dark" else 1
+                        ],
+                    },
+                    "lines": tile["lines"],
+                    "header": tile["header"],
+                    "aria": tile["alt"],
+                    "cover": None,
+                    "header_note": tile.get("header_note", ""),
+                    "width": 600,
+                    "height": 250,
+                    "text_x": TEXT_X,
+                },
+            )
+            (ASSETS / f"{tile['key']}-mobile-{theme_name}.svg").write_text(
+                mobile, encoding="utf-8"
+            )
     for key, label, _url in CHIPS:
         for theme_name, theme in themes:
             svg = render_svg(
@@ -340,8 +366,14 @@ def _esc(value: str) -> str:
 
 
 def _picture(key: str, alt: str, width: str) -> str:
+    mobile = ""
+    if not key.startswith("chip-"):
+        mobile = (
+            f'<source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/{key}-mobile-dark.svg">'
+            f'<source media="(max-width: 600px)" srcset="assets/{key}-mobile-light.svg">'
+        )
     return (
-        f'<picture><source media="(prefers-color-scheme: dark)" '
+        f'<picture>{mobile}<source media="(prefers-color-scheme: dark)" '
         f'srcset="assets/{key}-dark.svg">'
         f'<img src="assets/{key}-light.svg" width="{width}" alt="{_esc(alt)}">'
         f"</picture>"
@@ -350,8 +382,8 @@ def _picture(key: str, alt: str, width: str) -> str:
 
 def bento_html(tiles: list[dict]) -> str:
     rows = [
-        f'<a href="{SITE}"><img src="assets/hero.svg" width="100%" '
-        f'alt="{_esc(HERO_ALT)}"></a>'
+        f'<a href="{SITE}"><picture><source media="(max-width: 600px)" srcset="assets/hero-mobile.svg">'
+        f'<img src="assets/hero.svg" width="100%" alt="{_esc(HERO_ALT)}"></picture></a>'
     ]
     for tile in tiles:
         picture = _picture(tile["key"], tile["alt"], "100%")

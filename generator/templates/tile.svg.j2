@@ -16,7 +16,7 @@
   <image x="36" y="106" width="92" height="146" preserveAspectRatio="xMidYMid meet" href="data:{{ cover.mime }};base64,{{ cover.b64 }}"/>
 {% endif %}
 {% if header_note %}
-  <text x="{{ width - 36 }}" y="56" text-anchor="end" font-family="{{ font }}" font-size="17" fill="{{ theme.muted }}">{{ header_note }}</text>
+  <text x="{{ 36 if width <= 600 else width - 36 }}" y="{{ 83 if width <= 600 else 56 }}" text-anchor="{{ 'start' if width <= 600 else 'end' }}" font-family="{{ font }}" font-size="17" fill="{{ theme.muted }}">{{ header_note }}</text>
 {% endif %}
   <g clip-path="url(#content)">
 {% for row in rows %}

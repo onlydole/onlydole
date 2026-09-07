@@ -22,8 +22,9 @@ public repositories; it isn't a complete activity history.
 
 Goodreads doesn't expose Kindle reading progress or last-opened order in
 this RSS feed. Its `pubDate` matches the shelf-added date in the observed
-feed. The generator requests up to 200 shelf entries, excludes books marked
-finished or on another shelf, and displays three. A book can stay on that
+feed. The generator requests up to 200 shelf entries and displays three.
+An explicit currently-reading shelf takes precedence over an older finished
+date, so rereads stay visible. A book can stay on that
 shelf long after you put it down. Fix that at the source by updating your
 Goodreads shelf; a more frequent build cannot recover missing Kindle data.
 
@@ -44,7 +45,10 @@ The workflow commits successful updates before checking source health.
 Any unavailable or cached source then fails the run, so a green check means
 all five sources were fetched. RSS has a public Substack archive fallback,
 but both endpoints can be blocked by the provider. That remains a failed
-refresh, not a successful update of stale content.
+refresh, not a successful update of stale content. Substack requests use
+curl-cffi's browser-compatible TLS transport; ordinary HTTPX requests were
+blocked on the hosted runner even with a browser User-Agent. The other
+sources use HTTPX.
 
 Refresh commits use GitHub's GraphQL API for verified signatures, with the
 checked-out commit as the expected branch head. A concurrent branch change
@@ -70,7 +74,9 @@ against the available text width, including the space occupied by book
 covers. Extra-long titles end with an ellipsis; full titles and individual
 links remain available below each card. SVG clipping is a final boundary,
 not the layout algorithm. Check both themes and a narrow viewport after
-changing typography.
+changing typography. Screens up to 600 pixels wide get separate SVGs with
+larger type relative to the image width. Mobile cards omit the cover to leave
+more room for titles.
 
 After reviewing an intentional visual change, update the snapshot fixtures:
 

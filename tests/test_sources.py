@@ -71,7 +71,7 @@ def test_substack_blocked_rss_uses_public_archive(monkeypatch):
             ],
         )
 
-    monkeypatch.setattr(sources.httpx, "get", get)
+    monkeypatch.setattr(sources.substack_http, "get", get)
     assert sources.fetch_substack()[0]["title"] == "New"
     assert calls == [
         sources.SUBSTACK_FEED,
@@ -81,7 +81,7 @@ def test_substack_blocked_rss_uses_public_archive(monkeypatch):
 
 def test_substack_both_endpoints_blocked_raise(monkeypatch):
     monkeypatch.setattr(
-        sources.httpx,
+        sources.substack_http,
         "get",
         lambda url, **kwargs: httpx.Response(403, request=httpx.Request("GET", url)),
     )
@@ -395,6 +395,15 @@ def test_goodreads_filters_other_shelves_and_finished_books():
         "<title>Wanted</title><user_shelves>to-read</user_shelves>",
     )
     assert [b["title"] for b in parse_goodreads(feed)] == ["Reading"]
+
+
+def test_goodreads_keeps_explicit_current_rereads():
+    feed = _goodreads_feed(("Rereading", None)).replace(
+        "<title>Rereading</title>",
+        "<title>Rereading</title><user_shelves>favorites,currently-reading</user_shelves>"
+        "<user_read_at>Mon, 01 Jun 2026 09:00:00 GMT</user_read_at>",
+    )
+    assert parse_goodreads(feed)[0]["title"] == "Rereading"
 
 
 def test_parse_goodreads_rejects_doctype_and_entities():

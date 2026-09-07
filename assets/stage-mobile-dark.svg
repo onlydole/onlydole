@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 528" role="img" aria-label="On stage: Paying Attention in the Age of Agents (Alexa&#39;s Input (AI), panel episode · 2026-07-20); Lambda&#39;s Long Game, Claude&#39;s Complexity, and the AI Adoption Gap (LogiCast, Season 5 Episode 16 · 2026-04-29); Shaping the Future of Documentation. OSS, Knowledge, and Dosu (Software Plaza · 2025-12-05)">
+  <title>On stage: Paying Attention in the Age of Agents (Alexa&#39;s Input (AI), panel episode · 2026-07-20); Lambda&#39;s Long Game, Claude&#39;s Complexity, and the AI Adoption Gap (LogiCast, Season 5 Episode 16 · 2026-04-29); Shaping the Future of Documentation. OSS, Knowledge, and Dosu (Software Plaza · 2025-12-05)</title>
+  <defs>
+    <linearGradient id="wash" x2="1" y2="1">
+      <stop stop-color="#e9c779" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#1a1417" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="content"><rect x="36" y="90" width="524" height="420"/></clipPath>
+  </defs>
+  <rect x="1" y="1" width="598" height="526" rx="24" fill="#1a1417" stroke="#463038" stroke-width="2"/>
+  <rect x="2" y="2" width="596" height="84" rx="23" fill="url(#wash)"/>
+  <rect x="36" y="36" width="5" height="24" rx="2" fill="#e9c779"/>
+  <text x="56" y="56" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" letter-spacing="2" fill="#e9c779">ON STAGE</text>
+
+
+  <g clip-path="url(#content)">
+
+
+
+    <text x="36" y="126" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#e6ddd9">Paying Attention in the Age</text>
+
+    <text x="36" y="164" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="400" fill="#e6ddd9">of Agents</text>
+
+    <text x="36" y="196" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#a08a84">Alexa&#39;s Input (AI), panel episode · 2026-07…</text>
+
+
+    <path d="M36 220 H560" stroke="#463038"/>
+
+
+    <text x="36" y="256" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#e6ddd9">Lambda&#39;s Long Game, Claude&#39;s</text>
+
+    <text x="36" y="294" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="400" fill="#e6ddd9">Complexity, and the AI Adopt…</text>
+
+    <text x="36" y="326" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#a08a84">LogiCast, Season 5 Episode 16 · 2026-04-29</text>
+
+
+    <path d="M36 350 H560" stroke="#463038"/>
+
+
+    <text x="36" y="386" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#e6ddd9">Shaping the Future of</text>
+
+    <text x="36" y="424" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="400" fill="#e6ddd9">Documentation. OSS, Knowled…</text>
+
+    <text x="36" y="456" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#a08a84">Software Plaza · 2025-12-05</text>
+
+  </g>
+</svg>
