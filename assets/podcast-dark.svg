@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 414" role="img" aria-label="Attention Deficit: Attention Deficit Ep. 7 – Be Like a Data Center; Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers; Attention Deficit Ep. 5 – It&#39;s Not a Shark, It&#39;s a Data Center">
+  <title>Attention Deficit: Attention Deficit Ep. 7 – Be Like a Data Center; Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers; Attention Deficit Ep. 5 – It&#39;s Not a Shark, It&#39;s a Data Center</title>
+  <defs>
+    <linearGradient id="wash" x2="1" y2="1">
+      <stop stop-color="#c7adff" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#1a1417" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="content"><rect x="36" y="90" width="1124" height="306"/></clipPath>
+  </defs>
+  <rect x="1" y="1" width="1198" height="412" rx="24" fill="#1a1417" stroke="#463038" stroke-width="2"/>
+  <rect x="2" y="2" width="1196" height="84" rx="23" fill="url(#wash)"/>
+  <rect x="36" y="36" width="5" height="24" rx="2" fill="#c7adff"/>
+  <text x="56" y="56" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" letter-spacing="2" fill="#c7adff">ATTENTION DEFICIT</text>
+
+
+  <text x="1164" y="56" text-anchor="end" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="17" fill="#a08a84">with Alexa Griffith</text>
+
+  <g clip-path="url(#content)">
+
+
+
+    <text x="36" y="126" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#e6ddd9">Attention Deficit Ep. 7 – Be Like a Data Center</text>
+
+    <text x="36" y="158" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#a08a84">2026-09-07</text>
+
+
+    <path d="M36 182 H1160" stroke="#463038"/>
+
+
+    <text x="36" y="218" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#e6ddd9">Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers</text>
+
+    <text x="36" y="250" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#a08a84">2026-08-30</text>
+
+
+    <path d="M36 274 H1160" stroke="#463038"/>
+
+
+    <text x="36" y="310" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#e6ddd9">Attention Deficit Ep. 5 – It&#39;s Not a Shark, It&#39;s a Data Center</text>
+
+    <text x="36" y="342" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#a08a84">2026-08-16</text>
+
+  </g>
+</svg>

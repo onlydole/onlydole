@@ -42,6 +42,8 @@ COVER = {"url": "https://img/c.jpg", "b64": "QUJD", "mime": "image/jpeg"}
 
 @pytest.fixture
 def workspace(tmp_path, monkeypatch):
+    monkeypatch.delenv("GITHUB_STEP_SUMMARY", raising=False)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
     readme = tmp_path / "README.md"
     readme.write_text(README_FRAME, encoding="utf-8")
     assets = tmp_path / "assets"
@@ -55,6 +57,7 @@ def workspace(tmp_path, monkeypatch):
 
 def _patch_sources(monkeypatch, writing=WRITING):
     monkeypatch.setattr(sources, "fetch_substack", lambda: writing)
+    monkeypatch.setattr(sources, "fetch_podcast", lambda: WRITING)
     monkeypatch.setattr(sources, "fetch_activity", lambda token: SHIPPED)
     monkeypatch.setattr(sources, "fetch_talks", lambda: TALKS)
     monkeypatch.setattr(sources, "fetch_goodreads", lambda: list(BOOKS))
@@ -67,6 +70,9 @@ def test_main_builds_assets_readme_and_cache(workspace, monkeypatch):
     readme = build.README.read_text(encoding="utf-8")
     assert 'srcset="assets/writing-dark.svg"' in readme
     assert 'src="assets/writing-light.svg" width="100%"' in readme
+    assert 'srcset="assets/writing-mobile-dark.svg"' in readme
+    assert 'srcset="assets/hero-mobile.svg"' in readme
+    assert 'viewBox="0 0 600' in (build.ASSETS / "reading-mobile-light.svg").read_text()
     assert '<a href="https://s/p">' in readme
     assert "Last refreshed: 2026-06-10" in readme
     assert "prose stays" in readme
@@ -102,7 +108,16 @@ def test_dead_source_falls_back_to_cache(workspace, monkeypatch):
     assert build.main() == 0
     second = build.README.read_text(encoding="utf-8")
     assert '<a href="https://s/p">' in second  # cached writing link survives
-    assert "Last refreshed: 2026-06-11" in second  # stamp still advanced
+    assert "Built: 2026-06-11 · cached or unavailable: writing" in second
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["source_status"]["writing"] == {
+        "state": "cached",
+        "last_success": "2026-06-10",
+    }
+    assert (
+        "cached · last fetched 2026-06-10"
+        in (build.ASSETS / "writing-dark.svg").read_text()
+    )
 
 
 def test_dead_source_with_no_cache_renders_empty_state(workspace, monkeypatch):
@@ -115,6 +130,20 @@ def test_dead_source_with_no_cache_renders_empty_state(workspace, monkeypatch):
     assert build.main() == 0
     readme = build.README.read_text(encoding="utf-8")
     assert '<a href="https://onlydole.substack.com">' in readme  # fallback link
+
+
+def test_stale_relay_cannot_replace_newer_cached_post(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    build.main()
+    _patch_sources(
+        monkeypatch, writing=[{**WRITING[0], "date": "2026-01-01", "via": "rss2json"}]
+    )
+    monkeypatch.setenv("BUILD_DATE", "2026-06-11")
+    build.main()
+    cache = json.loads(build.CACHE.read_text())
+    assert cache["writing"] == WRITING
+    assert cache["source_status"]["writing"]["state"] == "cached"
+    assert cache["source_status"]["writing"]["last_success"] == "2026-06-10"
 
 
 def test_dead_talks_feed_falls_back_to_cache(workspace, monkeypatch):
@@ -150,6 +179,16 @@ def test_tile_contexts_treats_missing_books_as_empty():
     reading = next(t for t in tiles if t["key"] == "reading")
     assert reading["lines"] == build.EMPTY_LINES
     assert reading["url"] == ""
+
+
+def test_successful_empty_shelf_clears_previous_books(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    build.main()
+    monkeypatch.setattr(sources, "fetch_goodreads", lambda: [])
+    build.main()
+    cache = json.loads(build.CACHE.read_text())
+    assert cache["reading"] == {"books": [], "cover": None}
+    assert cache["source_status"]["reading"]["state"] == "fresh"
 
 
 def test_reading_tile_uses_goodreads_books(workspace, monkeypatch):

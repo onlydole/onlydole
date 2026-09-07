@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" role="img" aria-label="{{ aria }}">
+  <title>{{ aria }}</title>
+  <defs>
+    <linearGradient id="sunset" x2="1" y2="1"><stop stop-color="#261c35"/><stop offset="0.6" stop-color="#7c2d4f"/><stop offset="1" stop-color="#da663d"/></linearGradient>
+    <clipPath id="frame"><rect width="600" height="360" rx="24"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <rect width="600" height="360" fill="url(#sunset)"/>
+    <g fill="none" stroke="#ffc197" stroke-opacity="0.18" stroke-width="2"><circle cx="570" cy="40" r="100"/><circle cx="570" cy="40" r="140"/></g>
+    <text x="36" y="48" font-family="{{ font }}" font-size="18" letter-spacing="2" fill="#ffd2bd">OPEN SOURCE / LOS ANGELES</text>
+    <text x="32" y="119" font-family="{{ font }}" font-size="55" font-weight="700" fill="#fff8f2">{{ name }}</text>
+    <text x="36" y="170" font-family="{{ font }}" font-size="26" fill="#ffe8dd">Head of Open Source @ Dosu</text>
+    <text x="36" y="211" font-family="{{ font }}" font-size="24" fill="#ffe8dd">Building communities. Making things.</text>
+    <path d="M36 245 H564" stroke="#ffd2bd" stroke-opacity="0.3"/>
+    <text x="36" y="282" font-family="{{ font }}" font-size="22" fill="#ffd2bd">KubeCon keynoter</text>
+    <text x="36" y="316" font-family="{{ font }}" font-size="22" fill="#ffd2bd">ex-Disney Studios SRE · ex-HashiCorp</text>
+  </g>
+</svg>

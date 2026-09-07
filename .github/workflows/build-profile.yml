@@ -3,29 +3,36 @@ name: Build profile
 
 on:
   schedule:
-    - cron: "17 8 * * *"
+    - cron: "17 2,8,14,20 * * *"
   workflow_dispatch:
   push:
     branches:
       - main
     paths:
       - "generator/**"
+      - ".github/workflows/build-profile.yml"
 
-permissions:
-  contents: write
+permissions: {}
 
 concurrency:
   group: build-profile
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
 
       - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+
+      - name: Test generator before rebuilding
+        run: uv run --locked --project generator pytest tests/ -q
 
       - name: Rebuild dashboard
         env:
@@ -36,6 +43,11 @@ jobs:
       # `git push` from Actions. createCommitOnBranch commits are signed by
       # GitHub, so the refresh lands with a Verified badge instead.
       - name: Commit via API if changed
+        if: github.ref == 'refs/heads/main'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: uv run --locked --project generator python generator/api_commit.py
+
+      # Keep successful source updates, but don't call a partial refresh green.
+      - name: Check source freshness
+        run: uv run --locked --project generator python -m generator.health

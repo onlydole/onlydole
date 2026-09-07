@@ -43,12 +43,133 @@ def test_parse_substack_skips_bad_entries_without_shrinking():
         "</channel></rss>"
     )
     posts = parse_substack(feed)
-    assert [p["title"] for p in posts] == ["Post 1", "Post 2", "Post 3"]
+    assert [p["title"] for p in posts] == ["Post 3", "Post 2", "Post 1"]
+
+
+def test_substack_blocked_rss_uses_public_archive(monkeypatch):
+    calls = []
+
+    def get(url, **kwargs):
+        calls.append(url)
+        request = httpx.Request("GET", url)
+        if url.endswith("/feed"):
+            return httpx.Response(403, request=request)
+        return httpx.Response(
+            200,
+            request=request,
+            json=[
+                {
+                    "title": "Older",
+                    "canonical_url": "https://s/older",
+                    "post_date": "2026-06-01T12:00:00Z",
+                },
+                {
+                    "title": "New",
+                    "canonical_url": "https://s/new",
+                    "post_date": "2026-09-05T15:50:36Z",
+                },
+            ],
+        )
+
+    monkeypatch.setattr(sources.httpx, "get", get)
+    assert sources.fetch_substack()[0]["title"] == "New"
+    assert calls == [
+        sources.SUBSTACK_FEED,
+        "https://onlydole.substack.com/api/v1/archive",
+    ]
+
+
+def test_substack_both_endpoints_blocked_raise(monkeypatch):
+    monkeypatch.setattr(
+        sources.httpx,
+        "get",
+        lambda url, **kwargs: httpx.Response(403, request=httpx.Request("GET", url)),
+    )
+    with pytest.raises(SourceError, match="Substack and public RSS relay unavailable"):
+        sources.fetch_substack()
+
+
+def test_substack_relay_checks_publication_and_sorts(monkeypatch):
+    payload = {
+        "status": "ok",
+        "feed": {"url": sources.SUBSTACK_FEED},
+        "items": [
+            {
+                "title": "Old",
+                "link": "https://onlydole.substack.com/p/old",
+                "pubDate": "2026-02-14 02:25:34",
+            },
+            {
+                "title": "New",
+                "link": "https://onlydole.substack.com/p/new",
+                "pubDate": "2026-09-05 15:50:36",
+            },
+            {
+                "title": "Bad link",
+                "link": "https://unrelated.example/p/new",
+                "pubDate": "2026-09-06 15:50:36",
+            },
+        ],
+    }
+    monkeypatch.setattr(
+        sources.httpx,
+        "get",
+        lambda url, **kwargs: httpx.Response(
+            200, request=httpx.Request("GET", url), json=payload
+        ),
+    )
+    posts = sources.fetch_substack_relay(sources.SUBSTACK_FEED)
+    assert [p["title"] for p in posts] == ["New", "Old"]
+    assert posts[0]["via"] == "rss2json"
+    payload["feed"]["url"] = sources.PODCAST_FEED
+    with pytest.raises(SourceError, match="different publication"):
+        sources.fetch_substack_relay(sources.SUBSTACK_FEED)
+
+
+def test_public_search_is_used_before_private_activity_can_crowd_it_out():
+    payload = json.loads((FIXTURES / "activity.json").read_text())
+    public = [
+        p
+        for p in payload["data"]["user"]["pullRequests"]["nodes"]
+        if p["title"] == "Fix scheduler docs"
+    ]
+    payload["data"]["publicPullRequests"] = {"nodes": public}
+    payload["data"]["user"].pop("pullRequests")
+    assert parse_activity(payload)[0]["title"] == "Fix scheduler docs"
+    assert "is:public" in ACTIVITY_QUERY
 
 
 def test_parse_substack_garbage_raises():
     with pytest.raises(SourceError):
         parse_substack("complete garbage, not xml")
+
+
+def test_substack_orders_same_day_and_keeps_newest_duplicate():
+    feed = (
+        "<rss><channel>"
+        + "".join(
+            f"<item><title>{title}</title><link>https://s/{url}</link>"
+            f"<pubDate>Mon, 07 Sep 2026 {hour}:00:00 GMT</pubDate></item>"
+            for title, url, hour in [
+                ("Morning", "one", "08"),
+                ("Evening", "two", "20"),
+                ("Old copy", "two", "06"),
+            ]
+        )
+        + "</channel></rss>"
+    )
+    assert [p["title"] for p in parse_substack(feed)] == ["Evening", "Morning"]
+
+
+def test_empty_goodreads_shelf_is_valid():
+    assert (
+        parse_goodreads(
+            "<rss><channel><title>Currently reading</title></channel></rss>"
+        )
+        == []
+    )
+    with pytest.raises(SourceError, match="not an RSS channel"):
+        parse_goodreads("<html><body>Service unavailable</body></html>")
 
 
 def test_parse_activity_merges_sorts_and_caps():
@@ -315,6 +436,39 @@ def test_parse_goodreads_image_falls_back_to_small():
         "</item></channel></rss>"
     )
     assert parse_goodreads(feed)[0]["image_url"] == "small.jpg"
+
+
+def test_goodreads_prefers_update_date_to_original_shelving():
+    feed = _goodreads_feed(
+        ("Reopened", "Mon, 01 Jun 2026 09:00:00 -0700"),
+        ("Added", "Sat, 04 Jul 2026 10:45:34 -0700"),
+    ).replace(
+        "<title>Reopened</title>",
+        "<title>Reopened</title><user_date_updated>Mon, 07 Sep 2026 12:00:00 GMT</user_date_updated>",
+    )
+    assert [b["title"] for b in parse_goodreads(feed)] == ["Reopened", "Added"]
+
+
+def test_goodreads_filters_other_shelves_and_finished_books():
+    feed = _goodreads_feed(("Finished", None), ("Wanted", None), ("Reading", None))
+    feed = feed.replace(
+        "<title>Finished</title>",
+        "<title>Finished</title><user_read_at>Mon, 07 Sep 2026 12:00:00 GMT</user_read_at>",
+    )
+    feed = feed.replace(
+        "<title>Wanted</title>",
+        "<title>Wanted</title><user_shelves>to-read</user_shelves>",
+    )
+    assert [b["title"] for b in parse_goodreads(feed)] == ["Reading"]
+
+
+def test_goodreads_keeps_explicit_current_rereads():
+    feed = _goodreads_feed(("Rereading", None)).replace(
+        "<title>Rereading</title>",
+        "<title>Rereading</title><user_shelves>favorites,currently-reading</user_shelves>"
+        "<user_read_at>Mon, 01 Jun 2026 09:00:00 GMT</user_read_at>",
+    )
+    assert parse_goodreads(feed)[0]["title"] == "Rereading"
 
 
 def test_parse_goodreads_rejects_doctype_and_entities():

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 490" role="img" aria-label="Latest writing: What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02)">
+  <title>Latest writing: What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02)</title>
+  <defs>
+    <linearGradient id="wash" x2="1" y2="1">
+      <stop stop-color="#a33a35" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#fff6f0" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="content"><rect x="36" y="90" width="524" height="382"/></clipPath>
+  </defs>
+  <rect x="1" y="1" width="598" height="488" rx="24" fill="#fff6f0" stroke="#f3ddd0" stroke-width="2"/>
+  <rect x="2" y="2" width="596" height="84" rx="23" fill="url(#wash)"/>
+  <rect x="36" y="36" width="5" height="24" rx="2" fill="#a33a35"/>
+  <text x="56" y="56" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" letter-spacing="2" fill="#a33a35">LATEST WRITING</text>
+
+
+  <g clip-path="url(#content)">
+
+
+
+    <text x="36" y="126" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#44322e">What you can change when</text>
+
+    <text x="36" y="164" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="400" fill="#44322e">your agent is open source</text>
+
+    <text x="36" y="196" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#8a6f66">2026-09-05</text>
+
+
+    <path d="M36 220 H560" stroke="#f3ddd0"/>
+
+
+    <text x="36" y="256" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#44322e">I let AI fix my printer</text>
+
+    <text x="36" y="288" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#8a6f66">2026-02-14</text>
+
+
+    <path d="M36 312 H560" stroke="#f3ddd0"/>
+
+
+    <text x="36" y="348" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#44322e">Who Are You When the Code</text>
+
+    <text x="36" y="386" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="400" fill="#44322e">Writes Itself?</text>
+
+    <text x="36" y="418" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#8a6f66">2026-02-02</text>
+
+  </g>
+</svg>
