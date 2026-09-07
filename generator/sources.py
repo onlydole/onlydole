@@ -9,8 +9,6 @@ from xml.etree import ElementTree
 
 import feedparser
 import httpx
-from curl_cffi import requests as substack_http
-from curl_cffi.requests.exceptions import RequestException
 
 SUBSTACK_FEED = "https://onlydole.substack.com/feed"
 PODCAST_FEED = "https://attentiondeficitpod.substack.com/feed"
@@ -63,25 +61,27 @@ def parse_substack(feed_text: str) -> list[dict]:
 def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
     """Use RSS first, then the publication's public archive if RSS is blocked."""
     try:
-        resp = substack_http.get(
+        resp = httpx.get(
             feed_url,
             timeout=30,
-            allow_redirects=True,
-            impersonate="chrome",
-            headers={"Accept": "application/rss+xml, application/xml"},
+            follow_redirects=True,
+            headers={
+                "User-Agent": USER_AGENT,
+                "Accept": "application/rss+xml, application/xml",
+            },
         )
         resp.raise_for_status()
         return parse_substack(resp.text)
-    except (RequestException, httpx.HTTPError, SourceError):
+    except (httpx.HTTPError, SourceError):
         # Substack sometimes blocks RSS on hosted runners. The archive is a
         # public endpoint, not an authenticated dashboard or paywall bypass.
         try:
-            resp = substack_http.get(
+            resp = httpx.get(
                 feed_url.removesuffix("/feed") + "/api/v1/archive",
                 params={"sort": "new", "limit": 10},
-                impersonate="chrome",
+                headers={"User-Agent": USER_AGENT},
                 timeout=30,
-                allow_redirects=True,
+                follow_redirects=True,
             )
             resp.raise_for_status()
             payload = resp.json()
@@ -107,7 +107,6 @@ def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
             posts.sort(key=lambda post: post["date"], reverse=True)
             return posts[:3]
         except (
-            RequestException,
             httpx.HTTPError,
             ValueError,
             UnicodeDecodeError,

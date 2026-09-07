@@ -71,7 +71,7 @@ def test_substack_blocked_rss_uses_public_archive(monkeypatch):
             ],
         )
 
-    monkeypatch.setattr(sources.substack_http, "get", get)
+    monkeypatch.setattr(sources.httpx, "get", get)
     assert sources.fetch_substack()[0]["title"] == "New"
     assert calls == [
         sources.SUBSTACK_FEED,
@@ -81,7 +81,7 @@ def test_substack_blocked_rss_uses_public_archive(monkeypatch):
 
 def test_substack_both_endpoints_blocked_raise(monkeypatch):
     monkeypatch.setattr(
-        sources.substack_http,
+        sources.httpx,
         "get",
         lambda url, **kwargs: httpx.Response(403, request=httpx.Request("GET", url)),
     )

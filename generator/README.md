@@ -45,10 +45,10 @@ The workflow commits successful updates before checking source health.
 Any unavailable or cached source then fails the run, so a green check means
 all five sources were fetched. RSS has a public Substack archive fallback,
 but both endpoints can be blocked by the provider. That remains a failed
-refresh, not a successful update of stale content. Substack requests use
-curl-cffi's browser-compatible TLS transport; ordinary HTTPX requests were
-blocked on the hosted runner even with a browser User-Agent. The other
-sources use HTTPX.
+refresh, not a successful update of stale content. The refresh uses a macOS
+runner because Substack rejected requests from Ubuntu's Azure network,
+including requests with browser-compatible TLS. CI and lint stay on Ubuntu.
+All sources use HTTPX; no relay or paid proxy is involved.
 
 Refresh commits use GitHub's GraphQL API for verified signatures, with the
 checked-out commit as the expected branch head. A concurrent branch change
