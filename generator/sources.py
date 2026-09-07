@@ -12,6 +12,7 @@ import httpx
 
 SUBSTACK_FEED = "https://onlydole.substack.com/feed"
 PODCAST_FEED = "https://attentiondeficitpod.substack.com/feed"
+RSS_RELAY = "https://api.rss2json.com/v1/api.json"
 GITHUB_LOGIN = "onlydole"
 PROFILE_REPO = "onlydole/onlydole"
 GRAPHQL_URL = "https://api.github.com/graphql"
@@ -112,7 +113,54 @@ def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
             UnicodeDecodeError,
             SourceError,
         ) as exc:
-            raise SourceError(f"substack RSS and archive unavailable: {exc}") from exc
+            print(f"Substack direct fetch unavailable; trying public RSS relay: {exc}")
+            return fetch_substack_relay(feed_url)
+
+
+def fetch_substack_relay(feed_url: str) -> list[dict]:
+    """Last network fallback for hosted runners blocked by Substack.
+
+    The relay receives only a public feed URL. Its content may be cached;
+    gather rejects snapshots older than the already-verified local cache.
+    """
+    try:
+        resp = httpx.get(RSS_RELAY, params={"rss_url": feed_url}, timeout=30)
+        resp.raise_for_status()
+        payload = resp.json()
+        if not isinstance(payload, dict) or payload.get("status") != "ok":
+            raise SourceError("RSS relay did not return a successful feed")
+        feed = payload.get("feed")
+        if not isinstance(feed, dict) or feed.get("url") != feed_url:
+            raise SourceError("RSS relay returned a different publication")
+        if not isinstance(payload.get("items"), list):
+            raise SourceError("RSS relay had no item list")
+        posts = []
+        for item in payload["items"]:
+            if not isinstance(item, dict):
+                continue
+            title, url, date = (item.get(k) for k in ("title", "link", "pubDate"))
+            if not all(isinstance(v, str) and v for v in (title, url, date)):
+                continue
+            if not url.startswith(feed_url.removesuffix("/feed") + "/p/"):
+                continue
+            try:
+                published = datetime.datetime.fromisoformat(date.replace("Z", "+00:00"))
+            except ValueError:
+                continue
+            posts.append(
+                {
+                    "title": title,
+                    "url": url,
+                    "date": published.date().isoformat(),
+                    "via": "rss2json",
+                }
+            )
+        if not posts:
+            raise SourceError("RSS relay contained no usable posts")
+        posts.sort(key=lambda post: post["date"], reverse=True)
+        return posts[:3]
+    except (httpx.HTTPError, ValueError, UnicodeDecodeError, SourceError) as exc:
+        raise SourceError(f"Substack and public RSS relay unavailable: {exc}") from exc
 
 
 def fetch_podcast() -> list[dict]:

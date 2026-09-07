@@ -125,8 +125,15 @@ def gather(today: str) -> dict:
     for key, fetch in fetchers.items():
         try:
             data[key] = fetch()
+            if key in ("writing", "podcast") and cache.get(key):
+                if data[key][0]["date"] < cache[key][0]["date"]:
+                    raise sources.SourceError(
+                        "feed returned older posts than the last-good cache"
+                    )
             cache[key] = data[key]
             statuses[key] = {"state": "fresh", "last_success": today}
+            if key in ("writing", "podcast") and data[key][0].get("via"):
+                statuses[key]["via"] = data[key][0]["via"]
         except (sources.SourceError, KeyError) as exc:
             print(f"warning: {key}: {exc}; using last-good data", file=sys.stderr)
             data[key] = cache.get(key)
@@ -148,11 +155,11 @@ def gather(today: str) -> dict:
     if summary_path := os.environ.get("GITHUB_STEP_SUMMARY"):
         with Path(summary_path).open("a", encoding="utf-8") as summary:
             summary.write(
-                "## Profile sources\n\n| Source | Status | Last success |\n| --- | --- | --- |\n"
+                "## Profile sources\n\n| Source | Status | Last success | Transport |\n| --- | --- | --- | --- |\n"
             )
             for key, status in statuses.items():
                 summary.write(
-                    f"| {key} | {status['state']} | {status['last_success'] or 'unknown'} |\n"
+                    f"| {key} | {status['state']} | {status['last_success'] or 'unknown'} | {status.get('via', 'direct') if status['state'] == 'fresh' else 'local cache'} |\n"
                 )
     return data
 

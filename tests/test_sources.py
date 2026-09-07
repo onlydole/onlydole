@@ -85,8 +85,45 @@ def test_substack_both_endpoints_blocked_raise(monkeypatch):
         "get",
         lambda url, **kwargs: httpx.Response(403, request=httpx.Request("GET", url)),
     )
-    with pytest.raises(SourceError, match="RSS and archive unavailable"):
+    with pytest.raises(SourceError, match="Substack and public RSS relay unavailable"):
         sources.fetch_substack()
+
+
+def test_substack_relay_checks_publication_and_sorts(monkeypatch):
+    payload = {
+        "status": "ok",
+        "feed": {"url": sources.SUBSTACK_FEED},
+        "items": [
+            {
+                "title": "Old",
+                "link": "https://onlydole.substack.com/p/old",
+                "pubDate": "2026-02-14 02:25:34",
+            },
+            {
+                "title": "New",
+                "link": "https://onlydole.substack.com/p/new",
+                "pubDate": "2026-09-05 15:50:36",
+            },
+            {
+                "title": "Bad link",
+                "link": "https://unrelated.example/p/new",
+                "pubDate": "2026-09-06 15:50:36",
+            },
+        ],
+    }
+    monkeypatch.setattr(
+        sources.httpx,
+        "get",
+        lambda url, **kwargs: httpx.Response(
+            200, request=httpx.Request("GET", url), json=payload
+        ),
+    )
+    posts = sources.fetch_substack_relay(sources.SUBSTACK_FEED)
+    assert [p["title"] for p in posts] == ["New", "Old"]
+    assert posts[0]["via"] == "rss2json"
+    payload["feed"]["url"] = sources.PODCAST_FEED
+    with pytest.raises(SourceError, match="different publication"):
+        sources.fetch_substack_relay(sources.SUBSTACK_FEED)
 
 
 def test_public_search_is_used_before_private_activity_can_crowd_it_out():

@@ -45,10 +45,15 @@ The workflow commits successful updates before checking source health.
 Any unavailable or cached source then fails the run, so a green check means
 all five sources were fetched. RSS has a public Substack archive fallback,
 but both endpoints can be blocked by the provider. That remains a failed
-refresh, not a successful update of stale content. The refresh uses a macOS
-runner because Substack rejected requests from Ubuntu's Azure network,
-including requests with browser-compatible TLS. CI and lint stay on Ubuntu.
-All sources use HTTPX; no relay or paid proxy is involved.
+refresh, not a successful update of stale content. Both Ubuntu and macOS
+hosted runners were blocked by Substack, including a browser-compatible
+HTTP client. The final network fallback is [rss2json](https://rss2json.com/docs),
+which reads the public feed without an API key. Only the public feed URL is
+sent to it. The response must identify the requested publication and link
+back to its posts. Relay content can lag the source; an older newest-post
+date never replaces a newer snapshot already in the cache. The Actions
+summary records when the relay was used. If every network route fails,
+the build keeps its local cache and fails the source-health check.
 
 Refresh commits use GitHub's GraphQL API for verified signatures, with the
 checked-out commit as the expected branch head. A concurrent branch change

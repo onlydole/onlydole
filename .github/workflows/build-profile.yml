@@ -25,10 +25,7 @@ concurrency:
 
 jobs:
   build:
-    # Substack rejects the Azure IP ranges used by Ubuntu runners.
-    # GitHub's macOS cloud uses a separate network; this public repo uses
-    # standard hosted runners, which do not consume paid runner minutes.
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write

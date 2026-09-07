@@ -132,6 +132,20 @@ def test_dead_source_with_no_cache_renders_empty_state(workspace, monkeypatch):
     assert '<a href="https://onlydole.substack.com">' in readme  # fallback link
 
 
+def test_stale_relay_cannot_replace_newer_cached_post(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    build.main()
+    _patch_sources(
+        monkeypatch, writing=[{**WRITING[0], "date": "2026-01-01", "via": "rss2json"}]
+    )
+    monkeypatch.setenv("BUILD_DATE", "2026-06-11")
+    build.main()
+    cache = json.loads(build.CACHE.read_text())
+    assert cache["writing"] == WRITING
+    assert cache["source_status"]["writing"]["state"] == "cached"
+    assert cache["source_status"]["writing"]["last_success"] == "2026-06-10"
+
+
 def test_dead_talks_feed_falls_back_to_cache(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     assert build.main() == 0
