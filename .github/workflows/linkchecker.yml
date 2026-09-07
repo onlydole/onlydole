@@ -10,9 +10,14 @@ permissions:
   contents: read
   issues: write
 
+concurrency:
+  group: link-checker
+  cancel-in-progress: false
+
 jobs:
   linkChecker:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -28,10 +33,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Issue From File
+      - name: Update the link report
         if: steps.lychee.outputs.exit_code != 0
-        uses: peter-evans/create-issue-from-file@fca9117c27cdc29c6c4db3b86c48e4115a786710 # v6
-        with:
-          title: Link Checker Report
-          content-filepath: lychee/out.md
-          labels: report, automated issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          report_number=$(gh issue list --state open --label 'automated issue' --json number,title --jq '.[] | select(.title == "Link Checker Report") | .number' | head -n 1)
+          if [ -n "$report_number" ]; then
+            gh issue edit "$report_number" --body-file lychee/out.md
+          else
+            gh issue create --title 'Link Checker Report' --body-file lychee/out.md --label report --label 'automated issue'
+          fi

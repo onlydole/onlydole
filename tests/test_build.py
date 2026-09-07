@@ -42,6 +42,8 @@ COVER = {"url": "https://img/c.jpg", "b64": "QUJD", "mime": "image/jpeg"}
 
 @pytest.fixture
 def workspace(tmp_path, monkeypatch):
+    monkeypatch.delenv("GITHUB_STEP_SUMMARY", raising=False)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
     readme = tmp_path / "README.md"
     readme.write_text(README_FRAME, encoding="utf-8")
     assets = tmp_path / "assets"
@@ -55,6 +57,7 @@ def workspace(tmp_path, monkeypatch):
 
 def _patch_sources(monkeypatch, writing=WRITING):
     monkeypatch.setattr(sources, "fetch_substack", lambda: writing)
+    monkeypatch.setattr(sources, "fetch_podcast", lambda: WRITING)
     monkeypatch.setattr(sources, "fetch_activity", lambda token: SHIPPED)
     monkeypatch.setattr(sources, "fetch_talks", lambda: TALKS)
     monkeypatch.setattr(sources, "fetch_goodreads", lambda: list(BOOKS))
@@ -102,7 +105,16 @@ def test_dead_source_falls_back_to_cache(workspace, monkeypatch):
     assert build.main() == 0
     second = build.README.read_text(encoding="utf-8")
     assert '<a href="https://s/p">' in second  # cached writing link survives
-    assert "Last refreshed: 2026-06-11" in second  # stamp still advanced
+    assert "Built: 2026-06-11 · cached or unavailable: writing" in second
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["source_status"]["writing"] == {
+        "state": "cached",
+        "last_success": "2026-06-10",
+    }
+    assert (
+        "cached · last fetched 2026-06-10"
+        in (build.ASSETS / "writing-dark.svg").read_text()
+    )
 
 
 def test_dead_source_with_no_cache_renders_empty_state(workspace, monkeypatch):

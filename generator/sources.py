@@ -1,4 +1,4 @@
-"""Fetch and parse the four content sources."""
+"""Fetch public feeds and public GitHub activity."""
 
 from __future__ import annotations
 
@@ -11,13 +11,14 @@ import feedparser
 import httpx
 
 SUBSTACK_FEED = "https://onlydole.substack.com/feed"
+PODCAST_FEED = "https://attentiondeficitpod.substack.com/feed"
 GITHUB_LOGIN = "onlydole"
 PROFILE_REPO = "onlydole/onlydole"
 GRAPHQL_URL = "https://api.github.com/graphql"
 GOODREADS_USER_ID = "22801001"
 GOODREADS_FEED = (
     "https://www.goodreads.com/review/list_rss/"
-    f"{GOODREADS_USER_ID}?shelf=currently-reading"
+    f"{GOODREADS_USER_ID}?shelf=currently-reading&sort=date_updated&order=d&per_page=200"
 )
 TALKS_FEED = "https://onlydole.dev/feeds/talks.xml"
 USER_AGENT = "Mozilla/5.0 (compatible; onlydole-profile-bot/1.0)"
@@ -51,24 +52,78 @@ def parse_substack(feed_text: str) -> list[dict]:
                 "date": date,
             }
         )
-        if len(posts) == 3:
-            break
     if not posts:
         raise SourceError("feed contained no usable entries")
-    return posts
+    posts.sort(key=lambda post: post["date"], reverse=True)
+    return list({p["url"]: p for p in posts}.values())[:3]
 
 
-def fetch_substack() -> list[dict]:
+def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
+    """Use RSS first, then the publication's public archive if RSS is blocked."""
     try:
-        resp = httpx.get(SUBSTACK_FEED, timeout=30, follow_redirects=True)
+        resp = httpx.get(
+            feed_url,
+            timeout=30,
+            follow_redirects=True,
+            headers={
+                "User-Agent": USER_AGENT,
+                "Accept": "application/rss+xml, application/xml",
+            },
+        )
         resp.raise_for_status()
-    except httpx.HTTPError as exc:
-        raise SourceError(f"substack fetch failed: {exc}") from exc
-    return parse_substack(resp.text)
+        return parse_substack(resp.text)
+    except (httpx.HTTPError, SourceError):
+        # Substack sometimes blocks RSS on hosted runners. The archive is a
+        # public endpoint, not an authenticated dashboard or paywall bypass.
+        try:
+            resp = httpx.get(
+                feed_url.removesuffix("/feed") + "/api/v1/archive",
+                params={"sort": "new", "limit": 10},
+                headers={"User-Agent": USER_AGENT},
+                timeout=30,
+                follow_redirects=True,
+            )
+            resp.raise_for_status()
+            payload = resp.json()
+            if not isinstance(payload, list):
+                raise SourceError("archive response was not a list")
+            posts = []
+            for post in payload:
+                if not isinstance(post, dict):
+                    continue
+                title, url, date = (
+                    post.get(k) for k in ("title", "canonical_url", "post_date")
+                )
+                if not all(isinstance(v, str) and v for v in (title, url, date)):
+                    continue
+                date = (
+                    datetime.datetime.fromisoformat(date.replace("Z", "+00:00"))
+                    .date()
+                    .isoformat()
+                )
+                posts.append({"title": title, "url": url, "date": date})
+            if not posts:
+                raise SourceError("archive contained no usable posts")
+            posts.sort(key=lambda post: post["date"], reverse=True)
+            return posts[:3]
+        except (httpx.HTTPError, ValueError, UnicodeDecodeError, SourceError) as exc:
+            raise SourceError(f"substack RSS and archive unavailable: {exc}") from exc
+
+
+def fetch_podcast() -> list[dict]:
+    return fetch_substack(PODCAST_FEED)
 
 
 ACTIVITY_QUERY = """
 query($login: String!) {
+  publicPullRequests: search(
+    query: "is:pr is:merged is:public author:onlydole -repo:onlydole/onlydole sort:updated-desc",
+    type: ISSUE, first: 100
+  ) {
+    nodes { ... on PullRequest {
+      title url mergedAt repository { nameWithOwner isPrivate }
+    } }
+  }
   user(login: $login) {
     repositories(first: 50, privacy: PUBLIC, isFork: false,
                  orderBy: {field: PUSHED_AT, direction: DESC}) {
@@ -80,15 +135,6 @@ query($login: String!) {
         }
       }
     }
-    pullRequests(first: 20, states: MERGED,
-                 orderBy: {field: UPDATED_AT, direction: DESC}) {
-      nodes {
-        title
-        url
-        mergedAt
-        repository { nameWithOwner isPrivate }
-      }
-    }
   }
 }
 """
@@ -98,7 +144,11 @@ def parse_activity(payload: dict) -> list[dict]:
     try:
         user = payload["data"]["user"]
         repo_nodes = user["repositories"]["nodes"]
-        pr_nodes = user["pullRequests"]["nodes"]
+        pr_nodes = (
+            payload["data"]["publicPullRequests"]["nodes"]
+            if "publicPullRequests" in payload["data"]
+            else user["pullRequests"]["nodes"]
+        )
     except (KeyError, TypeError) as exc:
         raise SourceError(f"unexpected GraphQL shape: {exc}") from exc
     items = []
@@ -234,13 +284,9 @@ def fetch_talks() -> list[dict]:
 def parse_goodreads(feed_text: str) -> list[dict]:
     """Parse a Goodreads shelf RSS feed into up to 3 book dicts.
 
-    The three books are the three most recently shelved, chosen by each
-    item's pubDate (Goodreads sets it to the date the book landed on the
-    shelf). The feed usually arrives in that order already, but the
-    ordering is not part of the feed's contract, so taking the first
-    three in document order would silently pick arbitrary books off a
-    long shelf. Sorting here makes "most recently shelved" explicit,
-    matching parse_talks and parse_activity.
+    Prefer an explicit review update timestamp when present, then the
+    shelf-added date. Neither is a Kindle last-opened timestamp. Request
+    the expanded shelf upstream so sorting isn't limited to its first page.
 
     Rejects any document carrying DTD or entity declarations before
     parsing. That closes the XXE and entity-expansion attack classes
@@ -257,6 +303,13 @@ def parse_goodreads(feed_text: str) -> list[dict]:
         raise SourceError(f"unparsable goodreads feed: {exc}") from exc
     books = []
     for item in root.iter("item"):
+        shelves = item.findtext("user_shelves")
+        if shelves is not None and "currently-reading" not in {
+            s.strip() for s in shelves.split(",")
+        }:
+            continue
+        if shelves is None and (item.findtext("user_read_at") or "").strip():
+            continue
         title = (item.findtext("title") or "").strip()
         author = (item.findtext("author_name") or "").strip()
         url = (item.findtext("link") or "").strip()
@@ -267,7 +320,11 @@ def parse_goodreads(feed_text: str) -> list[dict]:
             continue
         books.append(
             (
-                _rfc822_sort_key(item.findtext("pubDate")),
+                _rfc822_sort_key(
+                    item.findtext("user_date_updated")
+                    or item.findtext("user_date_added")
+                    or item.findtext("pubDate")
+                ),
                 {"title": title, "author": author, "url": url, "image_url": image},
             )
         )

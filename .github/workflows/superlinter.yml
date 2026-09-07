@@ -7,12 +7,18 @@ on:
       - main
   workflow_dispatch:
 
-permissions: read-all
+permissions:
+  contents: read
+
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     name: Lint
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     permissions:
       contents: read
@@ -30,7 +36,7 @@ jobs:
         uses: super-linter/super-linter@4ce20838b8ab83717e78138c5b3a1407148e0918 # v8.7.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_GITHUB_ACTIONS_ZIZMOR: false
+          VALIDATE_GITHUB_ACTIONS_ZIZMOR: true
           MARKDOWN_CONFIG_FILE: .markdownlint.yaml
           FILTER_REGEX_EXCLUDE: (assets/|tests/goldens/|tests/fixtures/)
           VALIDATE_PYTHON_PYLINT: false

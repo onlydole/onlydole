@@ -97,8 +97,10 @@ def main() -> int:
     body = resp.json()
     if body.get("errors"):
         if _stale_data_only(body["errors"]):
-            print("branch advanced during run; a concurrent refresh already landed")
-            return 0
+            print(
+                "branch advanced during run; refresh was not committed; rerun against the new head"
+            )
+            return 1
         print(f"error: {body['errors']}", file=sys.stderr)
         return 1
     commit = body["data"]["createCommitOnBranch"]["commit"]

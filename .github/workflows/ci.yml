@@ -2,6 +2,14 @@
 name: CI
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "generator/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - ".github/workflows/**"
   pull_request:
     branches:
       - main
@@ -9,9 +17,14 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:

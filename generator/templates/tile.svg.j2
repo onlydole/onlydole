@@ -1,14 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {{ width }} {{ height }}" role="img" aria-label="{{ aria }}">
-  <rect x="1.5" y="1.5" width="{{ width - 3 }}" height="{{ height - 3 }}" rx="16" fill="{{ theme.bg }}" stroke="{{ theme.border }}" stroke-width="2"/>
+  <title>{{ aria }}</title>
+  <defs>
+    <linearGradient id="wash" x2="1" y2="1">
+      <stop stop-color="{{ theme.accent }}" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="{{ theme.bg }}" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="content"><rect x="{{ text_x }}" y="90" width="{{ width - text_x - 40 }}" height="{{ height - 108 }}"/></clipPath>
+  </defs>
+  <rect x="1" y="1" width="{{ width - 2 }}" height="{{ height - 2 }}" rx="24" fill="{{ theme.bg }}" stroke="{{ theme.border }}" stroke-width="2"/>
+  <rect x="2" y="2" width="{{ width - 4 }}" height="84" rx="23" fill="url(#wash)"/>
+  <rect x="36" y="36" width="5" height="24" rx="2" fill="{{ theme.accent }}"/>
+  <text x="56" y="56" font-family="{{ font }}" font-size="21" font-weight="700" letter-spacing="2" fill="{{ theme.accent }}">{{ header }}</text>
 {% if cover %}
-  <image x="36" y="56" width="92" height="138" preserveAspectRatio="xMidYMid meet" href="data:{{ cover.mime }};base64,{{ cover.b64 }}"/>
+  <rect x="31" y="102" width="102" height="154" rx="8" fill="{{ theme.border }}"/>
+  <image x="36" y="106" width="92" height="146" preserveAspectRatio="xMidYMid meet" href="data:{{ cover.mime }};base64,{{ cover.b64 }}"/>
 {% endif %}
-  <text x="{{ text_x }}" y="62" font-family="{{ font }}" font-size="22" font-weight="700" letter-spacing="2.5" fill="{{ theme.accent }}">{{ header }}</text>
 {% if header_note %}
-  <text x="{{ width - 36 }}" y="62" text-anchor="end" font-family="{{ font }}" font-size="15" fill="{{ theme.muted }}">{{ header_note }}</text>
+  <text x="{{ width - 36 }}" y="56" text-anchor="end" font-family="{{ font }}" font-size="17" fill="{{ theme.muted }}">{{ header_note }}</text>
 {% endif %}
-{% for line in lines %}
-  <text x="{{ text_x }}" y="{{ 122 + loop.index0 * 74 }}" font-family="{{ font }}" font-size="25" fill="{{ theme.text }}">{{ line.primary }}</text>
-  <text x="{{ text_x }}" y="{{ 152 + loop.index0 * 74 }}" font-family="{{ font }}" font-size="17" fill="{{ theme.muted }}">{{ line.secondary }}</text>
+  <g clip-path="url(#content)">
+{% for row in rows %}
+{% if not loop.first %}
+    <path d="M{{ text_x }} {{ row.y - 36 }} H{{ width - 40 }}" stroke="{{ theme.border }}"/>
+{% endif %}
+{% for text in row.primary %}
+    <text x="{{ text_x }}" y="{{ row.y + loop.index0 * 38 }}" font-family="{{ font }}" font-size="30" font-weight="{{ 600 if loop.first else 400 }}" fill="{{ theme.text }}">{{ text }}</text>
 {% endfor %}
+    <text x="{{ text_x }}" y="{{ row.y + (row.primary|length - 1) * 38 + 32 }}" font-family="{{ font }}" font-size="20" fill="{{ theme.muted }}">{{ row.secondary }}</text>
+{% endfor %}
+  </g>
 </svg>

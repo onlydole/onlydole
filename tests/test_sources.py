@@ -43,7 +43,63 @@ def test_parse_substack_skips_bad_entries_without_shrinking():
         "</channel></rss>"
     )
     posts = parse_substack(feed)
-    assert [p["title"] for p in posts] == ["Post 1", "Post 2", "Post 3"]
+    assert [p["title"] for p in posts] == ["Post 3", "Post 2", "Post 1"]
+
+
+def test_substack_blocked_rss_uses_public_archive(monkeypatch):
+    calls = []
+
+    def get(url, **kwargs):
+        calls.append(url)
+        request = httpx.Request("GET", url)
+        if url.endswith("/feed"):
+            return httpx.Response(403, request=request)
+        return httpx.Response(
+            200,
+            request=request,
+            json=[
+                {
+                    "title": "Older",
+                    "canonical_url": "https://s/older",
+                    "post_date": "2026-06-01T12:00:00Z",
+                },
+                {
+                    "title": "New",
+                    "canonical_url": "https://s/new",
+                    "post_date": "2026-09-05T15:50:36Z",
+                },
+            ],
+        )
+
+    monkeypatch.setattr(sources.httpx, "get", get)
+    assert sources.fetch_substack()[0]["title"] == "New"
+    assert calls == [
+        sources.SUBSTACK_FEED,
+        "https://onlydole.substack.com/api/v1/archive",
+    ]
+
+
+def test_substack_both_endpoints_blocked_raise(monkeypatch):
+    monkeypatch.setattr(
+        sources.httpx,
+        "get",
+        lambda url, **kwargs: httpx.Response(403, request=httpx.Request("GET", url)),
+    )
+    with pytest.raises(SourceError, match="RSS and archive unavailable"):
+        sources.fetch_substack()
+
+
+def test_public_search_is_used_before_private_activity_can_crowd_it_out():
+    payload = json.loads((FIXTURES / "activity.json").read_text())
+    public = [
+        p
+        for p in payload["data"]["user"]["pullRequests"]["nodes"]
+        if p["title"] == "Fix scheduler docs"
+    ]
+    payload["data"]["publicPullRequests"] = {"nodes": public}
+    payload["data"]["user"].pop("pullRequests")
+    assert parse_activity(payload)[0]["title"] == "Fix scheduler docs"
+    assert "is:public" in ACTIVITY_QUERY
 
 
 def test_parse_substack_garbage_raises():
@@ -315,6 +371,30 @@ def test_parse_goodreads_image_falls_back_to_small():
         "</item></channel></rss>"
     )
     assert parse_goodreads(feed)[0]["image_url"] == "small.jpg"
+
+
+def test_goodreads_prefers_update_date_to_original_shelving():
+    feed = _goodreads_feed(
+        ("Reopened", "Mon, 01 Jun 2026 09:00:00 -0700"),
+        ("Added", "Sat, 04 Jul 2026 10:45:34 -0700"),
+    ).replace(
+        "<title>Reopened</title>",
+        "<title>Reopened</title><user_date_updated>Mon, 07 Sep 2026 12:00:00 GMT</user_date_updated>",
+    )
+    assert [b["title"] for b in parse_goodreads(feed)] == ["Reopened", "Added"]
+
+
+def test_goodreads_filters_other_shelves_and_finished_books():
+    feed = _goodreads_feed(("Finished", None), ("Wanted", None), ("Reading", None))
+    feed = feed.replace(
+        "<title>Finished</title>",
+        "<title>Finished</title><user_read_at>Mon, 07 Sep 2026 12:00:00 GMT</user_read_at>",
+    )
+    feed = feed.replace(
+        "<title>Wanted</title>",
+        "<title>Wanted</title><user_shelves>to-read</user_shelves>",
+    )
+    assert [b["title"] for b in parse_goodreads(feed)] == ["Reading"]
 
 
 def test_parse_goodreads_rejects_doctype_and_entities():

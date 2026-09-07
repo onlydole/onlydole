@@ -3,17 +3,65 @@
 <!-- bento:start -->
 <a href="https://onlydole.dev"><img src="assets/hero.svg" width="100%" alt="Taylor Dolezal — Head of Open Source at Dosu · Open Source Strategy &amp; Ecosystems · Los Angeles"></a>
 <p align="center">
-  <a href="https://onlydole.substack.com/p/i-let-ai-fix-my-printer"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/writing-dark.svg"><img src="assets/writing-light.svg" width="100%" alt="Latest writing: I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02); Making Sense of AGENTS.md (2026-01-18)"></picture></a>
+  <a href="https://onlydole.substack.com/p/goose-open-source-agent-customization"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/writing-dark.svg"><img src="assets/writing-light.svg" width="100%" alt="Latest writing: What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02)"></picture></a>
 </p>
+<details>
+<summary>Links and full titles</summary>
+<ul>
+<li><a href="https://onlydole.substack.com/p/goose-open-source-agent-customization">What you can change when your agent is open source</a> · 2026-09-05</li>
+<li><a href="https://onlydole.substack.com/p/i-let-ai-fix-my-printer">I let AI fix my printer</a> · 2026-02-14</li>
+<li><a href="https://onlydole.substack.com/p/who-are-you-when-the-code-writes">Who Are You When the Code Writes Itself?</a> · 2026-02-02</li>
+</ul>
+</details>
+
 <p align="center">
-  <a href="https://github.com/onlydole/onlydole.github.io/pull/15"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20); ci: raise doc-update workflow turn cap from 25 to 100 (merged · onlydole/overdue · 2026-08-16); fix: repo-wide review — close XP farming and validation gaps, repair game-layer bugs, sync… (merged · onlydole/overdue · 2026-08-16)"></picture></a>
+  <a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-7-who-let-the"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/podcast-dark.svg"><img src="assets/podcast-light.svg" width="100%" alt="Attention Deficit: Attention Deficit Ep. 7 – Be Like a Data Center; Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers; Attention Deficit Ep. 5 – It&#x27;s Not a Shark, It&#x27;s a Data Center"></picture></a>
 </p>
+<details>
+<summary>Links and full titles</summary>
+<ul>
+<li><a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-7-who-let-the">Attention Deficit Ep. 7 – Be Like a Data Center</a> · 2026-09-07</li>
+<li><a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-6-sixteen-adversarial">Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers</a> · 2026-08-30</li>
+<li><a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-5-its-not-a">Attention Deficit Ep. 5 – It&#x27;s Not a Shark, It&#x27;s a Data Center</a> · 2026-08-16</li>
+</ul>
+</details>
+
+<p align="center">
+  <a href="https://github.com/onlydole/onlydole.github.io/pull/15"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20); ci: raise doc-update workflow turn cap from 25 to 100 (merged · onlydole/overdue · 2026-08-16); fix: repo-wide review — close XP farming and validation gaps, repair game-layer bugs, sync docs (merged · onlydole/overdue · 2026-08-16)"></picture></a>
+</p>
+<details>
+<summary>Links and full titles</summary>
+<ul>
+<li><a href="https://github.com/onlydole/onlydole.github.io/pull/15">Point Pullfrog at deepseek-v4-pro on Ollama</a> · merged · onlydole/onlydole.github.io · 2026-08-20</li>
+<li><a href="https://github.com/onlydole/overdue/pull/131">ci: raise doc-update workflow turn cap from 25 to 100</a> · merged · onlydole/overdue · 2026-08-16</li>
+<li><a href="https://github.com/onlydole/overdue/pull/130">fix: repo-wide review — close XP farming and validation gaps, repair game-layer bugs, sync docs</a> · merged · onlydole/overdue · 2026-08-16</li>
+</ul>
+</details>
+
 <p align="center">
   <a href="https://creators.spotify.com/pod/profile/alexagriffith/episodes/Paying-Attention-in-the-Age-of-Agents-e3m9i24"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: Paying Attention in the Age of Agents (Alexa&#x27;s Input (AI), panel episode · 2026-07-20); Lambda&#x27;s Long Game, Claude&#x27;s Complexity, and the AI Adoption Gap (LogiCast, Season 5 Episode 16 · 2026-04-29); Shaping the Future of Documentation. OSS, Knowledge, and Dosu (Software Plaza · 2025-12-05)"></picture></a>
 </p>
+<details>
+<summary>Links and full titles</summary>
+<ul>
+<li><a href="https://creators.spotify.com/pod/profile/alexagriffith/episodes/Paying-Attention-in-the-Age-of-Agents-e3m9i24">Paying Attention in the Age of Agents</a> · Alexa&#x27;s Input (AI), panel episode · 2026-07-20</li>
+<li><a href="https://logicast.podbean.com/e/season-5-episode-16-lambdas-long-game-claudes-complexity-and-the-ai-adoption-gap/">Lambda&#x27;s Long Game, Claude&#x27;s Complexity, and the AI Adoption Gap</a> · LogiCast, Season 5 Episode 16 · 2026-04-29</li>
+<li><a href="https://www.youtube.com/watch?v=h7XLE_taVN4">Shaping the Future of Documentation. OSS, Knowledge, and Dosu</a> · Software Plaza · 2025-12-05</li>
+</ul>
+</details>
+
 <p align="center">
-  <a href="https://www.goodreads.com/review/show/8886300863?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Reading now: Beyond Belief: The Science-Backed Way to Stop Limiting Yourself and Achieve Breakthrough Re… (Nir Eyal); All That&#x27;s Unseen: An Appalachian Memoir (Emilee Hackney); You Can Just Do Things: How High-Agency People Get What They Want Out of Life (Cate Hall)"></picture></a>
+  <a href="https://www.goodreads.com/review/show/8886300863?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Currently-reading shelf on Goodreads: Beyond Belief: The Science-Backed Way to Stop Limiting Yourself and Achieve Breakthrough Results (Nir Eyal); All That&#x27;s Unseen: An Appalachian Memoir (Emilee Hackney); You Can Just Do Things: How High-Agency People Get What They Want Out of Life (Cate Hall)"></picture></a>
 </p>
+<details>
+<summary>Links and full titles</summary>
+<ul>
+<li><a href="https://www.goodreads.com/review/show/8886300863?utm_medium=api&amp;utm_source=rss">Beyond Belief: The Science-Backed Way to Stop Limiting Yourself and Achieve Breakthrough Results</a> · Nir Eyal</li>
+<li><a href="https://www.goodreads.com/review/show/8863496208?utm_medium=api&amp;utm_source=rss">All That&#x27;s Unseen: An Appalachian Memoir</a> · Emilee Hackney</li>
+<li><a href="https://www.goodreads.com/review/show/8826127703?utm_medium=api&amp;utm_source=rss">You Can Just Do Things: How High-Agency People Get What They Want Out of Life</a> · Cate Hall</li>
+</ul>
+</details>
+
 <p align="center">
   <a href="https://onlydole.substack.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/chip-substack-dark.svg"><img src="assets/chip-substack-light.svg" width="150" alt="Substack"></picture></a>
   <a href="https://www.linkedin.com/in/onlydole"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/chip-linkedin-dark.svg"><img src="assets/chip-linkedin-light.svg" width="150" alt="LinkedIn"></picture></a>
@@ -24,14 +72,18 @@
 
 ## A little more about me
 
-I've spent my career refactoring complex systems into intuitive platforms —
-running production at Disney Studios, developer advocacy at HashiCorp,
-stewarding the end user ecosystem at CNCF, and now leading open source at
-[Dosu](https://dosu.dev). I care about the humans behind the code:
-maintainers, newcomers, and the communities that keep this ecosystem
-thriving. Reach out about Kubernetes, AI infrastructure, open source — or
-the best hikes in LA.
+I lead open source at [Dosu](https://dosu.dev). Before that, I worked on
+production systems at Disney Studios, developer advocacy at HashiCorp,
+and the end user community at CNCF. The part I keep coming back to is
+helping people find their way into a project and stick around.
 
-<sub>⚡ <!-- stamp:start -->Last refreshed: 2026-09-07<!-- stamp:end --> · rebuilt daily by
+I also co-host [Attention Deficit](https://attentiondeficitpod.substack.com)
+with Alexa Griffith. We talk through the week's AI news and what happens
+when you actually build with this stuff.
+
+Talk to me about Kubernetes, open source, your latest side project,
+or a good hike in LA.
+
+<sub><!-- stamp:start -->Last refreshed: 2026-09-07<!-- stamp:end --> · refreshed every six hours by
 [GitHub Actions](.github/workflows/build-profile.yml) ·
 [how it works](generator/)</sub>

@@ -1,9 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-label="{{ aria }}">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" role="img" aria-label="{{ aria }}">
+  <title>{{ aria }}</title>
   <defs>
     <linearGradient id="sunset" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#7c2d4f"/>
-      <stop offset="55%" stop-color="#c2414f"/>
-      <stop offset="100%" stop-color="#e8702a"/>
+      <stop offset="0%" stop-color="#261c35"/>
+      <stop offset="60%" stop-color="#7c2d4f"/>
+      <stop offset="100%" stop-color="#da663d"/>
     </linearGradient>
     <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
@@ -11,16 +12,21 @@
       <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
     <clipPath id="frame">
-      <rect width="1200" height="300" rx="18"/>
+      <rect width="1200" height="380" rx="24"/>
     </clipPath>
   </defs>
-  <rect width="1200" height="300" rx="18" fill="url(#sunset)"/>
+  <rect width="1200" height="380" rx="24" fill="url(#sunset)"/>
   <g clip-path="url(#frame)">
-    <rect x="-600" y="-40" width="420" height="380" fill="url(#sheen)" transform="skewX(-18)">
-      <animate attributeName="x" values="-600;1560" dur="9s" repeatCount="indefinite"/>
-    </rect>
+    <g fill="none" stroke="#ffc197" stroke-opacity="0.22" stroke-width="2">
+      <circle cx="1110" cy="82" r="110"/><circle cx="1110" cy="82" r="155"/><circle cx="1110" cy="82" r="200"/>
+      <path d="M720 380 Q910 180 1200 255 M820 380 Q980 240 1200 310 M920 380 Q1050 290 1200 365"/>
+    </g>
+    <circle cx="988" cy="249" r="6" fill="#ffd2bd"/>
+    <text x="56" y="60" font-family="{{ font }}" font-size="18" letter-spacing="3" fill="#ffd2bd">OPEN SOURCE / PEOPLE / POSSIBILITIES</text>
+    <text x="52" y="148" font-family="{{ font }}" font-size="72" font-weight="700" fill="#fff8f2">{{ name }}</text>
+    <text x="56" y="202" font-family="{{ font }}" font-size="28" fill="#ffe8dd">Head of Open Source @ Dosu</text>
+    <text x="56" y="243" font-family="{{ font }}" font-size="25" fill="#ffe8dd">Building communities. Making things. Based in Los Angeles.</text>
+    <path d="M56 278 H700" stroke="#ffd2bd" stroke-opacity="0.3"/>
+    <text x="56" y="320" font-family="{{ font }}" font-size="22" fill="#ffd2bd">{{ cred }}</text>
   </g>
-  <text x="64" y="132" font-family="{{ font }}" font-size="58" font-weight="700" fill="#ffffff">{{ name }}</text>
-  <text x="64" y="184" font-family="{{ font }}" font-size="25" fill="#ffe8dd">{{ role }}</text>
-  <text x="64" y="228" font-family="{{ font }}" font-size="19" fill="#ffd2bd" opacity="0.9">{{ cred }}</text>
 </svg>
