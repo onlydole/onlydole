@@ -2,7 +2,7 @@
 
 The profile pulls public posts, podcast episodes, GitHub activity, talks,
 and books into SVG cards. Python fetches the sources, Jinja renders the
-cards, and the build replaces the marked regions in the root README.
+cards, and the build replaces the marked regions in the root `README.md`.
 The prose outside those regions stays hand-written.
 
 ## Sources
@@ -33,6 +33,8 @@ Goodreads shelf; a more frequent build cannot recover missing Kindle data.
 
 The workflow runs every six hours, on generator changes, and on manual
 dispatch. Scheduled runs use the default branch and can start late.
+Manual runs on a feature branch fetch and validate without publishing;
+only runs on `main` can commit generated changes.
 The fetch step reads public sources with the workflow token used only for
 GitHub. It never needs Goodreads, Kindle, or Substack credentials.
 
