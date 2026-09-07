@@ -3,17 +3,20 @@
     {
       "title": "What you can change when your agent is open source",
       "url": "https://onlydole.substack.com/p/goose-open-source-agent-customization",
-      "date": "2026-09-05"
+      "date": "2026-09-05",
+      "published_at": "2026-09-05T15:50:36+00:00"
     },
     {
       "title": "I let AI fix my printer",
       "url": "https://onlydole.substack.com/p/i-let-ai-fix-my-printer",
-      "date": "2026-02-14"
+      "date": "2026-02-14",
+      "published_at": "2026-02-14T02:25:34+00:00"
     },
     {
       "title": "Who Are You When the Code Writes Itself?",
       "url": "https://onlydole.substack.com/p/who-are-you-when-the-code-writes",
-      "date": "2026-02-02"
+      "date": "2026-02-02",
+      "published_at": "2026-02-02T15:51:56+00:00"
     }
   ],
   "shipped": [
@@ -91,17 +94,20 @@
     {
       "title": "Attention Deficit Ep. 7 – Be Like a Data Center",
       "url": "https://attentiondeficitpod.substack.com/p/attention-deficit-ep-7-who-let-the",
-      "date": "2026-09-07"
+      "date": "2026-09-07",
+      "published_at": "2026-09-07T19:38:35+00:00"
     },
     {
       "title": "Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers",
       "url": "https://attentiondeficitpod.substack.com/p/attention-deficit-ep-6-sixteen-adversarial",
-      "date": "2026-08-30"
+      "date": "2026-08-30",
+      "published_at": "2026-08-30T16:03:12+00:00"
     },
     {
       "title": "Attention Deficit Ep. 5 – It's Not a Shark, It's a Data Center",
       "url": "https://attentiondeficitpod.substack.com/p/attention-deficit-ep-5-its-not-a",
-      "date": "2026-08-16"
+      "date": "2026-08-16",
+      "published_at": "2026-08-16T16:13:24+00:00"
     }
   ],
   "source_status": {

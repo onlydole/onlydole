@@ -98,7 +98,7 @@ def _resolve_reading(cache: dict) -> dict | None:
         cached = None
     books = sources.fetch_goodreads()
     cover = None
-    image_url = books[0].get("image_url") or ""
+    image_url = (books[0].get("image_url") or "") if books else ""
     cached_cover = (cached or {}).get("cover") or {}
     if image_url and cached_cover.get("url") == image_url and cached_cover.get("b64"):
         cover = cached_cover
@@ -126,7 +126,10 @@ def gather(today: str) -> dict:
         try:
             data[key] = fetch()
             if key in ("writing", "podcast") and cache.get(key):
-                if data[key][0]["date"] < cache[key][0]["date"]:
+                incoming, saved = data[key][0], cache[key][0]
+                if incoming.get("published_at", incoming["date"]) < saved.get(
+                    "published_at", saved["date"]
+                ):
                     raise sources.SourceError(
                         "feed returned older posts than the last-good cache"
                     )

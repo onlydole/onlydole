@@ -24,7 +24,8 @@ Goodreads doesn't expose Kindle reading progress or last-opened order in
 this RSS feed. Its `pubDate` matches the shelf-added date in the observed
 feed. The generator requests up to 200 shelf entries and displays three.
 An explicit currently-reading shelf takes precedence over an older finished
-date, so rereads stay visible. A book can stay on that
+date, so rereads stay visible. A valid empty shelf clears the displayed books;
+an unavailable feed preserves them. A book can stay on that
 shelf long after you put it down. Fix that at the source by updating your
 Goodreads shelf; a more frequent build cannot recover missing Kindle data.
 
@@ -51,7 +52,9 @@ HTTP client. The final network fallback is [rss2json](https://rss2json.com/docs)
 which reads the public feed without an API key. Only the public feed URL is
 sent to it. The response must identify the requested publication and link
 back to its posts. Relay content can lag the source; an older newest-post
-date never replaces a newer snapshot already in the cache. The Actions
+timestamp never replaces a newer snapshot already in the cache. Publication
+timestamps are normalized to UTC before sorting, including same-day posts.
+The Actions
 summary records when the relay was used. If every network route fails,
 the build keeps its local cache and fails the source-health check.
 

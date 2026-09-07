@@ -181,6 +181,16 @@ def test_tile_contexts_treats_missing_books_as_empty():
     assert reading["url"] == ""
 
 
+def test_successful_empty_shelf_clears_previous_books(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    build.main()
+    monkeypatch.setattr(sources, "fetch_goodreads", lambda: [])
+    build.main()
+    cache = json.loads(build.CACHE.read_text())
+    assert cache["reading"] == {"books": [], "cover": None}
+    assert cache["source_status"]["reading"]["state"] == "fresh"
+
+
 def test_reading_tile_uses_goodreads_books(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     assert build.main() == 0

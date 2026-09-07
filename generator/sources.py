@@ -37,6 +37,22 @@ def _entry_date(published) -> str | None:
         return None
 
 
+def _published_fields(value: datetime.datetime) -> dict:
+    """Keep full UTC precision for ordering while displaying a short date."""
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=datetime.timezone.utc)
+    value = value.astimezone(datetime.timezone.utc)
+    return {"date": value.date().isoformat(), "published_at": value.isoformat()}
+
+
+def _newest_posts(posts: list[dict]) -> list[dict]:
+    posts.sort(key=lambda p: p.get("published_at", p["date"]), reverse=True)
+    unique = {}
+    for post in posts:
+        unique.setdefault(post["url"], post)
+    return list(unique.values())[:3]
+
+
 def parse_substack(feed_text: str) -> list[dict]:
     parsed = feedparser.parse(feed_text)
     if parsed.bozo and not parsed.entries:
@@ -50,13 +66,12 @@ def parse_substack(feed_text: str) -> list[dict]:
             {
                 "title": entry["title"],
                 "url": entry["link"],
-                "date": date,
+                **_published_fields(datetime.datetime(*entry["published_parsed"][:6])),
             }
         )
     if not posts:
         raise SourceError("feed contained no usable entries")
-    posts.sort(key=lambda post: post["date"], reverse=True)
-    return list({p["url"]: p for p in posts}.values())[:3]
+    return _newest_posts(posts)
 
 
 def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
@@ -97,16 +112,13 @@ def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
                 )
                 if not all(isinstance(v, str) and v for v in (title, url, date)):
                     continue
-                date = (
-                    datetime.datetime.fromisoformat(date.replace("Z", "+00:00"))
-                    .date()
-                    .isoformat()
+                published = datetime.datetime.fromisoformat(date.replace("Z", "+00:00"))
+                posts.append(
+                    {"title": title, "url": url, **_published_fields(published)}
                 )
-                posts.append({"title": title, "url": url, "date": date})
             if not posts:
                 raise SourceError("archive contained no usable posts")
-            posts.sort(key=lambda post: post["date"], reverse=True)
-            return posts[:3]
+            return _newest_posts(posts)
         except (
             httpx.HTTPError,
             ValueError,
@@ -151,14 +163,13 @@ def fetch_substack_relay(feed_url: str) -> list[dict]:
                 {
                     "title": title,
                     "url": url,
-                    "date": published.date().isoformat(),
+                    **_published_fields(published),
                     "via": "rss2json",
                 }
             )
         if not posts:
             raise SourceError("RSS relay contained no usable posts")
-        posts.sort(key=lambda post: post["date"], reverse=True)
-        return posts[:3]
+        return _newest_posts(posts)
     except (httpx.HTTPError, ValueError, UnicodeDecodeError, SourceError) as exc:
         raise SourceError(f"Substack and public RSS relay unavailable: {exc}") from exc
 
@@ -354,7 +365,10 @@ def parse_goodreads(feed_text: str) -> list[dict]:
         root = ElementTree.fromstring(feed_text)
     except ElementTree.ParseError as exc:
         raise SourceError(f"unparsable goodreads feed: {exc}") from exc
+    if root.tag != "rss" or root.find("channel") is None:
+        raise SourceError("goodreads response was not an RSS channel")
     books = []
+    eligible = 0
     for item in root.iter("item"):
         shelves = item.findtext("user_shelves")
         if shelves is not None and "currently-reading" not in {
@@ -363,6 +377,7 @@ def parse_goodreads(feed_text: str) -> list[dict]:
             continue
         if shelves is None and (item.findtext("user_read_at") or "").strip():
             continue
+        eligible += 1
         title = (item.findtext("title") or "").strip()
         author = (item.findtext("author_name") or "").strip()
         url = (item.findtext("link") or "").strip()
@@ -381,7 +396,7 @@ def parse_goodreads(feed_text: str) -> list[dict]:
                 {"title": title, "author": author, "url": url, "image_url": image},
             )
         )
-    if not books:
+    if not books and eligible:
         raise SourceError("goodreads shelf feed had no usable items")
     books.sort(key=lambda entry: entry[0], reverse=True)
     return [book for _key, book in books[:3]]

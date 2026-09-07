@@ -144,6 +144,34 @@ def test_parse_substack_garbage_raises():
         parse_substack("complete garbage, not xml")
 
 
+def test_substack_orders_same_day_and_keeps_newest_duplicate():
+    feed = (
+        "<rss><channel>"
+        + "".join(
+            f"<item><title>{title}</title><link>https://s/{url}</link>"
+            f"<pubDate>Mon, 07 Sep 2026 {hour}:00:00 GMT</pubDate></item>"
+            for title, url, hour in [
+                ("Morning", "one", "08"),
+                ("Evening", "two", "20"),
+                ("Old copy", "two", "06"),
+            ]
+        )
+        + "</channel></rss>"
+    )
+    assert [p["title"] for p in parse_substack(feed)] == ["Evening", "Morning"]
+
+
+def test_empty_goodreads_shelf_is_valid():
+    assert (
+        parse_goodreads(
+            "<rss><channel><title>Currently reading</title></channel></rss>"
+        )
+        == []
+    )
+    with pytest.raises(SourceError, match="not an RSS channel"):
+        parse_goodreads("<html><body>Service unavailable</body></html>")
+
+
 def test_parse_activity_merges_sorts_and_caps():
     payload = json.loads((FIXTURES / "activity.json").read_text(encoding="utf-8"))
     items = parse_activity(payload)
