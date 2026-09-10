@@ -92,7 +92,7 @@
       "mime": "image/jpeg"
     }
   },
-  "updated": "2026-09-09",
+  "updated": "2026-09-10",
   "podcast": [
     {
       "title": "Attention Deficit Ep. 7 – Be Like a Data Center",
@@ -118,26 +118,24 @@
   ],
   "source_status": {
     "writing": {
-      "state": "fresh",
-      "last_success": "2026-09-09",
-      "via": "rss2json"
+      "state": "cached",
+      "last_success": "2026-09-09"
     },
     "shipped": {
       "state": "fresh",
-      "last_success": "2026-09-09"
+      "last_success": "2026-09-10"
     },
     "stage": {
       "state": "fresh",
-      "last_success": "2026-09-09"
+      "last_success": "2026-09-10"
     },
     "podcast": {
-      "state": "fresh",
-      "last_success": "2026-09-09",
-      "via": "rss2json"
+      "state": "cached",
+      "last_success": "2026-09-09"
     },
     "reading": {
       "state": "fresh",
-      "last_success": "2026-09-09"
+      "last_success": "2026-09-10"
     }
   }
 }
