@@ -84,6 +84,6 @@ when you actually build with this stuff.
 Talk to me about Kubernetes, open source, your latest side project,
 or a good hike in LA.
 
-<sub><!-- stamp:start -->Built: 2026-09-10 · cached or unavailable: writing, podcast<!-- stamp:end --> · refreshed every six hours by
+<sub><!-- stamp:start -->Last refreshed: 2026-09-10<!-- stamp:end --> · refreshed every six hours by
 [GitHub Actions](.github/workflows/build-profile.yml) ·
 [how it works](generator/)</sub>

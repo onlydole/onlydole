@@ -118,8 +118,9 @@
   ],
   "source_status": {
     "writing": {
-      "state": "cached",
-      "last_success": "2026-09-09"
+      "state": "fresh",
+      "last_success": "2026-09-10",
+      "via": "rss2json"
     },
     "shipped": {
       "state": "fresh",
@@ -130,8 +131,9 @@
       "last_success": "2026-09-10"
     },
     "podcast": {
-      "state": "cached",
-      "last_success": "2026-09-09"
+      "state": "fresh",
+      "last_success": "2026-09-10",
+      "via": "rss2json"
     },
     "reading": {
       "state": "fresh",
