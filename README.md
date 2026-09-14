@@ -27,14 +27,14 @@
 </details>
 
 <p align="center">
-  <a href="https://github.com/onlydole/onlydole.github.io/pull/15"><picture><source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/shipped-mobile-dark.svg"><source media="(max-width: 600px)" srcset="assets/shipped-mobile-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20); ci: raise doc-update workflow turn cap from 25 to 100 (merged · onlydole/overdue · 2026-08-16); fix: repo-wide review — close XP farming and validation gaps, repair game-layer bugs, sync docs (merged · onlydole/overdue · 2026-08-16)"></picture></a>
+  <a href="https://github.com/onlydole/onlydole.github.io/pull/15"><picture><source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/shipped-mobile-dark.svg"><source media="(max-width: 600px)" srcset="assets/shipped-mobile-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20); Add three 2025-2026 appearances, fix canonical URLs, bump actions (merged · onlydole/onlydole.github.io · 2026-08-16); Add Pullfrog agent workflow (merged · onlydole/onlydole.github.io · 2026-08-15)"></picture></a>
 </p>
 <details>
 <summary>Links and full titles</summary>
 <ul>
 <li><a href="https://github.com/onlydole/onlydole.github.io/pull/15">Point Pullfrog at deepseek-v4-pro on Ollama</a> · merged · onlydole/onlydole.github.io · 2026-08-20</li>
-<li><a href="https://github.com/onlydole/overdue/pull/131">ci: raise doc-update workflow turn cap from 25 to 100</a> · merged · onlydole/overdue · 2026-08-16</li>
-<li><a href="https://github.com/onlydole/overdue/pull/130">fix: repo-wide review — close XP farming and validation gaps, repair game-layer bugs, sync docs</a> · merged · onlydole/overdue · 2026-08-16</li>
+<li><a href="https://github.com/onlydole/onlydole.github.io/pull/14">Add three 2025-2026 appearances, fix canonical URLs, bump actions</a> · merged · onlydole/onlydole.github.io · 2026-08-16</li>
+<li><a href="https://github.com/onlydole/onlydole.github.io/pull/13">Add Pullfrog agent workflow</a> · merged · onlydole/onlydole.github.io · 2026-08-15</li>
 </ul>
 </details>
 
