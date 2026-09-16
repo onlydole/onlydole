@@ -51,14 +51,14 @@
 </details>
 
 <p align="center">
-  <a href="https://www.goodreads.com/review/show/8886300863?utm_medium=api&amp;utm_source=rss"><picture><source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/reading-mobile-dark.svg"><source media="(max-width: 600px)" srcset="assets/reading-mobile-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Currently-reading shelf on Goodreads: Beyond Belief: The Science-Backed Way to Stop Limiting Yourself and Achieve Breakthrough Results (Nir Eyal); All That&#x27;s Unseen: An Appalachian Memoir (Emilee Hackney); You Can Just Do Things: How High-Agency People Get What They Want Out of Life (Cate Hall)"></picture></a>
+  <a href="https://www.goodreads.com/review/show/8905760855?utm_medium=api&amp;utm_source=rss"><picture><source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/reading-mobile-dark.svg"><source media="(max-width: 600px)" srcset="assets/reading-mobile-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Currently-reading shelf on Goodreads: A Parade of Horribles (Dungeon Crawler Carl, #8) (Matt Dinniman); Beyond Belief: The Science-Backed Way to Stop Limiting Yourself and Achieve Breakthrough Results (Nir Eyal); All That&#x27;s Unseen: An Appalachian Memoir (Emilee Hackney)"></picture></a>
 </p>
 <details>
 <summary>Links and full titles</summary>
 <ul>
+<li><a href="https://www.goodreads.com/review/show/8905760855?utm_medium=api&amp;utm_source=rss">A Parade of Horribles (Dungeon Crawler Carl, #8)</a> · Matt Dinniman</li>
 <li><a href="https://www.goodreads.com/review/show/8886300863?utm_medium=api&amp;utm_source=rss">Beyond Belief: The Science-Backed Way to Stop Limiting Yourself and Achieve Breakthrough Results</a> · Nir Eyal</li>
 <li><a href="https://www.goodreads.com/review/show/8863496208?utm_medium=api&amp;utm_source=rss">All That&#x27;s Unseen: An Appalachian Memoir</a> · Emilee Hackney</li>
-<li><a href="https://www.goodreads.com/review/show/8826127703?utm_medium=api&amp;utm_source=rss">You Can Just Do Things: How High-Agency People Get What They Want Out of Life</a> · Cate Hall</li>
 </ul>
 </details>
 
