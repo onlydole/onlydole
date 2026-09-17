@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
       - name: Run agent
-        uses: pullfrog/pullfrog@86f7dba19a2e8fddcc11c703e3fd906d8deae145 # v0.1.64
+        uses: pullfrog/pullfrog@59433521bdff32d700bbd62f729754fa34e948d8 # v0.1.75
         with:
           prompt: ${{ inputs.prompt }}
           model: openai-compatible/byok
