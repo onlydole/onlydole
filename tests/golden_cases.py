@@ -1,6 +1,6 @@
 """Fixture contexts shared by the golden test and the regenerator."""
 
-from generator.render import DARK, FONT_STACK, LIGHT
+from generator.render import DARK, FONT_SANS, FONT_SERIF, LIGHT
 
 TINY_PNG_B64 = (
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ"
@@ -11,26 +11,36 @@ CASES = {
     "hero.svg": (
         "hero.svg.j2",
         {
-            "font": FONT_STACK,
-            "aria": "Taylor Dolezal — Head of Open Source at Dosu · "
-            "Open Source Strategy & Ecosystems · Los Angeles",
+            "sans": FONT_SANS,
+            "serif": FONT_SERIF,
+            "aria": "Taylor Dolezal, Head of Open Source at Dosu in Los Angeles.",
             "name": "Taylor Dolezal",
-            "role": "Head of Open Source @ Dosu · "
-            "Open Source Strategy & Ecosystems · Los Angeles",
-            "cred": "KubeCon keynoter · ex-Disney Studios SRE · ex-HashiCorp",
+            "role": "Head of Open Source at Dosu",
+            "mission": "I help open source communities thrive.",
+            "illustration_b64": TINY_PNG_B64,
+            "credentials": [
+                "Kubernetes 1.19 Release Lead",
+                "CNCF Head of Ecosystem",
+                "KubeCon keynoter",
+                "Technical author",
+            ],
         },
     ),
     "tile-writing-dark.svg": (
         "tile.svg.j2",
         {
-            "font": FONT_STACK,
+            "sans": FONT_SANS,
+            "serif": FONT_SERIF,
             "theme": DARK,
             "width": 1200,
-            "height": 262,
-            "text_x": 36,
+            "height": 176,
+            "text_x": 174,
             "cover": None,
             "header_note": "",
             "header": "✍️ LATEST WRITING",
+            "action": "READ",
+            "more_count": 1,
+            "key": "writing",
             "aria": "Latest writing: Fixture post (2026-01-02)",
             "lines": [
                 {"primary": "Fixture post", "secondary": "2026-01-02"},
@@ -44,14 +54,18 @@ CASES = {
     "tile-writing-light.svg": (
         "tile.svg.j2",
         {
-            "font": FONT_STACK,
+            "sans": FONT_SANS,
+            "serif": FONT_SERIF,
             "theme": LIGHT,
             "width": 1200,
-            "height": 188,
-            "text_x": 36,
+            "height": 176,
+            "text_x": 174,
             "cover": None,
             "header_note": "",
             "header": "✍️ LATEST WRITING",
+            "action": "READ",
+            "more_count": 0,
+            "key": "writing",
             "aria": "Latest writing: Fixture post (2026-01-02)",
             "lines": [{"primary": "Fixture post", "secondary": "2026-01-02"}],
         },
@@ -59,20 +73,24 @@ CASES = {
     "tile-reading-cover-dark.svg": (
         "tile.svg.j2",
         {
-            "font": FONT_STACK,
+            "sans": FONT_SANS,
+            "serif": FONT_SERIF,
             "theme": DARK,
             "width": 1200,
-            "height": 250,
-            "text_x": 156,
+            "height": 176,
+            "text_x": 174,
             "cover": {"mime": "image/png", "b64": TINY_PNG_B64},
             "header_note": "via Goodreads",
             "header": "📚 READING NOW",
+            "action": "EXPLORE",
+            "more_count": 0,
+            "key": "reading",
             "aria": "Reading now: Fixture book (Fixture author)",
             "lines": [{"primary": "Fixture book", "secondary": "Fixture author"}],
         },
     ),
     "chip-substack-dark.svg": (
         "chip.svg.j2",
-        {"font": FONT_STACK, "theme": DARK, "label": "Substack"},
+        {"font": FONT_SANS, "theme": DARK, "label": "Substack"},
     ),
 }

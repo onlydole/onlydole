@@ -1,32 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" role="img" aria-label="Taylor Dolezal — Head of Open Source at Dosu · Open Source Strategy &amp; Ecosystems · Los Angeles">
-  <title>Taylor Dolezal — Head of Open Source at Dosu · Open Source Strategy &amp; Ecosystems · Los Angeles</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-label="Taylor Dolezal, Head of Open Source at Dosu in Los Angeles.">
+  <title>Taylor Dolezal, Head of Open Source at Dosu in Los Angeles.</title>
   <defs>
-    <linearGradient id="sunset" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#261c35"/>
-      <stop offset="60%" stop-color="#7c2d4f"/>
-      <stop offset="100%" stop-color="#da663d"/>
+    <linearGradient id="paper" x2="1" y2="1">
+      <stop stop-color="#fffaf1"/>
+      <stop offset="0.58" stop-color="#f8eee1"/>
+      <stop offset="1" stop-color="#eedcca"/>
     </linearGradient>
-    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.10"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <clipPath id="frame">
-      <rect width="1200" height="380" rx="24"/>
-    </clipPath>
+    <pattern id="paper-fibers" width="26" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="4" r="0.9" fill="#654d42" fill-opacity="0.1"/>
+      <circle cx="19" cy="17" r="0.7" fill="#b66c54" fill-opacity="0.09"/>
+      <path d="M7 20 l6 -1 M18 5 l4 1 M1 12 l4 0.5" stroke="#654d42" stroke-opacity="0.07"/>
+    </pattern>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="3" seed="11" result="noise"/>
+      <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.32  0 0 0 0 0.24  0 0 0 0 0.2  0 0 0 0.11 0"/>
+    </filter>
+    <clipPath id="frame"><rect width="1200" height="430" rx="18"/></clipPath>
   </defs>
-  <rect width="1200" height="380" rx="24" fill="url(#sunset)"/>
   <g clip-path="url(#frame)">
-    <g fill="none" stroke="#ffc197" stroke-opacity="0.22" stroke-width="2">
-      <circle cx="1110" cy="82" r="110"/><circle cx="1110" cy="82" r="155"/><circle cx="1110" cy="82" r="200"/>
-      <path d="M720 380 Q910 180 1200 255 M820 380 Q980 240 1200 310 M920 380 Q1050 290 1200 365"/>
+    <rect width="1200" height="430" fill="url(#paper)"/>
+    <rect width="1200" height="430" fill="url(#paper-fibers)"/>
+    <rect width="1200" height="430" filter="url(#grain)" opacity="0.24"/>
+
+    <text x="49" y="48" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="4.8" fill="#944634">OPEN SOURCE  /  LOS ANGELES</text>
+    <path d="M49 64 H138" stroke="#bd6750" stroke-width="2"/>
+    <text x="45" y="137" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="72" font-weight="700" fill="#281f1b">Taylor Dolezal</text>
+    <text x="49" y="182" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#3a2d28">Head of Open Source at Dosu</text>
+
+    <text x="49" y="231" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="24" fill="#3f312b">Building open source communities, making things,</text>
+    <text x="49" y="261" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="24" fill="#3f312b">and helping good technology spread.</text>
+
+    <text x="49" y="306" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" fill="#655248">Formerly Disney Studios SRE, HashiCorp, and CNCF Head of Ecosystem.</text>
+    <text x="49" y="335" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" fill="#655248">Kubernetes 1.19 release lead · KubeCon keynoter · technical author.</text>
+
+    <path d="M49 363 H752" stroke="#8c7165" stroke-opacity="0.52"/>
+    <g transform="rotate(-1 52 396)">
+      <text x="52" y="399" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="21" font-style="italic" fill="#7b4639">Open source people make a brighter tomorrow.</text>
+      <path d="M51 409 Q255 416 471 406" fill="none" stroke="#b76650" stroke-opacity="0.58"/>
     </g>
-    <circle cx="988" cy="249" r="6" fill="#ffd2bd"/>
-    <text x="56" y="60" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="18" letter-spacing="3" fill="#ffd2bd">OPEN SOURCE / LOS ANGELES</text>
-    <text x="52" y="148" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="72" font-weight="700" fill="#fff8f2">Taylor Dolezal</text>
-    <text x="56" y="202" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="28" fill="#ffe8dd">Head of Open Source @ Dosu</text>
-    <text x="56" y="243" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="25" fill="#ffe8dd">Building communities. Making things. Based in Los Angeles.</text>
-    <path d="M56 278 H700" stroke="#ffd2bd" stroke-opacity="0.3"/>
-    <text x="56" y="320" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="22" fill="#ffd2bd">KubeCon keynoter · ex-Disney Studios SRE · ex-HashiCorp</text>
+
+    <image x="688" y="3" width="500" height="424" preserveAspectRatio="xMaxYMid meet" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="/>
   </g>
+  <rect x="1" y="1" width="1198" height="428" rx="17" fill="none" stroke="#d5c0ae" stroke-width="2"/>
 </svg>
