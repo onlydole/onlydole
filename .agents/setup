@@ -2,20 +2,20 @@
 set -euo pipefail
 
 step() {
-  local label=$1
-  shift
-  local started=$SECONDS
-  printf '\n==> %s\n' "$label"
-  "$@"
-  printf '    completed in %ss\n' "$((SECONDS - started))"
+	local label=$1
+	shift
+	local started=$SECONDS
+	printf '\n==> %s\n' "$label"
+	"$@"
+	printf '    completed in %ss\n' "$((SECONDS - started))"
 }
 
 if ! command -v uv >/dev/null 2>&1; then
-  step "Install uv" sh -c 'curl -LsSf https://astral.sh/uv/install.sh | sh'
-  export PATH="$HOME/.local/bin:$PATH"
+	step "Install uv" sh -c 'curl -LsSf https://astral.sh/uv/install.sh | sh'
+	export PATH="$HOME/.local/bin:$PATH"
 fi
 
 step "Install the locked Python toolchain and dependencies" \
-  uv sync --locked --project generator
+	uv sync --locked --project generator
 
 printf '\nOrb setup complete.\n'
