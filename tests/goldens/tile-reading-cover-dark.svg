@@ -16,7 +16,7 @@
   <rect x="2" y="2" width="1196" height="172" rx="7" fill="url(#fibers)"/>
 
   <rect x="29" y="18" width="108" height="140" rx="6" fill="#ff9d76" fill-opacity="0.14" stroke="#ff9d76" stroke-opacity="0.35"/>
-  <image x="36" y="24" width="94" height="128" preserveAspectRatio="xMidYMid slice" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="/>
+  <image x="36" y="24" width="94" height="128" preserveAspectRatio="xMidYMid meet" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="/>
 
   <path d="M150 24 V152" stroke="#ff9d76" stroke-opacity="0.36"/>
   <text x="174" y="42" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2.6" fill="#ff9d76">📚 READING NOW</text>

@@ -213,7 +213,9 @@ def test_reading_tile_uses_goodreads_books(workspace, monkeypatch):
     assert cache["reading"]["books"] == BOOKS
     assert cache["reading"]["cover"]["url"] == "https://img/c.jpg"
     svg = (build.ASSETS / "reading-dark.svg").read_text(encoding="utf-8")
+    mobile_svg = (build.ASSETS / "reading-mobile-light.svg").read_text(encoding="utf-8")
     assert "data:image/jpeg;base64,QUJD" in svg
+    assert "data:image/jpeg;base64,QUJD" in mobile_svg
     assert "EXPLORE" in svg
 
 
@@ -236,7 +238,9 @@ def test_cover_failure_renders_text_only(workspace, monkeypatch):
     monkeypatch.setattr(build, "_download_cover", lambda url: None)
     assert build.main() == 0
     svg = (build.ASSETS / "reading-dark.svg").read_text(encoding="utf-8")
+    mobile_svg = (build.ASSETS / "reading-mobile-dark.svg").read_text(encoding="utf-8")
     assert "<image" not in svg
+    assert "<image" not in mobile_svg
     assert "Book" in svg
 
 

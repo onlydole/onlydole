@@ -14,9 +14,9 @@
   <rect x="1" y="1" width="{{ width - 2 }}" height="{{ height - 2 }}" rx="8" fill="{{ theme.bg }}" stroke="{{ theme.accent }}" stroke-opacity="0.4" stroke-width="2"/>
   <rect x="2" y="2" width="{{ width - 4 }}" height="{{ height - 4 }}" rx="7" fill="url(#wash)"/>
   <rect x="2" y="2" width="{{ width - 4 }}" height="{{ height - 4 }}" rx="7" fill="url(#fibers)"/>
-{% if cover and width > 600 %}
-  <rect x="29" y="18" width="108" height="140" rx="6" fill="{{ theme.accent }}" fill-opacity="0.14" stroke="{{ theme.accent }}" stroke-opacity="0.35"/>
-  <image x="36" y="24" width="94" height="128" preserveAspectRatio="xMidYMid slice" href="data:{{ cover.mime }};base64,{{ cover.b64 }}"/>
+{% if cover %}
+  <rect x="{{ 20 if width <= 600 else 29 }}" y="{{ 46 if width <= 600 else 18 }}" width="{{ 76 if width <= 600 else 108 }}" height="{{ 112 if width <= 600 else 140 }}" rx="6" fill="{{ theme.accent }}" fill-opacity="0.14" stroke="{{ theme.accent }}" stroke-opacity="0.35"/>
+  <image x="{{ 24 if width <= 600 else 36 }}" y="{{ 50 if width <= 600 else 24 }}" width="{{ 68 if width <= 600 else 94 }}" height="{{ 104 if width <= 600 else 128 }}" preserveAspectRatio="xMidYMid meet" href="data:{{ cover.mime }};base64,{{ cover.b64 }}"/>
 {% else %}
   <rect x="{{ 20 if width <= 600 else 28 }}" y="{{ 46 if width <= 600 else 26 }}" width="{{ 76 if width <= 600 else 108 }}" height="{{ 112 if width <= 600 else 124 }}" rx="6" fill="{{ theme.accent }}" fill-opacity="0.12" stroke="{{ theme.accent }}" stroke-opacity="0.28"/>
   <g transform="translate({{ 58 if width <= 600 else 82 }} {{ 102 if width <= 600 else 88 }})" fill="none" stroke="{{ theme.accent }}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">

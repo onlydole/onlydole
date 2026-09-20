@@ -378,7 +378,7 @@ def write_assets(tiles: list[dict]) -> None:
                     "more_count": tile["more_count"],
                     "key": tile["key"],
                     "aria": tile["alt"],
-                    "cover": None,
+                    "cover": tile.get("cover"),
                     "header_note": tile.get("header_note", ""),
                     "width": 600,
                     "height": 210,
