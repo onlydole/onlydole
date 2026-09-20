@@ -1,4 +1,3 @@
-import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from generator.render import fit, render_svg, text_width, wrap_text
@@ -39,26 +38,6 @@ def test_svg_output_escapes_xml():
     svg = render_svg("tile.svg.j2", context)
     assert "&lt;angle&gt; &amp; amp" in svg
     assert "<angle>" not in svg
-
-
-def test_mobile_tile_keeps_one_readable_ellipsized_title_line():
-    _, desktop = CASES["tile-writing-dark.svg"]
-    namespace = {"svg": "http://www.w3.org/2000/svg"}
-    for title in ["W" * 160, "本" * 160, "An unusually long post title " * 12]:
-        context = {
-            **desktop,
-            "width": 600,
-            "height": 96,
-            "text_x": 94,
-            "lines": [{"primary": title, "secondary": "2026-09-20"}],
-        }
-        root = ET.fromstring(render_svg("tile.svg.j2", context))
-        text = root.findall("svg:text", namespace)
-
-        assert len(text) == 3
-        assert text[1].attrib["font-size"] == "29"
-        assert text[1].text.endswith("…")
-        assert text_width(text[1].text, 29) <= 486
 
 
 def test_wide_and_unbroken_titles_fit_the_reading_column():

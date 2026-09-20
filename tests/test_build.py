@@ -71,16 +71,10 @@ def test_main_builds_assets_readme_and_cache(workspace, monkeypatch):
     readme = build.README.read_text(encoding="utf-8")
     assert 'src="assets/writing-light.svg" width="100%"' in readme
     assert 'srcset="assets/writing-dark.svg"' in readme
-    assert (
-        'media="(max-width: 600px)" srcset="assets/writing-mobile-light.svg"' in readme
-    )
+    assert "writing-mobile" not in readme
     assert '<a href="https://s/p">Post</a>' in readme
     assert 'src="assets/hero.svg" width="100%"' in readme
     assert 'srcset="assets/hero-mobile.svg"' in readme
-    assert (
-        'width="600" height="96" viewBox="0 0 600 96"'
-        in (build.ASSETS / "reading-mobile-light.svg").read_text()
-    )
     assert (
         'width="1200" height="176"' in (build.ASSETS / "writing-light.svg").read_text()
     )
@@ -111,33 +105,21 @@ def test_main_builds_assets_readme_and_cache(workspace, monkeypatch):
     assert cache["updated"] == "2026-06-10"
 
 
-def test_all_card_variants_are_compact_and_mobile_type_is_readable(
-    workspace, monkeypatch
-):
+def test_all_cards_use_one_compact_rounded_layout(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     assert build.main() == 0
 
     namespace = {"svg": "http://www.w3.org/2000/svg"}
     for key in ("writing", "podcast", "shipped", "stage", "reading"):
         for theme in ("dark", "light"):
-            for mobile, dimensions in ((False, (1200, 176)), (True, (600, 96))):
-                infix = "-mobile" if mobile else ""
-                root = ET.parse(build.ASSETS / f"{key}{infix}-{theme}.svg").getroot()
-                width, height = dimensions
+            root = ET.parse(build.ASSETS / f"{key}-{theme}.svg").getroot()
 
-                assert root.attrib["width"] == str(width)
-                assert root.attrib["height"] == str(height)
-                assert root.attrib["viewBox"] == f"0 0 {width} {height}"
-                assert height / width <= 0.16
-                assert root.find("svg:rect", namespace).attrib["rx"] == "8"
-
-                if mobile:
-                    text = root.findall("svg:text", namespace)
-                    assert [node.attrib["font-size"] for node in text] == [
-                        "20",
-                        "29",
-                        "20",
-                    ]
+            assert root.attrib["width"] == "1200"
+            assert root.attrib["height"] == "176"
+            assert root.attrib["viewBox"] == "0 0 1200 176"
+            assert 176 / 1200 <= 0.16
+            assert root.find("svg:rect", namespace).attrib["rx"] == "8"
+            assert not (build.ASSETS / f"{key}-mobile-{theme}.svg").exists()
 
 
 def test_dead_source_falls_back_to_cache(workspace, monkeypatch):
@@ -229,7 +211,6 @@ def test_shipped_card_shortens_metadata_without_losing_link_detail():
 
     assert shipped["secondary"] == "merged · onlydole/repo · 2026-06-05"
     assert shipped["display_secondary"] == "onlydole/repo · 2026-06-05"
-    assert shipped["mobile_secondary"] == "2026-06-05"
 
 
 def test_successful_empty_shelf_clears_previous_books(workspace, monkeypatch):
@@ -251,9 +232,7 @@ def test_reading_tile_uses_goodreads_books(workspace, monkeypatch):
     assert cache["reading"]["books"] == BOOKS
     assert cache["reading"]["cover"]["url"] == "https://img/c.jpg"
     svg = (build.ASSETS / "reading-dark.svg").read_text(encoding="utf-8")
-    mobile_svg = (build.ASSETS / "reading-mobile-light.svg").read_text(encoding="utf-8")
     assert "data:image/jpeg;base64,QUJD" in svg
-    assert "data:image/jpeg;base64,QUJD" in mobile_svg
     assert "EXPLORE" in svg
 
 
@@ -276,9 +255,7 @@ def test_cover_failure_renders_text_only(workspace, monkeypatch):
     monkeypatch.setattr(build, "_download_cover", lambda url: None)
     assert build.main() == 0
     svg = (build.ASSETS / "reading-dark.svg").read_text(encoding="utf-8")
-    mobile_svg = (build.ASSETS / "reading-mobile-dark.svg").read_text(encoding="utf-8")
     assert "<image" not in svg
-    assert "<image" not in mobile_svg
     assert "Book" in svg
 
 

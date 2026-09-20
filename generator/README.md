@@ -84,9 +84,9 @@ against the available text width, including the space occupied by book
 covers. Extra-long titles end with an ellipsis; full titles and individual
 links remain available below each card. SVG clipping is a final boundary,
 not the layout algorithm. Check both themes and a narrow viewport after
-changing typography. Screens up to 600 pixels wide get separate SVGs with
-larger type relative to the image width. Mobile cards omit the cover to leave
-more room for titles.
+changing typography. Activity cards use one wide, shallow layout at every
+viewport so GitHub cannot substitute a taller card with oversized type. The
+hero retains its separate mobile layout.
 
 After reviewing an intentional visual change, update the snapshot fixtures:
 

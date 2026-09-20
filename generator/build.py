@@ -203,7 +203,6 @@ def tile_contexts(data: dict) -> list[dict]:
                 "primary": i["title"],
                 "secondary": f"{i['detail']} · {i['date']}",
                 "display_secondary": (f"{i['detail'].split(' · ')[-1]} · {i['date']}"),
-                "mobile_secondary": i["date"],
                 "url": i["url"],
             }
             for i in shipped
@@ -218,7 +217,6 @@ def tile_contexts(data: dict) -> list[dict]:
             {
                 "primary": t["title"],
                 "secondary": f"{t['venue']} · {t['date']}",
-                "mobile_secondary": t["date"],
                 "url": t["url"],
             }
             for t in stage
@@ -364,33 +362,6 @@ def write_assets(tiles: list[dict]) -> None:
             (ASSETS / f"{tile['key']}-{theme_name}.svg").write_text(
                 svg, encoding="utf-8"
             )
-            mobile = render_svg(
-                "tile.svg.j2",
-                {
-                    "sans": FONT_SANS,
-                    "serif": FONT_SERIF,
-                    "theme": {
-                        **theme,
-                        "accent": accents[tile["key"]][
-                            0 if theme_name == "dark" else 1
-                        ],
-                    },
-                    "lines": tile["lines"],
-                    "header": tile["header"],
-                    "action": tile["action"],
-                    "more_count": tile["more_count"],
-                    "key": tile["key"],
-                    "aria": tile["alt"],
-                    "cover": tile.get("cover"),
-                    "header_note": tile.get("header_note", ""),
-                    "width": 600,
-                    "height": 96,
-                    "text_x": 94,
-                },
-            )
-            (ASSETS / f"{tile['key']}-mobile-{theme_name}.svg").write_text(
-                mobile, encoding="utf-8"
-            )
     for key, label, _url in CHIPS:
         for theme_name, theme in themes:
             svg = render_svg(
@@ -404,14 +375,8 @@ def _esc(value: str) -> str:
 
 
 def _picture(key: str, alt: str, width: str) -> str:
-    mobile = ""
-    if not key.startswith("chip-"):
-        mobile = (
-            f'<source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/{key}-mobile-dark.svg">'
-            f'<source media="(max-width: 600px)" srcset="assets/{key}-mobile-light.svg">'
-        )
     return (
-        f'<picture>{mobile}<source media="(prefers-color-scheme: dark)" '
+        f'<picture><source media="(prefers-color-scheme: dark)" '
         f'srcset="assets/{key}-dark.svg">'
         f'<img src="assets/{key}-light.svg" width="{width}" alt="{_esc(alt)}">'
         f"</picture>"

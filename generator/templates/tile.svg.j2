@@ -15,11 +15,11 @@
   <rect x="2" y="2" width="{{ width - 4 }}" height="{{ height - 4 }}" rx="7" fill="url(#wash)"/>
   <rect x="2" y="2" width="{{ width - 4 }}" height="{{ height - 4 }}" rx="7" fill="url(#fibers)"/>
 {% if cover %}
-  <rect x="{{ 12 if width <= 600 else 29 }}" y="{{ 12 if width <= 600 else 18 }}" width="{{ 60 if width <= 600 else 108 }}" height="{{ 72 if width <= 600 else 140 }}" rx="6" fill="{{ theme.accent }}" fill-opacity="0.14" stroke="{{ theme.accent }}" stroke-opacity="0.35"/>
-  <image x="{{ 16 if width <= 600 else 36 }}" y="{{ 15 if width <= 600 else 24 }}" width="{{ 52 if width <= 600 else 94 }}" height="{{ 66 if width <= 600 else 128 }}" preserveAspectRatio="xMidYMid meet" href="data:{{ cover.mime }};base64,{{ cover.b64 }}"/>
+  <rect x="29" y="18" width="108" height="140" rx="6" fill="{{ theme.accent }}" fill-opacity="0.14" stroke="{{ theme.accent }}" stroke-opacity="0.35"/>
+  <image x="36" y="24" width="94" height="128" preserveAspectRatio="xMidYMid meet" href="data:{{ cover.mime }};base64,{{ cover.b64 }}"/>
 {% else %}
-  <rect x="{{ 12 if width <= 600 else 28 }}" y="{{ 12 if width <= 600 else 26 }}" width="{{ 60 if width <= 600 else 108 }}" height="{{ 72 if width <= 600 else 124 }}" rx="6" fill="{{ theme.accent }}" fill-opacity="0.12" stroke="{{ theme.accent }}" stroke-opacity="0.28"/>
-  <g transform="translate({{ 42 if width <= 600 else 82 }} {{ 48 if width <= 600 else 88 }}){% if width <= 600 %} scale(0.72){% endif %}" fill="none" stroke="{{ theme.accent }}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="28" y="26" width="108" height="124" rx="6" fill="{{ theme.accent }}" fill-opacity="0.12" stroke="{{ theme.accent }}" stroke-opacity="0.28"/>
+  <g transform="translate(82 88)" fill="none" stroke="{{ theme.accent }}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
 {% if key == "writing" %}
     <path d="M-20 -28 H12 L24 -16 V29 H-20Z M12 -28 V-16 H24 M-10 -5 H13 M-10 7 H13 M-10 19 H5"/>
 {% elif key == "podcast" %}
@@ -33,14 +33,12 @@
 {% endif %}
   </g>
 {% endif %}
-  <path d="M{{ 82 if width <= 600 else 150 }} {{ 12 if width <= 600 else 24 }} V{{ height - (12 if width <= 600 else 24) }}" stroke="{{ theme.accent }}" stroke-opacity="0.36"/>
-  <text x="{{ text_x }}" y="{{ 24 if width <= 600 else 42 }}" font-family="{{ sans }}" font-size="{{ 20 if width <= 600 else 15 }}" font-weight="700" letter-spacing="{{ 1 if width <= 600 else 2.6 }}" fill="{{ theme.accent }}">{{ header }}</text>
+  <path d="M150 24 V{{ height - 24 }}" stroke="{{ theme.accent }}" stroke-opacity="0.36"/>
+  <text x="{{ text_x }}" y="42" font-family="{{ sans }}" font-size="15" font-weight="700" letter-spacing="2.6" fill="{{ theme.accent }}">{{ header }}</text>
 {% for text in featured.primary %}
-  <text x="{{ text_x }}" y="{{ (54 if width <= 600 else 83) + loop.index0 * 31 }}" font-family="{{ serif }}" font-size="29" font-weight="700" fill="{{ theme.text }}">{{ text }}</text>
+  <text x="{{ text_x }}" y="{{ 83 + loop.index0 * 31 }}" font-family="{{ serif }}" font-size="29" font-weight="700" fill="{{ theme.text }}">{{ text }}</text>
 {% endfor %}
-  <text x="{{ text_x }}" y="{{ 82 if width <= 600 else 83 + featured.primary|length * 31 + 9 }}" font-family="{{ sans }}" font-size="{{ 20 if width <= 600 else 17 }}" letter-spacing="{{ 0.2 if width <= 600 else 0.6 }}" fill="{{ theme.muted }}">{{ featured.secondary }}</text>
-{% if width > 600 %}
+  <text x="{{ text_x }}" y="{{ 83 + featured.primary|length * 31 + 9 }}" font-family="{{ sans }}" font-size="17" letter-spacing="0.6" fill="{{ theme.muted }}">{{ featured.secondary }}</text>
   <text x="1018" y="76" font-family="{{ sans }}" font-size="16" font-weight="700" letter-spacing="2.3" fill="{{ theme.accent }}">{{ action }}</text>
   <path d="M1125 86 H1162 M1151 75 L1162 86 L1151 97" fill="none" stroke="{{ theme.accent }}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-{% endif %}
 </svg>

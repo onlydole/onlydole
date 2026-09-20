@@ -28,8 +28,6 @@
   <text x="174" y="83" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#2d2521">Fixture post</text>
 
   <text x="174" y="123" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="0.6" fill="#78665d">2026-01-02</text>
-
   <text x="1018" y="76" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="2.3" fill="#c2414f">READ</text>
   <path d="M1125 86 H1162 M1151 75 L1162 86 L1151 97" fill="none" stroke="#c2414f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-
 </svg>
