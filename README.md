@@ -70,8 +70,7 @@
 
 I lead open source at [Dosu](https://dosu.dev). Before that, I worked on
 production systems at Disney Studios, developer advocacy at HashiCorp,
-and the end user community at CNCF. The part I keep coming back to is
-helping people find their way into a project and stick around.
+and the end user community at CNCF.
 
 I also co-host [Attention Deficit](https://attentiondeficitpod.substack.com)
 with Alexa Griffith. We talk through the week's AI news and what happens

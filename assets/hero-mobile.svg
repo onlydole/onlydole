@@ -8,8 +8,6 @@
   <g clip-path="url(#frame)">
     <rect width="600" height="520" fill="url(#paper)"/>
     <rect width="600" height="520" fill="url(#paper-fibers)"/>
-    <circle cx="538" cy="59" r="48" fill="#ee9b6d" fill-opacity="0.82"/>
-    <path d="M538 11 V107 M490 59 H586" stroke="#6c5145" stroke-opacity="0.38"/>
 
     <text x="29" y="40" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="3.4" fill="#944634">OPEN SOURCE  /  LOS ANGELES</text>
     <path d="M29 55 H99" stroke="#bd6750" stroke-width="2"/>
