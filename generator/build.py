@@ -203,6 +203,7 @@ def tile_contexts(data: dict) -> list[dict]:
                 "primary": i["title"],
                 "secondary": f"{i['detail']} · {i['date']}",
                 "display_secondary": (f"{i['detail'].split(' · ')[-1]} · {i['date']}"),
+                "mobile_secondary": i["date"],
                 "url": i["url"],
             }
             for i in shipped
@@ -217,6 +218,7 @@ def tile_contexts(data: dict) -> list[dict]:
             {
                 "primary": t["title"],
                 "secondary": f"{t['venue']} · {t['date']}",
+                "mobile_secondary": t["date"],
                 "url": t["url"],
             }
             for t in stage
@@ -382,8 +384,8 @@ def write_assets(tiles: list[dict]) -> None:
                     "cover": tile.get("cover"),
                     "header_note": tile.get("header_note", ""),
                     "width": 600,
-                    "height": 210,
-                    "text_x": 118,
+                    "height": 96,
+                    "text_x": 94,
                 },
             )
             (ASSETS / f"{tile['key']}-mobile-{theme_name}.svg").write_text(
@@ -405,8 +407,8 @@ def _picture(key: str, alt: str, width: str) -> str:
     mobile = ""
     if not key.startswith("chip-"):
         mobile = (
-            f'<source media="(max-width: 480px) and (prefers-color-scheme: dark)" srcset="assets/{key}-mobile-dark.svg">'
-            f'<source media="(max-width: 480px)" srcset="assets/{key}-mobile-light.svg">'
+            f'<source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/{key}-mobile-dark.svg">'
+            f'<source media="(max-width: 600px)" srcset="assets/{key}-mobile-light.svg">'
         )
     return (
         f'<picture>{mobile}<source media="(prefers-color-scheme: dark)" '

@@ -83,14 +83,19 @@ def render_svg(template_name: str, context: dict) -> str:
     if template_name == "tile.svg.j2":
         context = dict(context)
         mobile = context["width"] <= 600
-        available = context["width"] - context["text_x"] - (36 if mobile else 210)
+        title_size = 29
+        available = context["width"] - context["text_x"] - (20 if mobile else 210)
         featured = context["lines"][0]
         context["featured"] = {
-            "primary": wrap_text(featured["primary"], available, 29, limit=2),
+            "primary": wrap_text(
+                featured["primary"], available, title_size, limit=1 if mobile else 2
+            ),
             "secondary": wrap_text(
-                featured.get("display_secondary", featured["secondary"]),
+                featured.get("mobile_secondary", featured["secondary"])
+                if mobile
+                else featured.get("display_secondary", featured["secondary"]),
                 available,
-                17,
+                20 if mobile else 17,
                 limit=1,
             )[0],
         }
