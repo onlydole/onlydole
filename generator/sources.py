@@ -40,8 +40,8 @@ def _entry_date(published) -> str | None:
 def _published_fields(value: datetime.datetime) -> dict:
     """Keep full UTC precision for ordering while displaying a short date."""
     if value.tzinfo is None:
-        value = value.replace(tzinfo=datetime.timezone.utc)
-    value = value.astimezone(datetime.timezone.utc)
+        value = value.replace(tzinfo=datetime.UTC)
+    value = value.astimezone(datetime.UTC)
     return {"date": value.date().isoformat(), "published_at": value.isoformat()}
 
 
@@ -66,7 +66,11 @@ def parse_substack(feed_text: str) -> list[dict]:
             {
                 "title": entry["title"],
                 "url": entry["link"],
-                **_published_fields(datetime.datetime(*entry["published_parsed"][:6])),
+                **_published_fields(
+                    datetime.datetime(
+                        *entry["published_parsed"][:6], tzinfo=datetime.UTC
+                    )
+                ),
             }
         )
     if not posts:
@@ -112,7 +116,7 @@ def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
                 )
                 if not all(isinstance(v, str) and v for v in (title, url, date)):
                     continue
-                published = datetime.datetime.fromisoformat(date.replace("Z", "+00:00"))
+                published = datetime.datetime.fromisoformat(date)
                 posts.append(
                     {"title": title, "url": url, **_published_fields(published)}
                 )
@@ -156,7 +160,7 @@ def fetch_substack_relay(feed_url: str) -> list[dict]:
             if not url.startswith(feed_url.removesuffix("/feed") + "/p/"):
                 continue
             try:
-                published = datetime.datetime.fromisoformat(date.replace("Z", "+00:00"))
+                published = datetime.datetime.fromisoformat(date)
             except ValueError:
                 continue
             posts.append(
@@ -293,9 +297,9 @@ def _rfc822_sort_key(value: str | None) -> datetime.datetime:
     try:
         parsed = parsedate_to_datetime(value)
     except (TypeError, ValueError, OverflowError):
-        return datetime.datetime.min.replace(tzinfo=datetime.timezone.utc)
+        return datetime.datetime.min.replace(tzinfo=datetime.UTC)
     if parsed.tzinfo is None:
-        return parsed.replace(tzinfo=datetime.timezone.utc)
+        return parsed.replace(tzinfo=datetime.UTC)
     return parsed
 
 

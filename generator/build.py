@@ -5,11 +5,12 @@ from __future__ import annotations
 import base64
 import datetime
 import html
-import httpx
 import json
 import os
 import sys
 from pathlib import Path
+
+import httpx
 
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -417,8 +418,11 @@ def _picture(key: str, alt: str, width: str) -> str:
 
 def bento_html(tiles: list[dict]) -> str:
     rows = [
-        f'<a href="{SITE}"><picture><source media="(max-width: 600px)" srcset="assets/hero-mobile.svg">'
-        f'<img src="assets/hero.svg" width="100%" alt="{_esc(HERO_ALT)}"></picture></a>'
+        (
+            f'<a href="{SITE}"><picture><source media="(max-width: 600px)" '
+            f'srcset="assets/hero-mobile.svg"><img src="assets/hero.svg" '
+            f'width="100%" alt="{_esc(HERO_ALT)}"></picture></a>'
+        )
     ]
     link_sections = []
     for tile in tiles:
@@ -454,7 +458,10 @@ def bento_html(tiles: list[dict]) -> str:
 
 
 def main() -> int:
-    today = os.environ.get("BUILD_DATE") or datetime.date.today().isoformat()
+    today = (
+        os.environ.get("BUILD_DATE")
+        or datetime.datetime.now(tz=datetime.UTC).date().isoformat()
+    )
     data = gather(today)
     tiles = tile_contexts(data)
     write_assets(tiles)

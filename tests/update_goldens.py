@@ -8,8 +8,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 # pylint: disable=wrong-import-position
-from generator.render import render_svg  # noqa: E402
-from tests.golden_cases import CASES  # noqa: E402
+from generator.render import render_svg
+from tests.golden_cases import CASES
 
 GOLDENS = Path(__file__).parent / "goldens"
 

@@ -197,7 +197,7 @@ def test_shipped_card_shortens_metadata_without_losing_link_detail():
 def test_successful_empty_shelf_clears_previous_books(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     build.main()
-    monkeypatch.setattr(sources, "fetch_goodreads", lambda: [])
+    monkeypatch.setattr(sources, "fetch_goodreads", list)
     build.main()
     cache = json.loads(build.CACHE.read_text())
     assert cache["reading"] == {"books": [], "cover": None}
