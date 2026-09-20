@@ -31,6 +31,10 @@ def test_rendered_svgs_match_goldens():
 
 def test_svg_output_escapes_xml():
     _, context = CASES["tile-writing-dark.svg"]
+    context = {
+        **context,
+        "lines": [{"primary": "Post with <angle> & amp", "secondary": "today"}],
+    }
     svg = render_svg("tile.svg.j2", context)
     assert "&lt;angle&gt; &amp; amp" in svg
     assert "<angle>" not in svg

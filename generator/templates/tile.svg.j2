@@ -1,32 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {{ width }} {{ height }}" role="img" aria-label="{{ aria }}">
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ width }}" height="{{ height }}" viewBox="0 0 {{ width }} {{ height }}" role="img" aria-label="{{ aria }}">
   <title>{{ aria }}</title>
   <defs>
-    <linearGradient id="wash" x2="1" y2="1">
-      <stop stop-color="{{ theme.accent }}" stop-opacity="0.13"/>
-      <stop offset="1" stop-color="{{ theme.bg }}" stop-opacity="0"/>
+    <linearGradient id="wash" x2="1">
+      <stop stop-color="{{ theme.accent }}" stop-opacity="0.25"/>
+      <stop offset="0.72" stop-color="{{ theme.bg }}" stop-opacity="0.02"/>
     </linearGradient>
-    <clipPath id="content"><rect x="{{ text_x }}" y="90" width="{{ width - text_x - 40 }}" height="{{ height - 108 }}"/></clipPath>
+    <pattern id="fibers" width="24" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="5" r="0.8" fill="{{ theme.text }}" fill-opacity="0.07"/>
+      <circle cx="19" cy="16" r="0.7" fill="{{ theme.accent }}" fill-opacity="0.09"/>
+      <path d="M8 19 l6 -1 M1 11 l4 0.5" stroke="{{ theme.text }}" stroke-opacity="0.055"/>
+    </pattern>
   </defs>
-  <rect x="1" y="1" width="{{ width - 2 }}" height="{{ height - 2 }}" rx="24" fill="{{ theme.bg }}" stroke="{{ theme.border }}" stroke-width="2"/>
-  <rect x="2" y="2" width="{{ width - 4 }}" height="84" rx="23" fill="url(#wash)"/>
-  <rect x="36" y="36" width="5" height="24" rx="2" fill="{{ theme.accent }}"/>
-  <text x="56" y="56" font-family="{{ font }}" font-size="21" font-weight="700" letter-spacing="2" fill="{{ theme.accent }}">{{ header }}</text>
+  <rect x="1" y="1" width="{{ width - 2 }}" height="{{ height - 2 }}" rx="8" fill="{{ theme.bg }}" stroke="{{ theme.accent }}" stroke-opacity="0.4" stroke-width="2"/>
+  <rect x="2" y="2" width="{{ width - 4 }}" height="{{ height - 4 }}" rx="7" fill="url(#wash)"/>
+  <rect x="2" y="2" width="{{ width - 4 }}" height="{{ height - 4 }}" rx="7" fill="url(#fibers)"/>
 {% if cover %}
-  <rect x="31" y="102" width="102" height="154" rx="8" fill="{{ theme.border }}"/>
-  <image x="36" y="106" width="92" height="146" preserveAspectRatio="xMidYMid meet" href="data:{{ cover.mime }};base64,{{ cover.b64 }}"/>
+  <rect x="{{ 20 if width <= 600 else 29 }}" y="{{ 46 if width <= 600 else 18 }}" width="{{ 76 if width <= 600 else 108 }}" height="{{ 112 if width <= 600 else 140 }}" rx="6" fill="{{ theme.accent }}" fill-opacity="0.14" stroke="{{ theme.accent }}" stroke-opacity="0.35"/>
+  <image x="{{ 24 if width <= 600 else 36 }}" y="{{ 50 if width <= 600 else 24 }}" width="{{ 68 if width <= 600 else 94 }}" height="{{ 104 if width <= 600 else 128 }}" preserveAspectRatio="xMidYMid meet" href="data:{{ cover.mime }};base64,{{ cover.b64 }}"/>
+{% else %}
+  <rect x="{{ 20 if width <= 600 else 28 }}" y="{{ 46 if width <= 600 else 26 }}" width="{{ 76 if width <= 600 else 108 }}" height="{{ 112 if width <= 600 else 124 }}" rx="6" fill="{{ theme.accent }}" fill-opacity="0.12" stroke="{{ theme.accent }}" stroke-opacity="0.28"/>
+  <g transform="translate({{ 58 if width <= 600 else 82 }} {{ 102 if width <= 600 else 88 }})" fill="none" stroke="{{ theme.accent }}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+{% if key == "writing" %}
+    <path d="M-20 -28 H12 L24 -16 V29 H-20Z M12 -28 V-16 H24 M-10 -5 H13 M-10 7 H13 M-10 19 H5"/>
+{% elif key == "podcast" %}
+    <path d="M-25 6 V-3 A25 25 0 0 1 25 -3 V6 M-25 6 V24 H-13 V4 H-25 M25 6 V24 H13 V4 H25"/>
+{% elif key == "shipped" %}
+    <path d="M0 -28 L25 -14 V15 L0 29 L-25 15 V-14Z M-25 -14 L0 1 L25 -14 M0 1 V29"/>
+{% elif key == "stage" %}
+    <path d="M-12 -27 H12 V5 A12 12 0 0 1 -12 5Z M-23 1 V7 A23 23 0 0 0 23 7 V1 M0 30 V19 M-12 30 H12"/>
+{% else %}
+    <path d="M0 -24 C-10 -31 -22 -30 -28 -24 V20 C-18 15 -9 16 0 23 C9 16 18 15 28 20 V-24 C22 -30 10 -31 0 -24Z M0 -24 V23"/>
 {% endif %}
-{% if header_note %}
-  <text x="{{ 36 if width <= 600 else width - 36 }}" y="{{ 83 if width <= 600 else 56 }}" text-anchor="{{ 'start' if width <= 600 else 'end' }}" font-family="{{ font }}" font-size="17" fill="{{ theme.muted }}">{{ header_note }}</text>
-{% endif %}
-  <g clip-path="url(#content)">
-{% for row in rows %}
-{% if not loop.first %}
-    <path d="M{{ text_x }} {{ row.y - 36 }} H{{ width - 40 }}" stroke="{{ theme.border }}"/>
-{% endif %}
-{% for text in row.primary %}
-    <text x="{{ text_x }}" y="{{ row.y + loop.index0 * 38 }}" font-family="{{ font }}" font-size="30" font-weight="{{ 600 if loop.first else 400 }}" fill="{{ theme.text }}">{{ text }}</text>
-{% endfor %}
-    <text x="{{ text_x }}" y="{{ row.y + (row.primary|length - 1) * 38 + 32 }}" font-family="{{ font }}" font-size="20" fill="{{ theme.muted }}">{{ row.secondary }}</text>
-{% endfor %}
   </g>
+{% endif %}
+  <path d="M{{ 108 if width <= 600 else 150 }} 24 V{{ height - 24 }}" stroke="{{ theme.accent }}" stroke-opacity="0.36"/>
+  <text x="{{ text_x }}" y="{{ 43 if width <= 600 else 42 }}" font-family="{{ sans }}" font-size="{{ 14 if width <= 600 else 15 }}" font-weight="700" letter-spacing="2.6" fill="{{ theme.accent }}">{{ header }}</text>
+{% for text in featured.primary %}
+  <text x="{{ text_x }}" y="{{ (84 if width <= 600 else 83) + loop.index0 * 31 }}" font-family="{{ serif }}" font-size="29" font-weight="700" fill="{{ theme.text }}">{{ text }}</text>
+{% endfor %}
+  <text x="{{ text_x }}" y="{{ (84 if width <= 600 else 83) + featured.primary|length * 31 + 9 }}" font-family="{{ sans }}" font-size="17" letter-spacing="0.6" fill="{{ theme.muted }}">{{ featured.secondary }}</text>
+{% if width > 600 %}
+  <text x="1018" y="76" font-family="{{ sans }}" font-size="16" font-weight="700" letter-spacing="2.3" fill="{{ theme.accent }}">{{ action }}</text>
+  <path d="M1125 86 H1162 M1151 75 L1162 86 L1151 97" fill="none" stroke="{{ theme.accent }}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+{% endif %}
 </svg>

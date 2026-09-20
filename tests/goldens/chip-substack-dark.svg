@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 46" role="img" aria-label="Substack">
-  <rect x="1" y="1" width="198" height="44" rx="22" fill="#1a1417" stroke="#463038" stroke-width="2"/>
-  <text x="100" y="29" text-anchor="middle" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="18" font-weight="600" fill="#ff9d76">Substack ↗</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="80" viewBox="0 0 160 40" role="img" aria-label="Substack">
+  <rect x="1" y="1" width="158" height="38" rx="7" fill="#1d1816" stroke="#51433d"/>
+  <circle cx="18" cy="20" r="7" fill="#ff9d76" fill-opacity="0.18" stroke="#ff9d76"/>
+  <text x="88" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#f7efe5">Substack <tspan fill="#ff9d76">↗</tspan></text>
 </svg>

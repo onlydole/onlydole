@@ -8,20 +8,23 @@ from jinja2 import Environment, FileSystemLoader
 TEMPLATE_DIR = Path(__file__).parent / "templates"
 
 DARK = {
-    "bg": "#1a1417",
-    "border": "#463038",
+    "bg": "#1d1816",
+    "border": "#51433d",
     "accent": "#ff9d76",
-    "text": "#e6ddd9",
-    "muted": "#a08a84",
+    "text": "#f7efe5",
+    "muted": "#b9a69c",
 }
 LIGHT = {
-    "bg": "#fff6f0",
-    "border": "#f3ddd0",
+    "bg": "#faf3e9",
+    "border": "#dfcfc0",
     "accent": "#c2414f",
-    "text": "#44322e",
-    "muted": "#8a6f66",
+    "text": "#2d2521",
+    "muted": "#78665d",
 }
-FONT_STACK = "-apple-system, 'Segoe UI', Ubuntu, Helvetica, Arial, sans-serif"
+FONT_SANS = (
+    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+)
+FONT_SERIF = "Georgia, 'Times New Roman', serif"
 
 
 def fit(text: str, max_chars: int) -> str:
@@ -79,14 +82,16 @@ def render_svg(template_name: str, context: dict) -> str:
     )
     if template_name == "tile.svg.j2":
         context = dict(context)
-        available = context["width"] - context["text_x"] - 64
-        y = 126
-        rows = []
-        for line in context["lines"]:
-            primary = wrap_text(line["primary"], available, 30)
-            secondary = wrap_text(line["secondary"], available, 20, limit=1)[0]
-            rows.append({"primary": primary, "secondary": secondary, "y": y})
-            y += len(primary) * 38 + 54
-        context["rows"] = rows
-        context["height"] = max(context["height"], y + 12)
+        mobile = context["width"] <= 600
+        available = context["width"] - context["text_x"] - (36 if mobile else 210)
+        featured = context["lines"][0]
+        context["featured"] = {
+            "primary": wrap_text(featured["primary"], available, 29, limit=2),
+            "secondary": wrap_text(
+                featured.get("display_secondary", featured["secondary"]),
+                available,
+                17,
+                limit=1,
+            )[0],
+        }
     return env.get_template(template_name).render(**context)

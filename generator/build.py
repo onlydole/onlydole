@@ -17,12 +17,13 @@ if __package__ in (None, ""):
 
 from generator import sources
 from generator.readme import replace_region
-from generator.render import DARK, FONT_STACK, LIGHT, render_svg
+from generator.render import DARK, FONT_SANS, FONT_SERIF, LIGHT, render_svg
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ASSETS = REPO_ROOT / "assets"
 CACHE = ASSETS / "data-cache.json"
 README = REPO_ROOT / "README.md"
+EDITORIAL_ART = REPO_ROOT / "generator" / "art" / "la-field-notes.png"
 
 SITE = "https://onlydole.dev"
 SUBSTACK_HOME = "https://onlydole.substack.com"
@@ -34,18 +35,24 @@ CHIPS = [
 ]
 HERO = {
     "name": "Taylor Dolezal",
-    "role": "Head of Open Source @ Dosu · Open Source Strategy & Ecosystems · Los Angeles",
-    "cred": "KubeCon keynoter · ex-Disney Studios SRE · ex-HashiCorp",
+    "role": "Head of Open Source at Dosu",
+    "mission": "I help open source communities thrive.",
+    "credentials": [
+        "Kubernetes 1.19 Release Lead",
+        "CNCF Head of Ecosystem",
+        "KubeCon keynoter",
+        "Technical author",
+    ],
 }
 HERO_ALT = (
-    "Taylor Dolezal — Head of Open Source at Dosu · "
-    "Open Source Strategy & Ecosystems · Los Angeles"
+    "Taylor Dolezal, Head of Open Source at Dosu in Los Angeles. "
+    "I help open source communities thrive. Kubernetes 1.19 Release Lead, "
+    "former CNCF Head of Ecosystem, KubeCon keynoter, and technical author."
 )
 EMPTY_LINES = [{"primary": "—", "secondary": ""}]
 
 TILE_WIDTH = 1200
-TEXT_X = 36
-TEXT_X_WITH_COVER = 156
+TEXT_X = 174
 COVER_MAX_BYTES = 80_000
 
 
@@ -195,6 +202,7 @@ def tile_contexts(data: dict) -> list[dict]:
             {
                 "primary": i["title"],
                 "secondary": f"{i['detail']} · {i['date']}",
+                "display_secondary": (f"{i['detail'].split(' · ')[-1]} · {i['date']}"),
                 "url": i["url"],
             }
             for i in shipped
@@ -236,6 +244,7 @@ def tile_contexts(data: dict) -> list[dict]:
         {
             "key": "writing",
             "header": "LATEST WRITING",
+            "action": "READ",
             "lines": writing_lines,
             "url": writing[0]["url"] if writing else SUBSTACK_HOME,
             "alt": "Latest writing: " + _summary(writing_lines),
@@ -243,6 +252,7 @@ def tile_contexts(data: dict) -> list[dict]:
         {
             "key": "podcast",
             "header": "ATTENTION DEFICIT",
+            "action": "LISTEN",
             "header_note": "with Alexa Griffith",
             "lines": [
                 {"primary": p["title"], "secondary": p["date"], "url": p["url"]}
@@ -257,6 +267,7 @@ def tile_contexts(data: dict) -> list[dict]:
         {
             "key": "shipped",
             "header": "RECENTLY SHIPPED",
+            "action": "VIEW",
             "lines": shipped_lines,
             "url": shipped[0]["url"]
             if shipped
@@ -266,6 +277,7 @@ def tile_contexts(data: dict) -> list[dict]:
         {
             "key": "stage",
             "header": "ON STAGE",
+            "action": "WATCH",
             "lines": stage_lines,
             "url": stage[0]["url"] if stage else SITE,
             "alt": "On stage: " + _summary(stage_lines),
@@ -273,6 +285,7 @@ def tile_contexts(data: dict) -> list[dict]:
         {
             "key": "reading",
             "header": "ON MY BOOKSHELF",
+            "action": "EXPLORE",
             "header_note": "via Goodreads" if books else "",
             "cover": (reading or {}).get("cover") if books else None,
             "lines": reading_lines,
@@ -281,6 +294,7 @@ def tile_contexts(data: dict) -> list[dict]:
         },
     ]
     for tile in tiles:
+        tile["more_count"] = max(0, len(tile["lines"]) - 1)
         status = data.get("_sources", {}).get(tile["key"], {})
         if status and status["state"] != "fresh":
             tile["header_note"] = (
@@ -290,19 +304,22 @@ def tile_contexts(data: dict) -> list[dict]:
 
 
 def _tile_geometry(tile: dict) -> dict:
-    height = 88 + 74 * len(tile["lines"]) + 26
-    if tile.get("cover"):
-        height = max(height, 250)
     return {
         "width": TILE_WIDTH,
-        "height": height,
-        "text_x": TEXT_X_WITH_COVER if tile.get("cover") else TEXT_X,
+        "height": 176,
+        "text_x": TEXT_X,
     }
 
 
 def write_assets(tiles: list[dict]) -> None:
     ASSETS.mkdir(exist_ok=True)
-    hero_ctx = {"font": FONT_STACK, "aria": HERO_ALT, **HERO}
+    hero_ctx = {
+        "sans": FONT_SANS,
+        "serif": FONT_SERIF,
+        "aria": HERO_ALT,
+        "illustration_b64": base64.b64encode(EDITORIAL_ART.read_bytes()).decode(),
+        **HERO,
+    }
     (ASSETS / "hero.svg").write_text(
         render_svg("hero.svg.j2", hero_ctx), encoding="utf-8"
     )
@@ -311,11 +328,11 @@ def write_assets(tiles: list[dict]) -> None:
     )
     themes = (("dark", DARK), ("light", LIGHT))
     accents = {
-        "writing": ("#ffad87", "#a33a35"),
-        "podcast": ("#c7adff", "#6940aa"),
-        "shipped": ("#82d8b9", "#227258"),
-        "stage": ("#e9c779", "#876219"),
-        "reading": ("#91c9f1", "#316a93"),
+        "writing": ("#f29a78", "#a74735"),
+        "podcast": ("#b4a1d8", "#66508f"),
+        "shipped": ("#93b9a7", "#3f725d"),
+        "stage": ("#d7b168", "#8a6220"),
+        "reading": ("#8fafd0", "#466f98"),
     }
     for tile in tiles:
         geometry = _tile_geometry(tile)
@@ -323,7 +340,8 @@ def write_assets(tiles: list[dict]) -> None:
             svg = render_svg(
                 "tile.svg.j2",
                 {
-                    "font": FONT_STACK,
+                    "sans": FONT_SANS,
+                    "serif": FONT_SERIF,
                     "theme": {
                         **theme,
                         "accent": accents[tile["key"]][
@@ -332,6 +350,9 @@ def write_assets(tiles: list[dict]) -> None:
                     },
                     "lines": tile["lines"],
                     "header": tile["header"],
+                    "action": tile["action"],
+                    "more_count": tile["more_count"],
+                    "key": tile["key"],
                     "aria": tile["alt"],
                     "cover": tile.get("cover"),
                     "header_note": tile.get("header_note", ""),
@@ -344,7 +365,8 @@ def write_assets(tiles: list[dict]) -> None:
             mobile = render_svg(
                 "tile.svg.j2",
                 {
-                    "font": FONT_STACK,
+                    "sans": FONT_SANS,
+                    "serif": FONT_SERIF,
                     "theme": {
                         **theme,
                         "accent": accents[tile["key"]][
@@ -353,12 +375,15 @@ def write_assets(tiles: list[dict]) -> None:
                     },
                     "lines": tile["lines"],
                     "header": tile["header"],
+                    "action": tile["action"],
+                    "more_count": tile["more_count"],
+                    "key": tile["key"],
                     "aria": tile["alt"],
-                    "cover": None,
+                    "cover": tile.get("cover"),
                     "header_note": tile.get("header_note", ""),
                     "width": 600,
-                    "height": 250,
-                    "text_x": TEXT_X,
+                    "height": 210,
+                    "text_x": 118,
                 },
             )
             (ASSETS / f"{tile['key']}-mobile-{theme_name}.svg").write_text(
@@ -367,7 +392,7 @@ def write_assets(tiles: list[dict]) -> None:
     for key, label, _url in CHIPS:
         for theme_name, theme in themes:
             svg = render_svg(
-                "chip.svg.j2", {"font": FONT_STACK, "theme": theme, "label": label}
+                "chip.svg.j2", {"font": FONT_SANS, "theme": theme, "label": label}
             )
             (ASSETS / f"chip-{key}-{theme_name}.svg").write_text(svg, encoding="utf-8")
 
@@ -399,6 +424,7 @@ def bento_html(tiles: list[dict]) -> str:
             f'width="100%" alt="{_esc(HERO_ALT)}"></picture></a>'
         )
     ]
+    link_sections = []
     for tile in tiles:
         picture = _picture(tile["key"], tile["alt"], "100%")
         if tile["url"]:
@@ -412,11 +438,17 @@ def bento_html(tiles: list[dict]) -> str:
             if line.get("url")
         ]
         if links:
-            rows.append(
-                "<details>\n<summary>Links and full titles</summary>\n<ul>\n"
+            link_sections.append(
+                f"<li><strong>{_esc(tile['header'].title())}</strong>\n<ul>\n"
                 + "\n".join(links)
-                + "\n</ul>\n</details>\n"
+                + "\n</ul>\n</li>"
             )
+    if link_sections:
+        rows.append(
+            "<details>\n<summary>Browse all field notes and individual links</summary>\n<ul>\n"
+            + "\n".join(link_sections)
+            + "\n</ul>\n</details>\n"
+        )
     chips = [
         f'<a href="{_esc(url)}">{_picture("chip-" + key, label, "150")}</a>'
         for key, label, url in CHIPS

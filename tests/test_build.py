@@ -73,7 +73,15 @@ def test_main_builds_assets_readme_and_cache(workspace, monkeypatch):
     assert 'srcset="assets/writing-mobile-dark.svg"' in readme
     assert 'srcset="assets/hero-mobile.svg"' in readme
     assert 'viewBox="0 0 600' in (build.ASSETS / "reading-mobile-light.svg").read_text()
+    assert (
+        'width="1200" height="176"' in (build.ASSETS / "writing-light.svg").read_text()
+    )
+    assert "READ" in (build.ASSETS / "writing-light.svg").read_text()
+    assert "Post" in (build.ASSETS / "writing-light.svg").read_text()
+    assert "data:image/png;base64," in (build.ASSETS / "hero.svg").read_text()
     assert '<a href="https://s/p">' in readme
+    assert "Browse all field notes and individual links" in readme
+    assert readme.count("<details>") == 1
     assert "Last refreshed: 2026-06-10" in readme
     assert "prose stays" in readme
     for name in (
@@ -114,10 +122,7 @@ def test_dead_source_falls_back_to_cache(workspace, monkeypatch):
         "state": "cached",
         "last_success": "2026-06-10",
     }
-    assert (
-        "cached · last fetched 2026-06-10"
-        in (build.ASSETS / "writing-dark.svg").read_text()
-    )
+    assert "Built: 2026-06-11 · cached or unavailable: writing" in second
 
 
 def test_dead_source_with_no_cache_renders_empty_state(workspace, monkeypatch):
@@ -181,6 +186,14 @@ def test_tile_contexts_treats_missing_books_as_empty():
     assert reading["url"] == ""
 
 
+def test_shipped_card_shortens_metadata_without_losing_link_detail():
+    item = {**SHIPPED[0], "detail": "merged · onlydole/repo"}
+    shipped = build.tile_contexts({"shipped": [item]})[2]["lines"][0]
+
+    assert shipped["secondary"] == "merged · onlydole/repo · 2026-06-05"
+    assert shipped["display_secondary"] == "onlydole/repo · 2026-06-05"
+
+
 def test_successful_empty_shelf_clears_previous_books(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     build.main()
@@ -200,8 +213,10 @@ def test_reading_tile_uses_goodreads_books(workspace, monkeypatch):
     assert cache["reading"]["books"] == BOOKS
     assert cache["reading"]["cover"]["url"] == "https://img/c.jpg"
     svg = (build.ASSETS / "reading-dark.svg").read_text(encoding="utf-8")
+    mobile_svg = (build.ASSETS / "reading-mobile-light.svg").read_text(encoding="utf-8")
     assert "data:image/jpeg;base64,QUJD" in svg
-    assert "via Goodreads" in svg
+    assert "data:image/jpeg;base64,QUJD" in mobile_svg
+    assert "EXPLORE" in svg
 
 
 def test_cover_reuses_cache_when_url_unchanged(workspace, monkeypatch):
@@ -223,7 +238,9 @@ def test_cover_failure_renders_text_only(workspace, monkeypatch):
     monkeypatch.setattr(build, "_download_cover", lambda url: None)
     assert build.main() == 0
     svg = (build.ASSETS / "reading-dark.svg").read_text(encoding="utf-8")
+    mobile_svg = (build.ASSETS / "reading-mobile-dark.svg").read_text(encoding="utf-8")
     assert "<image" not in svg
+    assert "<image" not in mobile_svg
     assert "Book" in svg
 
 

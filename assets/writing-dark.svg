@@ -1,41 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 414" role="img" aria-label="Latest writing: What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02)">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="176" viewBox="0 0 1200 176" role="img" aria-label="Latest writing: What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02)">
   <title>Latest writing: What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02)</title>
   <defs>
-    <linearGradient id="wash" x2="1" y2="1">
-      <stop stop-color="#ffad87" stop-opacity="0.13"/>
-      <stop offset="1" stop-color="#1a1417" stop-opacity="0"/>
+    <linearGradient id="wash" x2="1">
+      <stop stop-color="#f29a78" stop-opacity="0.25"/>
+      <stop offset="0.72" stop-color="#1d1816" stop-opacity="0.02"/>
     </linearGradient>
-    <clipPath id="content"><rect x="36" y="90" width="1124" height="306"/></clipPath>
+    <pattern id="fibers" width="24" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="5" r="0.8" fill="#f7efe5" fill-opacity="0.07"/>
+      <circle cx="19" cy="16" r="0.7" fill="#f29a78" fill-opacity="0.09"/>
+      <path d="M8 19 l6 -1 M1 11 l4 0.5" stroke="#f7efe5" stroke-opacity="0.055"/>
+    </pattern>
   </defs>
-  <rect x="1" y="1" width="1198" height="412" rx="24" fill="#1a1417" stroke="#463038" stroke-width="2"/>
-  <rect x="2" y="2" width="1196" height="84" rx="23" fill="url(#wash)"/>
-  <rect x="36" y="36" width="5" height="24" rx="2" fill="#ffad87"/>
-  <text x="56" y="56" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" letter-spacing="2" fill="#ffad87">LATEST WRITING</text>
+  <rect x="1" y="1" width="1198" height="174" rx="8" fill="#1d1816" stroke="#f29a78" stroke-opacity="0.4" stroke-width="2"/>
+  <rect x="2" y="2" width="1196" height="172" rx="7" fill="url(#wash)"/>
+  <rect x="2" y="2" width="1196" height="172" rx="7" fill="url(#fibers)"/>
 
+  <rect x="28" y="26" width="108" height="124" rx="6" fill="#f29a78" fill-opacity="0.12" stroke="#f29a78" stroke-opacity="0.28"/>
+  <g transform="translate(82 88)" fill="none" stroke="#f29a78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
 
-  <g clip-path="url(#content)">
-
-
-
-    <text x="36" y="126" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#e6ddd9">What you can change when your agent is open source</text>
-
-    <text x="36" y="158" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#a08a84">2026-09-05</text>
-
-
-    <path d="M36 182 H1160" stroke="#463038"/>
-
-
-    <text x="36" y="218" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#e6ddd9">I let AI fix my printer</text>
-
-    <text x="36" y="250" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#a08a84">2026-02-14</text>
-
-
-    <path d="M36 274 H1160" stroke="#463038"/>
-
-
-    <text x="36" y="310" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#e6ddd9">Who Are You When the Code Writes Itself?</text>
-
-    <text x="36" y="342" font-family="-apple-system, &#39;Segoe UI&#39;, Ubuntu, Helvetica, Arial, sans-serif" font-size="20" fill="#a08a84">2026-02-02</text>
+    <path d="M-20 -28 H12 L24 -16 V29 H-20Z M12 -28 V-16 H24 M-10 -5 H13 M-10 7 H13 M-10 19 H5"/>
 
   </g>
+
+  <path d="M150 24 V152" stroke="#f29a78" stroke-opacity="0.36"/>
+  <text x="174" y="42" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2.6" fill="#f29a78">LATEST WRITING</text>
+
+  <text x="174" y="83" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#f7efe5">What you can change when your agent is open</text>
+
+  <text x="174" y="114" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#f7efe5">source</text>
+
+  <text x="174" y="154" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="0.6" fill="#b9a69c">2026-09-05</text>
+
+  <text x="1018" y="76" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="2.3" fill="#f29a78">READ</text>
+  <path d="M1125 86 H1162 M1151 75 L1162 86 L1151 97" fill="none" stroke="#f29a78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
 </svg>
