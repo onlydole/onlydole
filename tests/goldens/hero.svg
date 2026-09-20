@@ -35,8 +35,8 @@
 
     <path d="M49 363 H752" stroke="#8c7165" stroke-opacity="0.52"/>
     <g transform="rotate(-1 52 396)">
-      <text x="52" y="399" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="21" font-style="italic" fill="#7b4639">Open source people make a brighter tomorrow.</text>
-      <path d="M51 409 Q255 416 471 406" fill="none" stroke="#b76650" stroke-opacity="0.58"/>
+      <text x="52" y="399" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="21" font-style="italic" fill="#7b4639">The project is code. The work is people.</text>
+      <path d="M51 409 Q235 416 419 406" fill="none" stroke="#b76650" stroke-opacity="0.58"/>
     </g>
 
     <image x="688" y="3" width="500" height="424" preserveAspectRatio="xMaxYMid meet" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="/>
