@@ -118,9 +118,8 @@
   ],
   "source_status": {
     "writing": {
-      "state": "fresh",
-      "last_success": "2026-09-20",
-      "via": "rss2json"
+      "state": "cached",
+      "last_success": "2026-09-20"
     },
     "shipped": {
       "state": "fresh",
