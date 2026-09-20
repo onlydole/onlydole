@@ -27,8 +27,8 @@
     <text x="45" y="137" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="72" font-weight="700" fill="#281f1b">Taylor Dolezal</text>
     <text x="49" y="182" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#3a2d28">Head of Open Source at Dosu</text>
 
-    <text x="49" y="231" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="24" fill="#3f312b">Building open source communities, making things,</text>
-    <text x="49" y="261" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="24" fill="#3f312b">and helping good technology spread.</text>
+    <text x="49" y="231" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="24" fill="#3f312b">Building open source communities, making useful things,</text>
+    <text x="49" y="261" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="24" fill="#3f312b">and sharing what I learn.</text>
 
     <text x="49" y="306" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" fill="#655248">Formerly Disney Studios SRE, HashiCorp, and CNCF Head of Ecosystem.</text>
     <text x="49" y="335" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" fill="#655248">Kubernetes 1.19 release lead · KubeCon keynoter · technical author.</text>
