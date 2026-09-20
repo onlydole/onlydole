@@ -1,7 +1,7 @@
 """Render SVG assets from Jinja2 templates."""
 
-from pathlib import Path
 import unicodedata
+from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
