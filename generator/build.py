@@ -405,8 +405,8 @@ def _picture(key: str, alt: str, width: str) -> str:
     mobile = ""
     if not key.startswith("chip-"):
         mobile = (
-            f'<source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/{key}-mobile-dark.svg">'
-            f'<source media="(max-width: 600px)" srcset="assets/{key}-mobile-light.svg">'
+            f'<source media="(max-width: 480px) and (prefers-color-scheme: dark)" srcset="assets/{key}-mobile-dark.svg">'
+            f'<source media="(max-width: 480px)" srcset="assets/{key}-mobile-light.svg">'
         )
     return (
         f'<picture>{mobile}<source media="(prefers-color-scheme: dark)" '

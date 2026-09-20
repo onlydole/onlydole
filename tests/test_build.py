@@ -68,9 +68,13 @@ def test_main_builds_assets_readme_and_cache(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     assert build.main() == 0
     readme = build.README.read_text(encoding="utf-8")
-    assert 'srcset="assets/writing-dark.svg"' in readme
     assert 'src="assets/writing-light.svg" width="100%"' in readme
-    assert 'srcset="assets/writing-mobile-dark.svg"' in readme
+    assert 'srcset="assets/writing-dark.svg"' in readme
+    assert (
+        'media="(max-width: 480px)" srcset="assets/writing-mobile-light.svg"' in readme
+    )
+    assert '<a href="https://s/p">Post</a>' in readme
+    assert 'src="assets/hero.svg" width="100%"' in readme
     assert 'srcset="assets/hero-mobile.svg"' in readme
     assert 'viewBox="0 0 600' in (build.ASSETS / "reading-mobile-light.svg").read_text()
     assert (
