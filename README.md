@@ -3,7 +3,7 @@
 <!-- bento:start -->
 <a href="https://onlydole.dev"><picture><source media="(max-width: 600px)" srcset="assets/hero-mobile.svg"><img src="assets/hero.svg" width="100%" alt="Taylor Dolezal, Head of Open Source at Dosu in Los Angeles. I help open source communities thrive. Kubernetes 1.19 Release Lead, former CNCF Head of Ecosystem, KubeCon keynoter, and technical author."></picture></a>
 <p align="center">
-  <a href="https://onlydole.substack.com/p/goose-open-source-agent-customization"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/writing-dark.svg"><img src="assets/writing-light.svg" width="100%" alt="Latest writing: What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02)"></picture></a>
+  <a href="https://onlydole.substack.com/p/git-with-the-times"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/writing-dark.svg"><img src="assets/writing-light.svg" width="100%" alt="Latest writing: Git with the times (2026-09-21); What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14)"></picture></a>
 </p>
 <p align="center">
   <a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-7-who-let-the"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/podcast-dark.svg"><img src="assets/podcast-light.svg" width="100%" alt="Attention Deficit: Attention Deficit Ep. 7 – Be Like a Data Center; Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers; Attention Deficit Ep. 5 – It&#x27;s Not a Shark, It&#x27;s a Data Center"></picture></a>
@@ -22,9 +22,9 @@
 <ul>
 <li><strong>Latest Writing</strong>
 <ul>
+<li><a href="https://onlydole.substack.com/p/git-with-the-times">Git with the times</a> · 2026-09-21</li>
 <li><a href="https://onlydole.substack.com/p/goose-open-source-agent-customization">What you can change when your agent is open source</a> · 2026-09-05</li>
 <li><a href="https://onlydole.substack.com/p/i-let-ai-fix-my-printer">I let AI fix my printer</a> · 2026-02-14</li>
-<li><a href="https://onlydole.substack.com/p/who-are-you-when-the-code-writes">Who Are You When the Code Writes Itself?</a> · 2026-02-02</li>
 </ul>
 </li>
 <li><strong>Attention Deficit</strong>

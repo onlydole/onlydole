@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="176" viewBox="0 0 1200 176" role="img" aria-label="Latest writing: What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02)">
-  <title>Latest writing: What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14); Who Are You When the Code Writes Itself? (2026-02-02)</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="176" viewBox="0 0 1200 176" role="img" aria-label="Latest writing: Git with the times (2026-09-21); What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14)">
+  <title>Latest writing: Git with the times (2026-09-21); What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14)</title>
   <defs>
     <linearGradient id="wash" x2="1">
       <stop stop-color="#f29a78" stop-opacity="0.25"/>
@@ -25,11 +25,9 @@
   <path d="M150 24 V152" stroke="#f29a78" stroke-opacity="0.36"/>
   <text x="174" y="42" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2.6" fill="#f29a78">LATEST WRITING</text>
 
-  <text x="174" y="83" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#f7efe5">What you can change when your agent is open</text>
+  <text x="174" y="83" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#f7efe5">Git with the times</text>
 
-  <text x="174" y="114" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#f7efe5">source</text>
-
-  <text x="174" y="154" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="0.6" fill="#b9a69c">2026-09-05</text>
+  <text x="174" y="123" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="0.6" fill="#b9a69c">2026-09-21</text>
   <text x="1018" y="76" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="2.3" fill="#f29a78">READ</text>
   <path d="M1125 86 H1162 M1151 75 L1162 86 L1151 97" fill="none" stroke="#f29a78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
