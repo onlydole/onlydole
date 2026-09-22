@@ -131,8 +131,9 @@
       "last_success": "2026-09-22"
     },
     "podcast": {
-      "state": "cached",
-      "last_success": "2026-09-21"
+      "state": "fresh",
+      "last_success": "2026-09-22",
+      "via": "rss2json"
     },
     "reading": {
       "state": "fresh",
