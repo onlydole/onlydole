@@ -15,11 +15,3 @@ dev = [
     "ruff>=0.9",
 ]
 
-[tool.ruff]
-line-length = 88
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-skip-magic-trailing-comma = false
-line-ending = "auto"

@@ -40,25 +40,35 @@ GitHub. It never needs Goodreads, Kindle, or Substack credentials.
 
 Each successful fetch updates its own `last_success` in
 `assets/data-cache.json`. A failed source keeps its last usable data and
-last success date. The card and footer label the fallback, and the Actions
-job summary lists every source. Old caches without per-source dates show
-an unknown last success until the next successful fetch.
+last success date. Old caches without per-source dates show an unknown
+last success until the next successful fetch, and count as stale.
 
 The workflow commits successful updates before checking source health.
-Any unavailable or cached source then fails the run, so a green check means
-all five sources were fetched. RSS has a public Substack archive fallback,
-but both endpoints can be blocked by the provider. That remains a failed
-refresh, not a successful update of stale content. Both Ubuntu and macOS
-hosted runners were blocked by Substack, including a browser-compatible
-HTTP client. The final network fallback is [rss2json](https://rss2json.com/docs),
-which reads the public feed without an API key. Only the public feed URL is
-sent to it. The response must identify the requested publication and link
-back to its posts. Relay content can lag the source; an older newest-post
-timestamp never replaces a newer snapshot already in the cache. Publication
-timestamps are normalized to UTC before sorting, including same-day posts.
-The Actions
-summary records when the relay was used. If every network route fails,
-the build keeps its local cache and fails the source-health check.
+Health is a staleness budget, not a per-run check. A source may serve its
+cache for one calendar day (UTC) without failing the run or labeling the
+card. Once its last success is older than yesterday, the card and footer
+name the outage and the scheduled run fails. `STALE_AFTER_DAYS` in
+`build.py` sets the budget, and the Actions job summary lists every source
+on every run.
+
+The budget exists because of Substack. It blocks Ubuntu and macOS hosted
+runners on both the RSS feed and the public archive, including a
+browser-compatible HTTP client. Both Substack cards therefore depend on
+[rss2json](https://rss2json.com/docs), a free relay that reads the public
+feed without an API key. Only the public feed URL is sent to it. The
+response must identify the requested publication and link back to its
+posts. The relay answers 500 on roughly one run in four, and before the
+budget each of those turned the scheduled run red while the card was at
+most six hours behind.
+
+Every source request retries 429 and 5xx answers and dropped connections
+twice, after 2 and 5 seconds. A 4xx such as Substack's 403 is a policy
+answer and fails at once, and timeouts aren't retried. Relay content can
+lag the source. An older newest-post timestamp never replaces a newer
+snapshot already in the cache. Publication timestamps are normalized to
+UTC before sorting, including same-day posts. The Actions summary records
+when the relay was used. If every network route fails, the build keeps
+its local cache.
 
 Refresh commits use GitHub's GraphQL API for verified signatures, with the
 checked-out commit as the expected branch head. A concurrent branch change
@@ -69,14 +79,14 @@ weekly Action and Python dependency updates.
 
 ```sh
 uv run --locked --project generator pytest tests/ -q
-uv run --locked --project generator ruff check generator tests
-uv run --locked --project generator ruff format --check generator tests
+uv run --locked --project generator ruff check .
+uv run --locked --project generator ruff format --check .
 uv run --locked --project generator python generator/build.py
 uv run --locked --project generator python -m generator.health
 ```
 
 Set `GITHUB_TOKEN` through your environment for live GitHub activity.
-Without it, that source uses the cache and the health check fails.
+Without it, that source uses the cache and counts toward the staleness budget.
 `BUILD_DATE` can set the displayed date for a reproducible fixture build.
 
 Edit the templates and generator, not the generated SVGs. Titles wrap

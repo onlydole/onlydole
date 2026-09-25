@@ -1,0 +1,7 @@
+# One config for generator/ and tests/. Formatting uses ruff's defaults.
+line-length = 88
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+# ruff format owns wrapping. The long lines left are string literals.
+ignore = ["E501"]

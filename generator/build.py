@@ -54,6 +54,23 @@ EMPTY_LINES = [{"primary": "—", "secondary": ""}]
 TILE_WIDTH = 1200
 TEXT_X = 174
 COVER_MAX_BYTES = 80_000
+# Days a source may serve its cache before the card is labeled and the
+# scheduled run fails. Substack blocks hosted runners, so both Substack
+# cards depend on a free relay that misses a refresh now and then. A
+# missed six-hour refresh is normal; no success today or yesterday isn't.
+STALE_AFTER_DAYS = 1
+
+
+def is_stale(status: dict, today: str) -> bool:
+    """True when a source has gone past its refresh budget."""
+    if status.get("state") == "fresh":
+        return False
+    try:
+        last = datetime.date.fromisoformat(status.get("last_success") or "")
+        age = datetime.date.fromisoformat(today) - last
+    except (TypeError, ValueError):
+        return True
+    return age.days > STALE_AFTER_DAYS
 
 
 def _load_cache() -> dict:
@@ -158,6 +175,7 @@ def gather(today: str) -> dict:
                 )
     cache["source_status"] = statuses
     data["_sources"] = statuses
+    data["_today"] = today
     cache["updated"] = today
     ASSETS.mkdir(exist_ok=True)
     CACHE.write_text(
@@ -296,7 +314,7 @@ def tile_contexts(data: dict) -> list[dict]:
     for tile in tiles:
         tile["more_count"] = max(0, len(tile["lines"]) - 1)
         status = data.get("_sources", {}).get(tile["key"], {})
-        if status and status["state"] != "fresh":
+        if status and is_stale(status, data["_today"]):
             tile["header_note"] = (
                 f"{status['state']} · last fetched {status['last_success'] or 'unknown'}"
             )
@@ -435,7 +453,7 @@ def main() -> int:
     content = README.read_text(encoding="utf-8")
     content = replace_region(content, "bento", "\n" + bento_html(tiles) + "\n")
     failed = [
-        key for key, status in data["_sources"].items() if status["state"] != "fresh"
+        key for key, status in data["_sources"].items() if is_stale(status, today)
     ]
     stamp = f"Last refreshed: {today}"
     if failed:

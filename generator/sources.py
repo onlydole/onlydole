@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime
 import json
+import time
 from email.utils import parsedate_to_datetime
 from xml.etree import ElementTree
 
@@ -25,8 +26,38 @@ TALKS_FEED = "https://onlydole.dev/feeds/talks.xml"
 USER_AGENT = "Mozilla/5.0 (compatible; onlydole-profile-bot/1.0)"
 
 
+# Waits between attempts. Only 429 and 5xx answers and dropped connections
+# are retried; those come back fast, so a flaky source adds seconds, not
+# minutes, to the ten-minute job.
+RETRY_DELAYS = (2, 5)
+RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
+_sleep = time.sleep
+
+
 class SourceError(RuntimeError):
     """A content source could not be fetched or parsed."""
+
+
+def _send(method: str, url: str, **kwargs) -> httpx.Response:
+    """Send a request and raise for its final status, retrying transient errors.
+
+    A 4xx such as Substack's 403 is a policy answer and fails at once.
+    Timeouts aren't retried because each request already waits 30 seconds.
+    """
+    send = httpx.post if method == "POST" else httpx.get
+    for delay in RETRY_DELAYS:
+        try:
+            resp = send(url, **kwargs)
+        except (httpx.ConnectError, httpx.RemoteProtocolError):
+            pass
+        else:
+            if resp.status_code not in RETRY_STATUSES:
+                break
+        _sleep(delay)
+    else:
+        resp = send(url, **kwargs)
+    resp.raise_for_status()
+    return resp
 
 
 def _entry_date(published) -> str | None:
@@ -81,7 +112,8 @@ def parse_substack(feed_text: str) -> list[dict]:
 def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
     """Use RSS first, then the publication's public archive if RSS is blocked."""
     try:
-        resp = httpx.get(
+        resp = _send(
+            "GET",
             feed_url,
             timeout=30,
             follow_redirects=True,
@@ -90,20 +122,19 @@ def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
                 "Accept": "application/rss+xml, application/xml",
             },
         )
-        resp.raise_for_status()
         return parse_substack(resp.text)
     except (httpx.HTTPError, SourceError):
         # Substack sometimes blocks RSS on hosted runners. The archive is a
         # public endpoint, not an authenticated dashboard or paywall bypass.
         try:
-            resp = httpx.get(
+            resp = _send(
+                "GET",
                 feed_url.removesuffix("/feed") + "/api/v1/archive",
                 params={"sort": "new", "limit": 10},
                 headers={"User-Agent": USER_AGENT},
                 timeout=30,
                 follow_redirects=True,
             )
-            resp.raise_for_status()
             payload = resp.json()
             if not isinstance(payload, list):
                 raise SourceError("archive response was not a list")
@@ -140,8 +171,7 @@ def fetch_substack_relay(feed_url: str) -> list[dict]:
     gather rejects snapshots older than the already-verified local cache.
     """
     try:
-        resp = httpx.get(RSS_RELAY, params={"rss_url": feed_url}, timeout=30)
-        resp.raise_for_status()
+        resp = _send("GET", RSS_RELAY, params={"rss_url": feed_url}, timeout=30)
         payload = resp.json()
         if not isinstance(payload, dict) or payload.get("status") != "ok":
             raise SourceError("RSS relay did not return a successful feed")
@@ -254,13 +284,13 @@ def parse_activity(payload: dict) -> list[dict]:
 
 def fetch_activity(token: str) -> list[dict]:
     try:
-        resp = httpx.post(
+        resp = _send(
+            "POST",
             GRAPHQL_URL,
             json={"query": ACTIVITY_QUERY, "variables": {"login": GITHUB_LOGIN}},
             headers={"Authorization": f"Bearer {token}"},
             timeout=30,
         )
-        resp.raise_for_status()
     except httpx.HTTPError as exc:
         raise SourceError(f"github fetch failed: {exc}") from exc
     try:
@@ -337,13 +367,13 @@ def parse_talks(feed_text: str) -> list[dict]:
 
 def fetch_talks() -> list[dict]:
     try:
-        resp = httpx.get(
+        resp = _send(
+            "GET",
             TALKS_FEED,
             timeout=30,
             follow_redirects=True,
             headers={"User-Agent": USER_AGENT},
         )
-        resp.raise_for_status()
     except httpx.HTTPError as exc:
         raise SourceError(f"talks fetch failed: {exc}") from exc
     return parse_talks(resp.text)
@@ -408,13 +438,13 @@ def parse_goodreads(feed_text: str) -> list[dict]:
 
 def fetch_goodreads() -> list[dict]:
     try:
-        resp = httpx.get(
+        resp = _send(
+            "GET",
             GOODREADS_FEED,
             timeout=30,
             follow_redirects=True,
             headers={"User-Agent": USER_AGENT},
         )
-        resp.raise_for_status()
     except httpx.HTTPError as exc:
         raise SourceError(f"goodreads fetch failed: {exc}") from exc
     return parse_goodreads(resp.text)

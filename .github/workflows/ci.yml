@@ -8,7 +8,8 @@ on:
     paths:
       - "generator/**"
       - "tests/**"
-      - "pyproject.toml"
+      - "ruff.toml"
+      - "conftest.py"
       - ".github/workflows/**"
   pull_request:
     branches:
@@ -36,7 +37,7 @@ jobs:
         run: uv run --locked --project generator pytest tests/ -v
 
       - name: Lint generator
-        run: uv run --locked --project generator ruff check generator tests
+        run: uv run --locked --project generator ruff check .
 
       - name: Check generator formatting
-        run: uv run --locked --project generator ruff format --check generator tests
+        run: uv run --locked --project generator ruff format --check .

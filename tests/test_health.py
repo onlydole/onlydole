@@ -1,19 +1,42 @@
 import json
 
+import pytest
+
 from generator import health
 
+FRESH = {key: {"state": "fresh"} for key in health.EXPECTED}
 
-def test_health_requires_every_source_to_be_fresh(tmp_path, monkeypatch):
-    cache = tmp_path / "cache.json"
-    monkeypatch.setattr(health, "CACHE", cache)
-    statuses = {
-        key: {"state": "fresh"}
-        for key in ("writing", "podcast", "shipped", "stage", "reading")
-    }
-    cache.write_text(json.dumps({"source_status": statuses}))
+
+@pytest.fixture
+def cache(tmp_path, monkeypatch):
+    path = tmp_path / "cache.json"
+    monkeypatch.setattr(health, "CACHE", path)
+
+    def write(statuses, updated="2026-06-10"):
+        path.write_text(json.dumps({"source_status": statuses, "updated": updated}))
+
+    return write
+
+
+def test_health_passes_when_every_source_is_fresh(cache):
+    cache(FRESH)
     assert health.main() == 0
-    statuses["writing"]["state"] = "cached"
-    cache.write_text(json.dumps({"source_status": statuses}))
+
+
+def test_health_tolerates_a_recent_cache(cache, capsys):
+    cache({**FRESH, "writing": {"state": "cached", "last_success": "2026-06-09"}})
+    assert health.main() == 0
+    assert "within the 1-day budget: writing" in capsys.readouterr().out
+
+
+def test_health_fails_past_the_budget(cache, capsys):
+    cache({**FRESH, "podcast": {"state": "cached", "last_success": "2026-06-08"}})
     assert health.main() == 1
-    cache.write_text("{}")
+    assert "past the refresh budget: podcast" in capsys.readouterr().out
+
+
+def test_health_fails_on_missing_or_unknown_status(cache):
+    cache({**FRESH, "writing": {"state": "cached"}})
+    assert health.main() == 1
+    cache({})
     assert health.main() == 1

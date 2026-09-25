@@ -89,6 +89,64 @@ def test_substack_both_endpoints_blocked_raise(monkeypatch):
         sources.fetch_substack()
 
 
+def _responses(monkeypatch, *outcomes):
+    """Serve each outcome in turn; an exception instance is raised."""
+    calls = []
+
+    def get(url, **kwargs):
+        outcome = outcomes[len(calls)]
+        calls.append(url)
+        if isinstance(outcome, Exception):
+            raise outcome
+        return httpx.Response(outcome, request=httpx.Request("GET", url), text="ok")
+
+    monkeypatch.setattr(sources.httpx, "get", get)
+    return calls
+
+
+def test_send_retries_server_errors_and_dropped_connections(monkeypatch):
+    calls = _responses(monkeypatch, 500, httpx.ConnectError("reset"), 200)
+    assert sources._send("GET", "https://relay").text == "ok"
+    assert len(calls) == 3
+
+
+def test_send_gives_up_after_the_last_retry(monkeypatch):
+    calls = _responses(monkeypatch, 503, 502, 500)
+    with pytest.raises(httpx.HTTPStatusError):
+        sources._send("GET", "https://relay")
+    assert len(calls) == len(sources.RETRY_DELAYS) + 1
+
+
+def test_send_does_not_retry_a_block(monkeypatch):
+    calls = _responses(monkeypatch, 403)
+    with pytest.raises(httpx.HTTPStatusError):
+        sources._send("GET", "https://substack")
+    assert len(calls) == 1
+
+
+def test_relay_recovers_from_a_transient_500(monkeypatch):
+    payload = {
+        "status": "ok",
+        "feed": {"url": sources.SUBSTACK_FEED},
+        "items": [
+            {
+                "title": "New",
+                "link": "https://onlydole.substack.com/p/new",
+                "pubDate": "2026-09-05 15:50:36",
+            }
+        ],
+    }
+    replies = iter([500, 200])
+
+    def get(url, **kwargs):
+        return httpx.Response(
+            next(replies), request=httpx.Request("GET", url), json=payload
+        )
+
+    monkeypatch.setattr(sources.httpx, "get", get)
+    assert sources.fetch_substack_relay(sources.SUBSTACK_FEED)[0]["title"] == "New"
+
+
 def test_substack_relay_checks_publication_and_sorts(monkeypatch):
     payload = {
         "status": "ok",
