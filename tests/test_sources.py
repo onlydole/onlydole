@@ -105,9 +105,22 @@ def _responses(monkeypatch, *outcomes):
 
 
 def test_send_retries_server_errors_and_dropped_connections(monkeypatch):
-    calls = _responses(monkeypatch, 500, httpx.ConnectError("reset"), 200)
+    calls = _responses(monkeypatch, 500, httpx.ConnectError("refused"), 200)
     assert sources._send("GET", "https://relay").text == "ok"
     assert len(calls) == 3
+
+
+def test_send_retries_a_connection_reset_mid_request(monkeypatch):
+    calls = _responses(monkeypatch, httpx.ReadError("reset"), 200)
+    assert sources._send("GET", "https://relay").text == "ok"
+    assert len(calls) == 2
+
+
+def test_send_does_not_retry_timeouts(monkeypatch):
+    calls = _responses(monkeypatch, httpx.ReadTimeout("slow"))
+    with pytest.raises(httpx.ReadTimeout):
+        sources._send("GET", "https://relay")
+    assert len(calls) == 1
 
 
 def test_send_gives_up_after_the_last_retry(monkeypatch):

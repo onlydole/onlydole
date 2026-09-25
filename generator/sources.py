@@ -48,7 +48,7 @@ def _send(method: str, url: str, **kwargs) -> httpx.Response:
     for delay in RETRY_DELAYS:
         try:
             resp = send(url, **kwargs)
-        except (httpx.ConnectError, httpx.RemoteProtocolError):
+        except (httpx.NetworkError, httpx.RemoteProtocolError):
             pass
         else:
             if resp.status_code not in RETRY_STATUSES:
