@@ -60,7 +60,7 @@ jobs:
       # empty, the run takes the repo's console model, which the Router serves
       # when billing mode is Router.
       - name: Run agent
-        uses: pullfrog/pullfrog@59433521bdff32d700bbd62f729754fa34e948d8 # v0.1.75
+        uses: pullfrog/pullfrog@e354ba26ce66bb317aa30ec13e4bdff962373474 # v0.1.81
         with:
           prompt: ${{ inputs.prompt }}
           push: restricted
