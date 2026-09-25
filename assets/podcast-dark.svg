@@ -24,6 +24,7 @@
 
   <path d="M150 24 V152" stroke="#b4a1d8" stroke-opacity="0.36"/>
   <text x="174" y="42" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2.6" fill="#b4a1d8">ATTENTION DEFICIT</text>
+  <text x="1162" y="42" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="14" letter-spacing="0.4" fill="#b9a69c">with Alexa Griffith</text>
 
   <text x="174" y="83" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#f7efe5">Attention Deficit Ep. 7 – Be Like a Data Center</text>
 

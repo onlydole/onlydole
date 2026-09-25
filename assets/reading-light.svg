@@ -20,6 +20,7 @@
 
   <path d="M150 24 V152" stroke="#466f98" stroke-opacity="0.36"/>
   <text x="174" y="42" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2.6" fill="#466f98">ON MY BOOKSHELF</text>
+  <text x="1162" y="42" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="14" letter-spacing="0.4" fill="#78665d">via Goodreads</text>
 
   <text x="174" y="83" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#2d2521">A Parade of Horribles (Dungeon Crawler Carl, #8)</text>
 
