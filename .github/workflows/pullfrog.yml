@@ -23,25 +23,53 @@ jobs:
     permissions:
       id-token: write
       contents: read
+    env:
+      OPENAI_COMPATIBLE_BASE_URL: https://ollama.com/v1
+      OPENAI_COMPATIBLE_MODEL: glm-5.3-flash:cloud
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 1
           persist-credentials: false
+
+      # A one-token request tells a spent Ollama plan apart from a working
+      # one before the agent starts, so a quota error never fails the run.
+      - name: Check Ollama availability
+        id: ollama
+        env:
+          OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+        run: |
+          body=$(mktemp)
+          status=$(curl -sS -o "$body" -w '%{http_code}' --max-time 30 \
+            "$OPENAI_COMPATIBLE_BASE_URL/chat/completions" \
+            -H "Authorization: Bearer $OLLAMA_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"model\":\"$OPENAI_COMPATIBLE_MODEL\",\"max_tokens\":1,\"messages\":[{\"role\":\"user\",\"content\":\"ok\"}]}") ||
+            status=000
+          if [ "$status" -ge 200 ] && [ "$status" -lt 300 ]; then
+            echo "available=true" >>"$GITHUB_OUTPUT"
+          else
+            echo "::warning title=Ollama unavailable::HTTP $status, running on the Pullfrog Router"
+            head -c 500 "$body"
+            echo
+            echo "available=false" >>"$GITHUB_OUTPUT"
+          fi
+
+      # PULLFROG_MODEL is Pullfrog's BYOK override and skips the Router. Left
+      # empty, the run takes the repo's console model, which the Router serves
+      # when billing mode is Router.
       - name: Run agent
         uses: pullfrog/pullfrog@59433521bdff32d700bbd62f729754fa34e948d8 # v0.1.75
         with:
           prompt: ${{ inputs.prompt }}
-          model: openai-compatible/byok
           push: restricted
         env:
-          OPENAI_COMPATIBLE_BASE_URL: https://ollama.com/v1
+          PULLFROG_MODEL: ${{ steps.ollama.outputs.available == 'true' && 'openai-compatible/byok' || '' }}
           OPENAI_COMPATIBLE_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
-          OPENAI_COMPATIBLE_MODEL: glm-5.3-flash:cloud
-          # GLM 5.3 Flash limits — Pullfrog requires both. Context is the 1M
+          # GLM 5.3 Flash limits. Pullfrog requires both. Context is the 1M
           # window the Ollama library page lists for glm-5.3-flash:cloud.
-          # Output is GLM-5.3-Flash's documented ceiling — docs.z.ai lists
+          # Output is GLM-5.3-Flash's documented ceiling. docs.z.ai lists
           # 65536 default, 131072 maximum.
           OPENAI_COMPATIBLE_CONTEXT: "1048576"
           OPENAI_COMPATIBLE_MAX_OUTPUT: "131072"

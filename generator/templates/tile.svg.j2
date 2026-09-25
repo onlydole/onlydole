@@ -35,6 +35,9 @@
 {% endif %}
   <path d="M150 24 V{{ height - 24 }}" stroke="{{ theme.accent }}" stroke-opacity="0.36"/>
   <text x="{{ text_x }}" y="42" font-family="{{ sans }}" font-size="15" font-weight="700" letter-spacing="2.6" fill="{{ theme.accent }}">{{ header }}</text>
+{%- if header_note %}
+  <text x="{{ width - 38 }}" y="42" text-anchor="end" font-family="{{ sans }}" font-size="14" letter-spacing="0.4" fill="{{ theme.muted }}">{{ header_note }}</text>
+{%- endif %}
 {% for text in featured.primary %}
   <text x="{{ text_x }}" y="{{ 83 + loop.index0 * 31 }}" font-family="{{ serif }}" font-size="29" font-weight="700" fill="{{ theme.text }}">{{ text }}</text>
 {% endfor %}

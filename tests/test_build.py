@@ -135,13 +135,38 @@ def test_dead_source_falls_back_to_cache(workspace, monkeypatch):
     assert build.main() == 0
     second = build.README.read_text(encoding="utf-8")
     assert '<a href="https://s/p">' in second  # cached writing link survives
-    assert "Built: 2026-06-11 · cached or unavailable: writing" in second
     cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
     assert cache["source_status"]["writing"] == {
         "state": "cached",
         "last_success": "2026-06-10",
     }
-    assert "Built: 2026-06-11 · cached or unavailable: writing" in second
+    # A day-old cache is within budget, so visitors see no outage label.
+    assert "Last refreshed: 2026-06-11" in second
+    assert "last fetched" not in (build.ASSETS / "writing-dark.svg").read_text()
+
+    monkeypatch.setenv("BUILD_DATE", "2026-06-12")
+    assert build.main() == 0
+    third = build.README.read_text(encoding="utf-8")
+    assert "Built: 2026-06-12 · cached or unavailable: writing" in third
+    svg = (build.ASSETS / "writing-dark.svg").read_text(encoding="utf-8")
+    assert "cached · last fetched 2026-06-10" in svg
+
+
+@pytest.mark.parametrize(
+    ("status", "stale"),
+    [
+        ({"state": "fresh"}, False),
+        ({"state": "cached", "last_success": "2026-06-10"}, False),
+        ({"state": "cached", "last_success": "2026-06-09"}, False),
+        ({"state": "cached", "last_success": "2026-06-08"}, True),
+        ({"state": "cached", "last_success": None}, True),
+        ({"state": "unavailable", "last_success": "garbled"}, True),
+        ({"state": "cached", "last_success": 20260610}, True),
+        ({}, True),
+    ],
+)
+def test_is_stale_allows_one_day_of_cached_data(status, stale):
+    assert build.is_stale(status, "2026-06-10") is stale
 
 
 def test_dead_source_with_no_cache_renders_empty_state(workspace, monkeypatch):
