@@ -9,7 +9,7 @@
   <a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-7-who-let-the"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/podcast-dark.svg"><img src="assets/podcast-light.svg" width="100%" alt="Attention Deficit, with Alexa Griffith: Attention Deficit Ep. 7 – Be Like a Data Center (2026-09-07); Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers (2026-08-30); Attention Deficit Ep. 5 – It&#x27;s Not a Shark, It&#x27;s a Data Center (2026-08-16)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://github.com/onlydole/onlydole.github.io/pull/15"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20); ci: raise doc-update workflow turn cap from 25 to 100 (merged · onlydole/overdue · 2026-08-16); fix: repo-wide review — close XP farming and validation gaps, repair game-layer bugs, sync docs (merged · onlydole/overdue · 2026-08-16)"></picture></a>
+  <a href="https://github.com/onlydole/onlydole.github.io/pull/20"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: chore: prepare Python environment for Amp orbs (merged · onlydole/onlydole.github.io · 2026-09-26); Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20); ci: raise doc-update workflow turn cap from 25 to 100 (merged · onlydole/overdue · 2026-08-16)"></picture></a>
 </p>
 <p align="center">
   <a href="https://creators.spotify.com/pod/profile/alexagriffith/episodes/Paying-Attention-in-the-Age-of-Agents-e3m9i24"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: Paying Attention in the Age of Agents (Alexa&#x27;s Input (AI), panel episode · 2026-07-20); Lambda&#x27;s Long Game, Claude&#x27;s Complexity, and the AI Adoption Gap (LogiCast, Season 5 Episode 16 · 2026-04-29); Shaping the Future of Documentation. OSS, Knowledge, and Dosu (Software Plaza · 2025-12-05)"></picture></a>
@@ -36,9 +36,9 @@
 </li>
 <li><strong>Recently Shipped</strong>
 <ul>
+<li><a href="https://github.com/onlydole/onlydole.github.io/pull/20">chore: prepare Python environment for Amp orbs</a> · merged · onlydole/onlydole.github.io · 2026-09-26</li>
 <li><a href="https://github.com/onlydole/onlydole.github.io/pull/15">Point Pullfrog at deepseek-v4-pro on Ollama</a> · merged · onlydole/onlydole.github.io · 2026-08-20</li>
 <li><a href="https://github.com/onlydole/overdue/pull/131">ci: raise doc-update workflow turn cap from 25 to 100</a> · merged · onlydole/overdue · 2026-08-16</li>
-<li><a href="https://github.com/onlydole/overdue/pull/130">fix: repo-wide review — close XP farming and validation gaps, repair game-layer bugs, sync docs</a> · merged · onlydole/overdue · 2026-08-16</li>
 </ul>
 </li>
 <li><strong>On Stage</strong>

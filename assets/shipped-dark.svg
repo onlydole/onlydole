@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="176" viewBox="0 0 1200 176" role="img" aria-label="Recently shipped: Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20); ci: raise doc-update workflow turn cap from 25 to 100 (merged · onlydole/overdue · 2026-08-16); fix: repo-wide review — close XP farming and validation gaps, repair game-layer bugs, sync docs (merged · onlydole/overdue · 2026-08-16)">
-  <title>Recently shipped: Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20); ci: raise doc-update workflow turn cap from 25 to 100 (merged · onlydole/overdue · 2026-08-16); fix: repo-wide review — close XP farming and validation gaps, repair game-layer bugs, sync docs (merged · onlydole/overdue · 2026-08-16)</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="176" viewBox="0 0 1200 176" role="img" aria-label="Recently shipped: chore: prepare Python environment for Amp orbs (merged · onlydole/onlydole.github.io · 2026-09-26); Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20); ci: raise doc-update workflow turn cap from 25 to 100 (merged · onlydole/overdue · 2026-08-16)">
+  <title>Recently shipped: chore: prepare Python environment for Amp orbs (merged · onlydole/onlydole.github.io · 2026-09-26); Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20); ci: raise doc-update workflow turn cap from 25 to 100 (merged · onlydole/overdue · 2026-08-16)</title>
   <style>
     .icon { fill: none; stroke: #93b9a7; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
     .fit { transform-box: fill-box; transform-origin: center; }
@@ -59,9 +59,9 @@
   <path d="M150 24 V152" stroke="#93b9a7" stroke-opacity="0.36"/>
   <text x="174" y="51" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2.6" fill="#93b9a7">RECENTLY SHIPPED</text>
 
-  <text x="174" y="92" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#f7efe5">Point Pullfrog at deepseek-v4-pro on Ollama</text>
+  <text x="174" y="92" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#f7efe5">chore: prepare Python environment for Amp orbs</text>
 
-  <text x="174" y="132" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="0.6" fill="#b9a69c">onlydole/onlydole.github.io · 2026-08-20</text>
+  <text x="174" y="132" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="0.6" fill="#b9a69c">onlydole/onlydole.github.io · 2026-09-26</text>
   <g class="nudge" style="--d: 8.3s">
     <text x="1104" y="94" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="2.3" fill="#93b9a7">VIEW</text>
     <path d="M1124 88 H1161 M1150 77 L1161 88 L1150 99" fill="none" stroke="#93b9a7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>

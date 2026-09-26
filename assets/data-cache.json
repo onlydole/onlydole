@@ -24,6 +24,12 @@
   ],
   "shipped": [
     {
+      "title": "chore: prepare Python environment for Amp orbs",
+      "detail": "merged · onlydole/onlydole.github.io",
+      "url": "https://github.com/onlydole/onlydole.github.io/pull/20",
+      "date": "2026-09-26"
+    },
+    {
       "title": "Point Pullfrog at deepseek-v4-pro on Ollama",
       "detail": "merged · onlydole/onlydole.github.io",
       "url": "https://github.com/onlydole/onlydole.github.io/pull/15",
@@ -33,12 +39,6 @@
       "title": "ci: raise doc-update workflow turn cap from 25 to 100",
       "detail": "merged · onlydole/overdue",
       "url": "https://github.com/onlydole/overdue/pull/131",
-      "date": "2026-08-16"
-    },
-    {
-      "title": "fix: repo-wide review — close XP farming and validation gaps, repair game-layer bugs, sync docs",
-      "detail": "merged · onlydole/overdue",
-      "url": "https://github.com/onlydole/overdue/pull/130",
       "date": "2026-08-16"
     }
   ],
