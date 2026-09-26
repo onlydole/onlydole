@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>One Dot Reel</title>
+    <meta
+      name="description"
+      content="A 15-second motion design reel built from a single dot, rendered live in WebGL with a synthesized soundtrack."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <style>
+      :root {
+        --ink: #0e0d0c;
+        --ink-2: #1a1917;
+        --line: #2c2a26;
+        --paper: #f1ece2;
+        --muted: #938c80;
+        --coral: #f2663a;
+        --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+        --mono:
+          "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--ink);
+        color: var(--paper);
+        font: 13px/1.5 var(--mono);
+        padding-inline: 16px;
+      }
+      .shell {
+        width: min(100%, 1280px, (100vh - 250px) * 16 / 9);
+        margin-inline: auto;
+        padding-block: 20px 28px;
+        display: grid;
+        gap: 14px;
+      }
+      .head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 4px 24px;
+      }
+      h1 {
+        margin: 0;
+        font: 400 clamp(28px, 4vw, 40px) / 1 var(--serif);
+        letter-spacing: -0.01em;
+      }
+      h1 i {
+        color: var(--coral);
+      }
+      .meta {
+        margin: 0;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-size: 11px;
+      }
+      .stage {
+        position: relative;
+        max-width: 100%;
+        aspect-ratio: 16 / 9;
+        background: #000;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .play {
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        width: clamp(72px, 11%, 128px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        border: 0;
+        background: var(--coral);
+        color: var(--ink);
+        font: 500 12px var(--mono);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 0 0 0 rgb(242 102 58 / 0.45);
+        transition:
+          transform 0.25s cubic-bezier(0.3, 1.7, 0.5, 1),
+          box-shadow 0.4s ease;
+      }
+      .play:hover {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 14px rgb(242 102 58 / 0);
+      }
+      .playing .play {
+        display: none;
+      }
+      .transport {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: var(--muted);
+      }
+      button {
+        font: inherit;
+        color: inherit;
+      }
+      .transport button {
+        background: none;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--paper);
+        padding: 5px 14px;
+        cursor: pointer;
+      }
+      .transport button:hover {
+        border-color: var(--muted);
+      }
+      #scrub {
+        flex: 1;
+        min-width: 0;
+        accent-color: var(--coral);
+      }
+      #time {
+        font-variant-numeric: tabular-nums;
+        color: var(--paper);
+      }
+      .chapters {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 6px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .chapters button {
+        width: 100%;
+        text-align: left;
+        background: var(--ink-2);
+        border: 0;
+        border-top: 2px solid var(--line);
+        padding: 8px 8px 9px;
+        cursor: pointer;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.3;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .chapters button b {
+        display: block;
+        font-weight: 500;
+        color: var(--paper);
+      }
+      .chapters button:hover {
+        color: var(--paper);
+      }
+      .chapters button[aria-current] {
+        border-top-color: var(--coral);
+        color: var(--paper);
+      }
+      .note {
+        margin: 0;
+        max-width: 72ch;
+        color: var(--muted);
+      }
+      kbd {
+        font: inherit;
+        color: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: 0 5px;
+      }
+      :focus-visible {
+        outline: 2px solid var(--coral);
+        outline-offset: 3px;
+      }
+      @media (max-width: 760px) {
+        .chapters {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+      @media (max-width: 480px) {
+        .transport {
+          flex-wrap: wrap;
+        }
+        #scrub {
+          order: -1;
+          flex-basis: 100%;
+        }
+        .chapters {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .play {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="head">
+        <h1>One dot<i>.</i> Fifteen seconds<i>.</i></h1>
+        <p class="meta">Motion design reel · 1920×1080 · 60 fps · 128 bpm</p>
+      </header>
+      <div class="stage">
+        <canvas
+          id="reel"
+          width="1920"
+          height="1080"
+          aria-label="Motion design reel: a coral dot bounces, becomes type, a pattern, liquid, a 3D form, a chart, a grid, and finally the full stop in Claude."
+        ></canvas>
+        <button class="play" id="play" type="button">Play</button>
+      </div>
+      <div class="transport">
+        <button id="toggle" type="button">Play</button>
+        <input
+          id="scrub"
+          type="range"
+          min="0"
+          max="15000"
+          step="1"
+          value="0"
+          aria-label="Scrub through the reel"
+        />
+        <span id="time">00:00</span>
+        <button id="mute" type="button" aria-pressed="false">Sound on</button>
+      </div>
+      <ol class="chapters">
+        <li>
+          <button type="button" data-chapter="0">
+            <b>01</b>Squash &amp; stretch
+          </button>
+        </li>
+        <li>
+          <button type="button" data-chapter="1"><b>02</b>Kinetic type</button>
+        </li>
+        <li>
+          <button type="button" data-chapter="2"><b>03</b>Pattern</button>
+        </li>
+        <li>
+          <button type="button" data-chapter="3"><b>04</b>Liquid</button>
+        </li>
+        <li>
+          <button type="button" data-chapter="4"><b>05</b>Dimension</button>
+        </li>
+        <li>
+          <button type="button" data-chapter="5"><b>06</b>Data</button>
+        </li>
+        <li>
+          <button type="button" data-chapter="6"><b>07</b>Rhythm</button>
+        </li>
+        <li>
+          <button type="button" data-chapter="7"><b>08</b>Hello</button>
+        </li>
+      </ol>
+      <p class="note">
+        Every frame is drawn live from code in WebGL, and the soundtrack is
+        synthesized in your browser on the same beat grid.
+        <kbd>Space</kbd> plays and pauses, <kbd>←</kbd> <kbd>→</kbd> step one
+        frame.
+      </p>
+    </main>
+    <script type="module" src="player.js"></script>
+  </body>
+</html>

@@ -5,6 +5,12 @@
     "indentWidth": 2
   },
   "files": {
-    "includes": ["**", "!assets", "!generator/uv.lock", "!tests/fixtures"]
+    "includes": [
+      "**",
+      "!assets",
+      "!generator/uv.lock",
+      "!tests/fixtures",
+      "!showreel/glyphs.js"
+    ]
   }
 }

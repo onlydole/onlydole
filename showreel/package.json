@@ -1,0 +1,15 @@
+{
+  "name": "showreel",
+  "private": true,
+  "type": "module",
+  "description": "A 15-second motion design reel, rendered frame by frame from code.",
+  "scripts": {
+    "glyphs": "node tools/build-glyphs.mjs",
+    "render": "node render.mjs",
+    "serve": "node render.mjs --serve"
+  },
+  "devDependencies": {
+    "fontkit": "2.0.4",
+    "playwright": "1.56.1"
+  }
+}

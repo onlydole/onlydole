@@ -39,7 +39,7 @@ jobs:
           SAVE_SUPER_LINTER_SUMMARY: true
           ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
           MARKDOWN_CONFIG_FILE: .markdownlint.yaml
-          FILTER_REGEX_EXCLUDE: (assets/|tests/goldens/|tests/fixtures/)
+          FILTER_REGEX_EXCLUDE: (assets/|tests/goldens/|tests/fixtures/|showreel/glyphs\.js)
           VALIDATE_PYTHON_PYLINT: false
           VALIDATE_PYTHON_MYPY: false
           VALIDATE_PYTHON_ISORT: false
