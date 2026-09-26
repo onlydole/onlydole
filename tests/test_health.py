@@ -2,9 +2,9 @@ import json
 
 import pytest
 
-from generator import health
+from generator import build, health
 
-FRESH = {key: {"state": "fresh"} for key in health.EXPECTED}
+FRESH = {key: {"state": "fresh"} for key in build.SOURCE_KEYS}
 
 
 @pytest.fixture
@@ -40,3 +40,9 @@ def test_health_fails_on_missing_or_unknown_status(cache):
     assert health.main() == 1
     cache({})
     assert health.main() == 1
+
+
+def test_health_reports_the_source_count(cache, capsys):
+    cache(FRESH)
+    health.main()
+    assert f"All {len(build.SOURCE_KEYS)} public sources" in capsys.readouterr().out

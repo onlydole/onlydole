@@ -2,9 +2,7 @@
 
 import json
 
-from generator.build import CACHE, STALE_AFTER_DAYS, is_stale
-
-EXPECTED = ("podcast", "reading", "shipped", "stage", "writing")
+from generator.build import CACHE, SOURCE_KEYS, STALE_AFTER_DAYS, is_stale
 
 
 def main() -> int:
@@ -12,7 +10,7 @@ def main() -> int:
     statuses = cache.get("source_status", {})
     today = cache.get("updated", "")
     stale, cached = [], []
-    for key in EXPECTED:
+    for key in SOURCE_KEYS:
         status = statuses.get(key, {})
         if is_stale(status, today):
             stale.append(key)
@@ -26,7 +24,7 @@ def main() -> int:
     if stale:
         print("Sources past the refresh budget: " + ", ".join(stale))
         return 1
-    print("All five public sources are within the refresh budget.")
+    print(f"All {len(SOURCE_KEYS)} public sources are within the refresh budget.")
     return 0
 
 

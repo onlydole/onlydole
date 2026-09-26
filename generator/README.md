@@ -18,7 +18,8 @@ The prose outside those regions stays hand-written.
 GitHub activity searches public PRs before applying the result limit.
 Filtering a user's latest PRs afterward lets private work crowd out public
 work. The query samples 100 public PRs and releases from 50 recently pushed
-public repositories; it isn't a complete activity history.
+public repositories; it isn't a complete activity history. PRs and
+releases from this profile repository are left out of both.
 
 Goodreads doesn't expose Kindle reading progress or last-opened order in
 this RSS feed. Its `pubDate` matches the shelf-added date in the observed
@@ -28,6 +29,50 @@ date, so rereads stay visible. A valid empty shelf clears the displayed books;
 an unavailable feed preserves them. A book can stay on that
 shelf long after you put it down. Fix that at the source by updating your
 Goodreads shelf; a more frequent build cannot recover missing Kindle data.
+
+## Motion
+
+The hero draws the career as a commit graph. `main` carries the day jobs,
+Disney Studios through Dosu. An `upstream` lane forks after the first stop,
+carries the Kubernetes and community work as tags, and merges into `main`
+at HEAD, where the community work became the job. On phones the graph
+stacks top to bottom and a legend names the upstream commits. After the
+graph draws, only the HEAD marker's pulse and the sun's glow keep moving.
+
+The cards take turns. After the page loads, one card at a time plays a
+short gesture tied to its source. The document rewrites its lines, the
+headphones show a voice meter, the branch merges, the microphone
+broadcasts, and the book turns a page or catches light on its cover. Three
+sweeps play down the page, then the cards rest.
+
+The templates follow four rules, and `tests/test_render.py` checks them.
+
+- Every animation runs from a hidden or partial state back to the
+  element's own SVG attributes. Nothing uses `forwards` or `both`, so a
+  renderer without animation shows the finished drawing.
+- Motion is opt-in. Every animation rule sits inside
+  `@media (prefers-reduced-motion: no-preference)`, and elements carry only
+  their timing as CSS variables, so a visitor who asks for reduced motion,
+  or a renderer that can't tell, gets the still drawing.
+- Copy never starts hidden. Only the career graph's labels enter with
+  their stops, and the alt text carries every one of them.
+- No `feTurbulence` or other expensive filters. An animated SVG image
+  repaints every frame.
+
+`layout.py` computes geometry and timing, so templates only loop over
+prepared values. The career, the upstream tags, the mission's line breaks,
+and the tagline live in `HERO` in `build.py`. The alt text is built from
+the same data, so the picture and its description can't drift apart.
+
+The hero is paper in light mode and the same city at night in dark mode.
+The dark variant inverts the illustration's lightness and rotates its hue
+back, so the ink turns pale and the sun keeps its color. The profile page
+offers four hero files, phone layouts first, and GitHub picks by viewport
+width and `prefers-color-scheme`. The illustration is embedded as WebP, which cut
+each hero from 418 KB to about 107 KB.
+
+The build owns every SVG in `assets/`. Each run deletes SVGs it didn't
+write, so renamed or retired cards don't linger.
 
 ## Refreshes and failures
 
@@ -94,11 +139,13 @@ against the available text width, including the space occupied by book
 covers. Extra-long titles end with an ellipsis; full titles and individual
 links remain available below each card. SVG clipping is a final boundary,
 not the layout algorithm. Check both themes and a narrow viewport after
-changing typography. Activity cards use one wide, shallow layout at every
-viewport so GitHub cannot substitute a taller card with oversized type. The
-hero retains its separate mobile layout.
+changing typography, and check reduced motion after changing animation.
+Activity cards use one wide, shallow layout at every viewport so GitHub
+cannot substitute a taller card with oversized type. The hero retains its
+separate mobile layout.
 
-After reviewing an intentional visual change, update the snapshot fixtures:
+After reviewing an intentional visual change, update the snapshot fixtures.
+The script also deletes snapshots that no longer have a case.
 
 ```sh
 uv run --locked --project generator python tests/update_goldens.py

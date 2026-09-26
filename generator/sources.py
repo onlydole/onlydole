@@ -18,6 +18,9 @@ GITHUB_LOGIN = "onlydole"
 PROFILE_REPO = "onlydole/onlydole"
 GRAPHQL_URL = "https://api.github.com/graphql"
 GOODREADS_USER_ID = "22801001"
+GOODREADS_SHELF = (
+    f"https://www.goodreads.com/review/list/{GOODREADS_USER_ID}?shelf=currently-reading"
+)
 GOODREADS_FEED = (
     "https://www.goodreads.com/review/list_rss/"
     f"{GOODREADS_USER_ID}?shelf=currently-reading&sort=date_updated&order=d&per_page=200"
@@ -109,59 +112,68 @@ def parse_substack(feed_text: str) -> list[dict]:
     return _newest_posts(posts)
 
 
-def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
-    """Use RSS first, then the publication's public archive if RSS is blocked."""
-    try:
-        resp = _send(
-            "GET",
-            feed_url,
-            timeout=30,
-            follow_redirects=True,
-            headers={
-                "User-Agent": USER_AGENT,
-                "Accept": "application/rss+xml, application/xml",
-            },
+def _fetch_substack_rss(feed_url: str) -> list[dict]:
+    resp = _send(
+        "GET",
+        feed_url,
+        timeout=30,
+        follow_redirects=True,
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "application/rss+xml, application/xml",
+        },
+    )
+    return parse_substack(resp.text)
+
+
+def _fetch_substack_archive(feed_url: str) -> list[dict]:
+    """Read the publication's public archive endpoint.
+
+    It's a public endpoint, not an authenticated dashboard or paywall bypass.
+    """
+    resp = _send(
+        "GET",
+        feed_url.removesuffix("/feed") + "/api/v1/archive",
+        params={"sort": "new", "limit": 10},
+        headers={"User-Agent": USER_AGENT},
+        timeout=30,
+        follow_redirects=True,
+    )
+    payload = resp.json()
+    if not isinstance(payload, list):
+        raise SourceError("archive response was not a list")
+    posts = []
+    for post in payload:
+        if not isinstance(post, dict):
+            continue
+        title, url, date = (
+            post.get(k) for k in ("title", "canonical_url", "post_date")
         )
-        return parse_substack(resp.text)
-    except (httpx.HTTPError, SourceError):
-        # Substack sometimes blocks RSS on hosted runners. The archive is a
-        # public endpoint, not an authenticated dashboard or paywall bypass.
+        if not all(isinstance(v, str) and v for v in (title, url, date)):
+            continue
+        published = datetime.datetime.fromisoformat(date)
+        posts.append({"title": title, "url": url, **_published_fields(published)})
+    if not posts:
+        raise SourceError("archive contained no usable posts")
+    return _newest_posts(posts)
+
+
+def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
+    """Try RSS, then the public archive, then the public RSS relay.
+
+    Substack blocks hosted runners on both of its own endpoints, so the
+    relay is the route that usually answers in Actions.
+    """
+    errors = []
+    for route in (_fetch_substack_rss, _fetch_substack_archive):
         try:
-            resp = _send(
-                "GET",
-                feed_url.removesuffix("/feed") + "/api/v1/archive",
-                params={"sort": "new", "limit": 10},
-                headers={"User-Agent": USER_AGENT},
-                timeout=30,
-                follow_redirects=True,
-            )
-            payload = resp.json()
-            if not isinstance(payload, list):
-                raise SourceError("archive response was not a list")
-            posts = []
-            for post in payload:
-                if not isinstance(post, dict):
-                    continue
-                title, url, date = (
-                    post.get(k) for k in ("title", "canonical_url", "post_date")
-                )
-                if not all(isinstance(v, str) and v for v in (title, url, date)):
-                    continue
-                published = datetime.datetime.fromisoformat(date)
-                posts.append(
-                    {"title": title, "url": url, **_published_fields(published)}
-                )
-            if not posts:
-                raise SourceError("archive contained no usable posts")
-            return _newest_posts(posts)
-        except (
-            httpx.HTTPError,
-            ValueError,
-            UnicodeDecodeError,
-            SourceError,
-        ) as exc:
-            print(f"Substack direct fetch unavailable; trying public RSS relay: {exc}")
-            return fetch_substack_relay(feed_url)
+            return route(feed_url)
+        except (httpx.HTTPError, ValueError, UnicodeDecodeError, SourceError) as exc:
+            name = route.__name__.removeprefix("_fetch_substack_")
+            detail = str(exc).splitlines()[0] if str(exc) else repr(exc)
+            errors.append(f"{name}: {detail}")
+    print(f"Substack direct fetch unavailable ({'; '.join(errors)}); trying relay")
+    return fetch_substack_relay(feed_url)
 
 
 def fetch_substack_relay(feed_url: str) -> list[dict]:
@@ -212,12 +224,15 @@ def fetch_podcast() -> list[dict]:
     return fetch_substack(PODCAST_FEED)
 
 
+# Search public PRs before applying the result limit, so private work
+# can't crowd public work out of the sample.
+PR_SEARCH = (
+    f"is:pr is:merged is:public author:{GITHUB_LOGIN} "
+    f"-repo:{PROFILE_REPO} sort:updated-desc"
+)
 ACTIVITY_QUERY = """
-query($login: String!) {
-  publicPullRequests: search(
-    query: "is:pr is:merged is:public author:onlydole -repo:onlydole/onlydole sort:updated-desc",
-    type: ISSUE, first: 100
-  ) {
+query($login: String!, $prSearch: String!) {
+  publicPullRequests: search(query: $prSearch, type: ISSUE, first: 100) {
     nodes { ... on PullRequest {
       title url mergedAt repository { nameWithOwner isPrivate }
     } }
@@ -226,8 +241,7 @@ query($login: String!) {
     repositories(first: 50, privacy: PUBLIC, isFork: false,
                  orderBy: {field: PUSHED_AT, direction: DESC}) {
       nodes {
-        name
-        url
+        nameWithOwner
         releases(first: 3, orderBy: {field: CREATED_AT, direction: DESC}) {
           nodes { tagName publishedAt url }
         }
@@ -239,47 +253,52 @@ query($login: String!) {
 
 
 def parse_activity(payload: dict) -> list[dict]:
-    try:
-        user = payload["data"]["user"]
-        repo_nodes = user["repositories"]["nodes"]
-        pr_nodes = (
-            payload["data"]["publicPullRequests"]["nodes"]
-            if "publicPullRequests" in payload["data"]
-            else user["pullRequests"]["nodes"]
-        )
-    except (KeyError, TypeError) as exc:
-        raise SourceError(f"unexpected GraphQL shape: {exc}") from exc
+    """Merge public releases and merged public PRs, newest first.
+
+    The profile repository is left out: its own refresh commits and
+    dashboard tweaks aren't shipped work.
+    """
     items = []
-    for repo in repo_nodes:
-        for release in repo["releases"]["nodes"]:
-            if not release.get("publishedAt"):
+    try:
+        repo_nodes = payload["data"]["user"]["repositories"]["nodes"]
+        pr_nodes = payload["data"]["publicPullRequests"]["nodes"]
+        for repo in repo_nodes:
+            if repo["nameWithOwner"] == PROFILE_REPO:
+                continue
+            for release in repo["releases"]["nodes"]:
+                if not release.get("publishedAt"):
+                    continue
+                items.append(
+                    {
+                        "title": f"{repo['nameWithOwner'].split('/')[-1]} "
+                        f"{release['tagName']}",
+                        "detail": "release",
+                        "url": release["url"],
+                        "date": release["publishedAt"][:10],
+                        "_at": release["publishedAt"],
+                    }
+                )
+        for pr in pr_nodes:
+            repo = pr.get("repository")  # null when the repository was deleted
+            if not repo or repo["isPrivate"] or repo["nameWithOwner"] == PROFILE_REPO:
+                continue
+            if not pr.get("mergedAt"):
                 continue
             items.append(
                 {
-                    "title": f"{repo['name']} {release['tagName']}",
-                    "detail": "release",
-                    "url": release["url"],
-                    "date": release["publishedAt"][:10],
+                    "title": pr["title"],
+                    "detail": f"merged · {repo['nameWithOwner']}",
+                    "url": pr["url"],
+                    "date": pr["mergedAt"][:10],
+                    "_at": pr["mergedAt"],
                 }
             )
-    for pr in pr_nodes:
-        repo = pr["repository"]  # null when the repository was deleted
-        if not repo or repo["isPrivate"] or repo["nameWithOwner"] == PROFILE_REPO:
-            continue
-        if not pr.get("mergedAt"):
-            continue
-        items.append(
-            {
-                "title": pr["title"],
-                "detail": f"merged · {repo['nameWithOwner']}",
-                "url": pr["url"],
-                "date": pr["mergedAt"][:10],
-            }
-        )
+    except (KeyError, TypeError, AttributeError) as exc:
+        raise SourceError(f"unexpected GraphQL shape: {exc!r}") from exc
     if not items:
         raise SourceError("no public activity found")
-    items.sort(key=lambda item: item["date"], reverse=True)
-    return items[:3]
+    items.sort(key=lambda item: item["_at"], reverse=True)
+    return [{k: v for k, v in item.items() if k != "_at"} for item in items[:3]]
 
 
 def fetch_activity(token: str) -> list[dict]:
@@ -287,7 +306,10 @@ def fetch_activity(token: str) -> list[dict]:
         resp = _send(
             "POST",
             GRAPHQL_URL,
-            json={"query": ACTIVITY_QUERY, "variables": {"login": GITHUB_LOGIN}},
+            json={
+                "query": ACTIVITY_QUERY,
+                "variables": {"login": GITHUB_LOGIN, "prSearch": PR_SEARCH},
+            },
             headers={"Authorization": f"Bearer {token}"},
             timeout=30,
         )

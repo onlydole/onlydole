@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import base64
 import datetime
+import functools
 import html
 import json
 import os
@@ -16,44 +17,70 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from generator import sources
+from generator.layout import hero_layout, hero_mobile_layout, tile_layout
 from generator.readme import replace_region
-from generator.render import DARK, FONT_SANS, FONT_SERIF, LIGHT, render_svg
+from generator.render import FONT_SANS, FONT_SERIF, HERO_THEMES, THEMES, render_svg
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ASSETS = REPO_ROOT / "assets"
 CACHE = ASSETS / "data-cache.json"
 README = REPO_ROOT / "README.md"
-EDITORIAL_ART = REPO_ROOT / "generator" / "art" / "la-field-notes.png"
+EDITORIAL_ART = REPO_ROOT / "generator" / "art" / "la-field-notes.webp"
 
 SITE = "https://onlydole.dev"
 SUBSTACK_HOME = "https://onlydole.substack.com"
+PODCAST_HOME = "https://attentiondeficitpod.substack.com"
 CHIPS = [
     ("substack", "Substack", SUBSTACK_HOME),
     ("linkedin", "LinkedIn", "https://www.linkedin.com/in/onlydole"),
     ("bluesky", "Bluesky", "https://bsky.app/profile/onlydole.dev"),
     ("website", "Website", SITE),
 ]
+# Everything the hero says, in one place. The templates and the alt text
+# both read from here, so the picture and its description can't drift.
 HERO = {
     "name": "Taylor Dolezal",
     "role": "Head of Open Source at Dosu",
-    "mission": "I help open source communities thrive.",
-    "credentials": [
-        "Kubernetes 1.19 Release Lead",
-        "CNCF Head of Ecosystem",
-        "KubeCon keynoter",
-        "Technical author",
-    ],
+    "place": "Los Angeles",
+    "kicker": "OPEN SOURCE  /  LOS ANGELES",
+    # Line breaks are art direction, so each layout sets its own.
+    "mission": {
+        "desktop": (
+            "Building open source communities, making useful things,",
+            "and sharing what I learn.",
+        ),
+        "mobile": (
+            "Building open source communities,",
+            "making useful things, and sharing",
+            "what I learn.",
+        ),
+    },
+    "tagline": "The project is code. The work is people.",
+    # Day jobs, oldest first. The last stop is HEAD.
+    "career": (
+        ("Disney Studios", "Lead SRE"),
+        ("HashiCorp", "Developer Advocate"),
+        ("CNCF", "Head of Ecosystem"),
+        ("Dosu", "Head of Open Source"),
+    ),
+    # Community work that ran alongside the day jobs and merges into HEAD.
+    "upstream": ("Kubernetes 1.19 lead", "SIG Docs tech lead", "KubeCon keynoter"),
 }
-HERO_ALT = (
-    "Taylor Dolezal, Head of Open Source at Dosu in Los Angeles. "
-    "I help open source communities thrive. Kubernetes 1.19 Release Lead, "
-    "former CNCF Head of Ecosystem, KubeCon keynoter, and technical author."
-)
 EMPTY_LINES = [{"primary": "—", "secondary": ""}]
 
-TILE_WIDTH = 1200
-TEXT_X = 174
+# Per-card accents as (dark, light).
+ACCENTS = {
+    "writing": ("#f29a78", "#a74735"),
+    "podcast": ("#b4a1d8", "#66508f"),
+    "shipped": ("#93b9a7", "#3f725d"),
+    "stage": ("#d7b168", "#8a6220"),
+    "reading": ("#8fafd0", "#466f98"),
+}
+SOURCE_KEYS = ("writing", "podcast", "shipped", "stage", "reading")
+# Feeds that can come through a caching relay, whose snapshot may lag.
+RELAYED = ("writing", "podcast")
 COVER_MAX_BYTES = 80_000
+COVER_TYPES = ("image/jpeg", "image/png", "image/webp", "image/gif")
 # Days a source may serve its cache before the card is labeled and the
 # scheduled run fails. Substack blocks hosted runners, so both Substack
 # cards depend on a free relay that misses a refresh now and then. A
@@ -71,6 +98,16 @@ def is_stale(status: dict, today: str) -> bool:
     except (TypeError, ValueError):
         return True
     return age.days > STALE_AFTER_DAYS
+
+
+def hero_alt() -> str:
+    career = ", ".join(f"{name} ({role})" for name, role in HERO["career"])
+    return (
+        f"{HERO['name']}, {HERO['role']}, in {HERO['place']}. "
+        f"{' '.join(HERO['mission']['desktop'])} "
+        f"Career so far: {career}. "
+        f"Alongside: {', '.join(HERO['upstream'])}. {HERO['tagline']}"
+    )
 
 
 def _load_cache() -> dict:
@@ -95,8 +132,8 @@ def _download_cover(url: str) -> dict | None:
         ) as resp:
             resp.raise_for_status()
             mime = resp.headers.get("content-type", "image/jpeg").split(";")[0]
-            if not mime.startswith("image/"):
-                print(f"warning: cover is not an image ({mime})", file=sys.stderr)
+            if mime.strip().lower() not in COVER_TYPES:
+                print(f"warning: cover is not a raster image ({mime})", file=sys.stderr)
                 return None
             chunks = []
             total = 0
@@ -112,88 +149,115 @@ def _download_cover(url: str) -> dict | None:
     return {
         "url": url,
         "b64": base64.b64encode(b"".join(chunks)).decode(),
-        "mime": mime,
+        "mime": mime.strip().lower(),
     }
 
 
-def _resolve_reading(cache: dict) -> dict | None:
-    """Fetch Goodreads books, reusing or downloading the first cover."""
-    cached = cache.get("reading")
-    if not isinstance(cached, dict) or "books" not in cached:
-        cached = None
+def _fetch_reading(cached: object) -> dict:
+    """Fetch Goodreads books, reusing the cached cover when its URL matches."""
     books = sources.fetch_goodreads()
-    cover = None
     image_url = (books[0].get("image_url") or "") if books else ""
-    cached_cover = (cached or {}).get("cover") or {}
+    cached_cover = (cached.get("cover") if isinstance(cached, dict) else None) or {}
+    cover = None
     if image_url and cached_cover.get("url") == image_url and cached_cover.get("b64"):
         cover = cached_cover
     elif image_url:
         cover = _download_cover(image_url)
-    fresh = {"books": books, "cover": cover}
-    cache["reading"] = fresh
-    return fresh
+    return {"books": books, "cover": cover}
+
+
+def _fetch_activity() -> list[dict]:
+    token = os.environ.get("GITHUB_TOKEN")
+    if not token:
+        raise sources.SourceError("GITHUB_TOKEN is not set")
+    return sources.fetch_activity(token)
+
+
+def _newest_stamp(items: object) -> str:
+    """Publication stamp of a feed's newest post, or '' if unknown."""
+    try:
+        first = items[0]
+        return str(first.get("published_at") or first.get("date") or "")
+    except (IndexError, KeyError, TypeError, AttributeError):
+        return ""
+
+
+def _write_summary(statuses: dict) -> None:
+    summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not summary_path:
+        return
+    rows = [
+        "## Profile sources\n",
+        "| Source | Status | Last success | Transport |",
+        "| --- | --- | --- | --- |",
+    ]
+    for key, status in statuses.items():
+        transport = (
+            status.get("via", "direct") if status["state"] == "fresh" else "local cache"
+        )
+        rows.append(
+            f"| {key} | {status['state']} | {status['last_success'] or 'unknown'} "
+            f"| {transport} |"
+        )
+    with Path(summary_path).open("a", encoding="utf-8") as summary:
+        summary.write("\n".join(rows) + "\n")
 
 
 def gather(today: str) -> dict:
     """Fetch every source; fall back to last-good cache on failure."""
     cache = _load_cache()
     fetchers = {
-        "writing": lambda: sources.fetch_substack(),
-        "shipped": lambda: sources.fetch_activity(os.environ["GITHUB_TOKEN"]),
-        "stage": lambda: sources.fetch_talks(),
-        "podcast": lambda: sources.fetch_podcast(),
-        "reading": lambda: _resolve_reading(cache),
+        "writing": sources.fetch_substack,
+        "podcast": sources.fetch_podcast,
+        "shipped": _fetch_activity,
+        "stage": sources.fetch_talks,
+        "reading": lambda: _fetch_reading(cache.get("reading")),
     }
-    data = {}
-    previous = cache.get("source_status", {})
-    statuses = {}
-    for key, fetch in fetchers.items():
+    previous = cache.get("source_status")
+    previous = previous if isinstance(previous, dict) else {}
+    data, statuses = {}, {}
+    for key in SOURCE_KEYS:
         try:
-            data[key] = fetch()
-            if key in ("writing", "podcast") and cache.get(key):
-                incoming, saved = data[key][0], cache[key][0]
-                if incoming.get("published_at", incoming["date"]) < saved.get(
-                    "published_at", saved["date"]
-                ):
-                    raise sources.SourceError(
-                        "feed returned older posts than the last-good cache"
-                    )
-            cache[key] = data[key]
-            statuses[key] = {"state": "fresh", "last_success": today}
-            if key in ("writing", "podcast") and data[key][0].get("via"):
-                statuses[key]["via"] = data[key][0]["via"]
-        except (sources.SourceError, KeyError) as exc:
+            fresh = fetchers[key]()
+            if key in RELAYED and _newest_stamp(fresh) < _newest_stamp(cache.get(key)):
+                raise sources.SourceError(
+                    "feed returned older posts than the last-good cache"
+                )
+        except sources.SourceError as exc:
             print(f"warning: {key}: {exc}; using last-good data", file=sys.stderr)
             data[key] = cache.get(key)
+            last = previous.get(key)
             statuses[key] = {
                 "state": "cached" if data[key] else "unavailable",
-                "last_success": previous.get(key, {}).get("last_success"),
+                "last_success": last.get("last_success")
+                if isinstance(last, dict)
+                else None,
             }
             if os.environ.get("GITHUB_ACTIONS"):
                 print(
-                    f"::warning title=Profile source unavailable::{key} is {statuses[key]['state']}"
+                    "::warning title=Profile source unavailable::"
+                    f"{key} is {statuses[key]['state']}"
                 )
+            continue
+        data[key] = cache[key] = fresh
+        statuses[key] = {"state": "fresh", "last_success": today}
+        if key in RELAYED and fresh and fresh[0].get("via"):
+            statuses[key]["via"] = fresh[0]["via"]
     cache["source_status"] = statuses
+    cache["updated"] = today
     data["_sources"] = statuses
     data["_today"] = today
-    cache["updated"] = today
     ASSETS.mkdir(exist_ok=True)
     CACHE.write_text(
         json.dumps(cache, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    if summary_path := os.environ.get("GITHUB_STEP_SUMMARY"):
-        with Path(summary_path).open("a", encoding="utf-8") as summary:
-            summary.write(
-                "## Profile sources\n\n| Source | Status | Last success | Transport |\n| --- | --- | --- | --- |\n"
-            )
-            for key, status in statuses.items():
-                summary.write(
-                    f"| {key} | {status['state']} | {status['last_success'] or 'unknown'} | {status.get('via', 'direct') if status['state'] == 'fresh' else 'local cache'} |\n"
-                )
+    _write_summary(statuses)
     return data
 
 
 def _summary(lines: list[dict]) -> str:
+    if lines is EMPTY_LINES:
+        return "nothing to show right now"
     parts = []
     for line in lines:
         if line["primary"] and line["secondary"]:
@@ -203,16 +267,17 @@ def _summary(lines: list[dict]) -> str:
     return "; ".join(parts) or "no items"
 
 
+def _dated_lines(posts: list[dict] | None) -> list[dict]:
+    if not posts:
+        return EMPTY_LINES
+    return [
+        {"primary": p["title"], "secondary": p["date"], "url": p["url"]} for p in posts
+    ]
+
+
 def tile_contexts(data: dict) -> list[dict]:
     writing = data.get("writing")
-    writing_lines = (
-        [
-            {"primary": p["title"], "secondary": p["date"], "url": p["url"]}
-            for p in writing
-        ]
-        if writing
-        else EMPTY_LINES
-    )
+    podcast = data.get("podcast")
 
     shipped = data.get("shipped")
     shipped_lines = (
@@ -220,7 +285,7 @@ def tile_contexts(data: dict) -> list[dict]:
             {
                 "primary": i["title"],
                 "secondary": f"{i['detail']} · {i['date']}",
-                "display_secondary": (f"{i['detail'].split(' · ')[-1]} · {i['date']}"),
+                "display_secondary": f"{i['detail'].split(' · ')[-1]} · {i['date']}",
                 "url": i["url"],
             }
             for i in shipped
@@ -244,43 +309,33 @@ def tile_contexts(data: dict) -> list[dict]:
     )
 
     reading = data.get("reading")
-    books = (reading or {}).get("books") or []
-    if books:
-        reading_lines = [
-            {
-                "primary": b["title"],
-                "secondary": " ".join(b["author"].split()),
-                "url": b["url"],
-            }
-            for b in books
-        ]
-    else:
-        reading_lines = EMPTY_LINES
+    books = (reading.get("books") if isinstance(reading, dict) else None) or []
+    reading_lines = [
+        {
+            "primary": b["title"],
+            "secondary": " ".join(b["author"].split()),
+            "url": b["url"],
+        }
+        for b in books
+    ] or EMPTY_LINES
 
-    podcast = data.get("podcast") or []
     tiles = [
         {
             "key": "writing",
             "header": "LATEST WRITING",
             "action": "READ",
-            "lines": writing_lines,
+            "lines": _dated_lines(writing),
             "url": writing[0]["url"] if writing else SUBSTACK_HOME,
-            "alt": "Latest writing: " + _summary(writing_lines),
+            "alt_prefix": "Latest writing",
         },
         {
             "key": "podcast",
             "header": "ATTENTION DEFICIT",
             "action": "LISTEN",
             "header_note": "with Alexa Griffith",
-            "lines": [
-                {"primary": p["title"], "secondary": p["date"], "url": p["url"]}
-                for p in podcast
-            ]
-            or EMPTY_LINES,
-            "url": podcast[0]["url"]
-            if podcast
-            else "https://attentiondeficitpod.substack.com",
-            "alt": "Attention Deficit: " + "; ".join(p["title"] for p in podcast),
+            "lines": _dated_lines(podcast),
+            "url": podcast[0]["url"] if podcast else PODCAST_HOME,
+            "alt_prefix": "Attention Deficit, with Alexa Griffith",
         },
         {
             "key": "shipped",
@@ -290,7 +345,7 @@ def tile_contexts(data: dict) -> list[dict]:
             "url": shipped[0]["url"]
             if shipped
             else f"https://github.com/{sources.GITHUB_LOGIN}",
-            "alt": "Recently shipped: " + _summary(shipped_lines),
+            "alt_prefix": "Recently shipped",
         },
         {
             "key": "stage",
@@ -298,21 +353,21 @@ def tile_contexts(data: dict) -> list[dict]:
             "action": "WATCH",
             "lines": stage_lines,
             "url": stage[0]["url"] if stage else SITE,
-            "alt": "On stage: " + _summary(stage_lines),
+            "alt_prefix": "On stage",
         },
         {
             "key": "reading",
             "header": "ON MY BOOKSHELF",
             "action": "EXPLORE",
-            "header_note": "via Goodreads" if books else "",
-            "cover": (reading or {}).get("cover") if books else None,
+            "header_note": "via Goodreads",
+            "cover": reading.get("cover") if books else None,
             "lines": reading_lines,
-            "url": books[0]["url"] if books else "",
-            "alt": "Currently-reading shelf on Goodreads: " + _summary(reading_lines),
+            "url": books[0]["url"] if books else sources.GOODREADS_SHELF,
+            "alt_prefix": "Currently-reading shelf on Goodreads",
         },
     ]
     for tile in tiles:
-        tile["more_count"] = max(0, len(tile["lines"]) - 1)
+        tile["alt"] = f"{tile.pop('alt_prefix')}: {_summary(tile['lines'])}"
         status = data.get("_sources", {}).get(tile["key"], {})
         if status and is_stale(status, data["_today"]):
             tile["header_note"] = (
@@ -321,71 +376,75 @@ def tile_contexts(data: dict) -> list[dict]:
     return tiles
 
 
-def _tile_geometry(tile: dict) -> dict:
+ART_TYPES = {".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg"}
+
+
+@functools.cache
+def _art() -> tuple[str, str]:
+    mime = ART_TYPES[EDITORIAL_ART.suffix.lower()]
+    return mime, base64.b64encode(EDITORIAL_ART.read_bytes()).decode()
+
+
+def hero_context(theme: str, mobile: bool = False) -> dict:
+    art_mime, art_b64 = _art()
+    layout = hero_mobile_layout(HERO) if mobile else hero_layout(HERO)
+    first, _, rest = HERO["tagline"].partition(". ")
     return {
-        "width": TILE_WIDTH,
-        "height": 176,
-        "text_x": TEXT_X,
+        "sans": FONT_SANS,
+        "serif": FONT_SERIF,
+        "aria": hero_alt(),
+        "art_mime": art_mime,
+        "art_b64": art_b64,
+        "t": HERO_THEMES[theme],
+        "g": layout,
+        "name": HERO["name"],
+        "role": HERO["role"],
+        "kicker": HERO["kicker"],
+        "mission": HERO["mission"]["mobile" if mobile else "desktop"],
+        "tagline": HERO["tagline"],
+        "tagline_lines": (f"{first}.", rest) if rest else (HERO["tagline"], ""),
     }
 
 
 def write_assets(tiles: list[dict]) -> None:
+    """Write every SVG and delete SVGs this build no longer produces."""
     ASSETS.mkdir(exist_ok=True)
-    hero_ctx = {
-        "sans": FONT_SANS,
-        "serif": FONT_SERIF,
-        "aria": HERO_ALT,
-        "illustration_b64": base64.b64encode(EDITORIAL_ART.read_bytes()).decode(),
-        **HERO,
-    }
-    (ASSETS / "hero.svg").write_text(
-        render_svg("hero.svg.j2", hero_ctx), encoding="utf-8"
-    )
-    (ASSETS / "hero-mobile.svg").write_text(
-        render_svg("hero-mobile.svg.j2", hero_ctx), encoding="utf-8"
-    )
-    themes = (("dark", DARK), ("light", LIGHT))
-    accents = {
-        "writing": ("#f29a78", "#a74735"),
-        "podcast": ("#b4a1d8", "#66508f"),
-        "shipped": ("#93b9a7", "#3f725d"),
-        "stage": ("#d7b168", "#8a6220"),
-        "reading": ("#8fafd0", "#466f98"),
-    }
-    for tile in tiles:
-        geometry = _tile_geometry(tile)
-        for theme_name, theme in themes:
-            svg = render_svg(
+    written: dict[str, str] = {}
+    for theme in THEMES:
+        written[f"hero-{theme}.svg"] = render_svg("hero.svg.j2", hero_context(theme))
+        written[f"hero-mobile-{theme}.svg"] = render_svg(
+            "hero-mobile.svg.j2", hero_context(theme, mobile=True)
+        )
+    for index, tile in enumerate(tiles):
+        layout = tile_layout(tile["lines"], index)
+        for theme_name, theme in THEMES.items():
+            accent = ACCENTS[tile["key"]][0 if theme_name == "dark" else 1]
+            written[f"{tile['key']}-{theme_name}.svg"] = render_svg(
                 "tile.svg.j2",
                 {
                     "sans": FONT_SANS,
                     "serif": FONT_SERIF,
-                    "theme": {
-                        **theme,
-                        "accent": accents[tile["key"]][
-                            0 if theme_name == "dark" else 1
-                        ],
-                    },
-                    "lines": tile["lines"],
+                    "theme": {**theme, "accent": accent},
+                    "layout": layout,
                     "header": tile["header"],
                     "action": tile["action"],
-                    "more_count": tile["more_count"],
                     "key": tile["key"],
                     "aria": tile["alt"],
                     "cover": tile.get("cover"),
                     "header_note": tile.get("header_note", ""),
-                    **geometry,
                 },
             )
-            (ASSETS / f"{tile['key']}-{theme_name}.svg").write_text(
-                svg, encoding="utf-8"
-            )
     for key, label, _url in CHIPS:
-        for theme_name, theme in themes:
-            svg = render_svg(
-                "chip.svg.j2", {"font": FONT_SANS, "theme": theme, "label": label}
+        for theme_name, theme in THEMES.items():
+            written[f"chip-{key}-{theme_name}.svg"] = render_svg(
+                "chip.svg.j2",
+                {"font": FONT_SANS, "theme": theme, "label": label, "key": key},
             )
-            (ASSETS / f"chip-{key}-{theme_name}.svg").write_text(svg, encoding="utf-8")
+    for name, svg in written.items():
+        (ASSETS / name).write_text(svg, encoding="utf-8")
+    for orphan in ASSETS.glob("*.svg"):
+        if orphan.name not in written:
+            orphan.unlink()
 
 
 def _esc(value: str) -> str:
@@ -401,22 +460,28 @@ def _picture(key: str, alt: str, width: str) -> str:
     )
 
 
+def _hero_picture() -> str:
+    # The first matching source wins, so the phone layouts come first.
+    phone = "(max-width: 600px)"
+    dark = "(prefers-color-scheme: dark)"
+    return (
+        f'<a href="{SITE}"><picture>'
+        f'<source media="{phone} and {dark}" srcset="assets/hero-mobile-dark.svg">'
+        f'<source media="{phone}" srcset="assets/hero-mobile-light.svg">'
+        f'<source media="{dark}" srcset="assets/hero-dark.svg">'
+        f'<img src="assets/hero-light.svg" width="100%" alt="{_esc(hero_alt())}">'
+        f"</picture></a>"
+    )
+
+
 def bento_html(tiles: list[dict]) -> str:
-    rows = [
-        (
-            f'<a href="{SITE}"><picture><source media="(max-width: 600px)" '
-            f'srcset="assets/hero-mobile.svg"><img src="assets/hero.svg" '
-            f'width="100%" alt="{_esc(HERO_ALT)}"></picture></a>'
-        )
-    ]
+    rows = [_hero_picture()]
     link_sections = []
     for tile in tiles:
         picture = _picture(tile["key"], tile["alt"], "100%")
-        if tile["url"]:
-            cell = f'<a href="{_esc(tile["url"])}">{picture}</a>'
-        else:
-            cell = picture
-        rows.append(f'<p align="center">\n  {cell}\n</p>')
+        rows.append(
+            f'<p align="center">\n  <a href="{_esc(tile["url"])}">{picture}</a>\n</p>'
+        )
         links = [
             f'<li><a href="{_esc(line["url"])}">{_esc(line["primary"])}</a> · {_esc(line["secondary"])}</li>'
             for line in tile["lines"]

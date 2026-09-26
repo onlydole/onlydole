@@ -1,5 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="80" viewBox="0 0 160 40" role="img" aria-label="Bluesky">
   <rect x="1" y="1" width="158" height="38" rx="7" fill="#faf3e9" stroke="#dfcfc0"/>
-  <circle cx="18" cy="20" r="7" fill="#c2414f" fill-opacity="0.18" stroke="#c2414f"/>
+  <g transform="translate(18 20)" fill="#c2414f" stroke="#c2414f" stroke-linejoin="round" aria-hidden="true">
+
+    <path d="M0 -0.6 C-1.4 -3.6 -4.8 -6.6 -6.8 -6.6 C-8 -6.6 -8.2 -5.2 -8.2 -4.4 C-8.2 -3.6 -7.8 -0.8 -4.6 -0.2 C-7.6 0.4 -8.2 2.2 -6.4 3.8 C-3.4 6.4 -1.2 3 0 0.6 C1.2 3 3.4 6.4 6.4 3.8 C8.2 2.2 7.6 0.4 4.6 -0.2 C7.8 -0.8 8.2 -3.6 8.2 -4.4 C8.2 -5.2 8 -6.6 6.8 -6.6 C4.8 -6.6 1.4 -3.6 0 -0.6Z" stroke="none"/>
+
+  </g>
   <text x="88" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2d2521">Bluesky <tspan fill="#c2414f">↗</tspan></text>
 </svg>

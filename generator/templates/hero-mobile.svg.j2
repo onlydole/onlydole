@@ -1,31 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="520" viewBox="0 0 600 520" role="img" aria-label="{{ aria }}">
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ g.width }}" height="{{ g.height }}" viewBox="0 0 {{ g.width }} {{ g.height }}" role="img" aria-label="{{ aria }}">
   <title>{{ aria }}</title>
+{% include "_hero_style.svg.j2" %}
   <defs>
-    <linearGradient id="paper" x2="1" y2="1"><stop stop-color="#fffaf1"/><stop offset="0.6" stop-color="#f8eee1"/><stop offset="1" stop-color="#eedcca"/></linearGradient>
-    <pattern id="paper-fibers" width="24" height="22" patternUnits="userSpaceOnUse"><circle cx="3" cy="4" r="0.9" fill="#654d42" fill-opacity="0.1"/><circle cx="18" cy="15" r="0.7" fill="#b66c54" fill-opacity="0.08"/><path d="M8 18 l5 -1 M1 11 l4 0.5" stroke="#654d42" stroke-opacity="0.065"/></pattern>
-    <clipPath id="frame"><rect width="600" height="520" rx="18"/></clipPath>
+    <linearGradient id="paper" x2="1" y2="1"><stop stop-color="{{ t.paper[0] }}"/><stop offset="0.6" stop-color="{{ t.paper[1] }}"/><stop offset="1" stop-color="{{ t.paper[2] }}"/></linearGradient>
+    <pattern id="paper-fibers" width="24" height="22" patternUnits="userSpaceOnUse"><circle cx="3" cy="4" r="0.9" fill="{{ t.fiber }}" fill-opacity="0.1"/><circle cx="18" cy="15" r="0.7" fill="{{ t.fiber_warm }}" fill-opacity="0.08"/><path d="M8 18 l5 -1 M1 11 l4 0.5" stroke="{{ t.fiber }}" stroke-opacity="0.065"/></pattern>
+    <radialGradient id="sun-glow"><stop offset="0.45" stop-color="{{ t.sun }}" stop-opacity="0.9"/><stop offset="1" stop-color="{{ t.sun }}" stop-opacity="0"/></radialGradient>
+{%- if t.invert_art %}
+    <filter id="night" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"/><feColorMatrix type="hueRotate" values="180"/></filter>
+{%- endif %}
+    <clipPath id="frame"><rect width="{{ g.width }}" height="{{ g.height }}" rx="18"/></clipPath>
   </defs>
   <g clip-path="url(#frame)">
-    <rect width="600" height="520" fill="url(#paper)"/>
-    <rect width="600" height="520" fill="url(#paper-fibers)"/>
+    <rect width="{{ g.width }}" height="{{ g.height }}" fill="url(#paper)"/>
+    <rect width="{{ g.width }}" height="{{ g.height }}" fill="url(#paper-fibers)"/>
 
-    <text x="29" y="40" font-family="{{ sans }}" font-size="13" font-weight="700" letter-spacing="3.4" fill="#944634">OPEN SOURCE  /  LOS ANGELES</text>
-    <path d="M29 55 H99" stroke="#bd6750" stroke-width="2"/>
-    <text x="27" y="114" font-family="{{ serif }}" font-size="50" font-weight="700" fill="#281f1b">{{ name }}</text>
-    <text x="29" y="154" font-family="{{ serif }}" font-size="24" font-weight="700" fill="#3a2d28">{{ role }}</text>
+    <circle class="glow" cx="{{ g.sun.cx }}" cy="{{ g.sun.cy }}" r="{{ g.sun.r * 1.9 }}" fill="url(#sun-glow)" opacity="{{ t.glow[0] }}"/>
+    <image x="{{ g.art.x }}" y="{{ g.art.y }}" width="{{ g.art.width }}" height="{{ g.art.height }}" opacity="0.94" preserveAspectRatio="xMaxYMid meet"{% if t.invert_art %} filter="url(#night)"{% endif %} href="data:{{ art_mime }};base64,{{ art_b64 }}"/>
 
-    <text x="29" y="204" font-family="{{ serif }}" font-size="23" fill="#3f312b">Building open source communities,</text>
-    <text x="29" y="234" font-family="{{ serif }}" font-size="23" fill="#3f312b">making useful things, and sharing</text>
-    <text x="29" y="264" font-family="{{ serif }}" font-size="23" fill="#3f312b">what I learn.</text>
+    <text x="29" y="40" font-family="{{ sans }}" font-size="13" font-weight="700" letter-spacing="3.4" fill="{{ t.kicker }}">{{ kicker }}</text>
+    <path class="lane draw" style="stroke: {{ t.accent }}; stroke-width: 2; --dur: .6s; --at: .1s" d="M29 55 H99" pathLength="1"/>
+    <text x="27" y="112" font-family="{{ serif }}" font-size="50" font-weight="700" fill="{{ t.name }}">{{ name }}</text>
+    <text x="29" y="150" font-family="{{ serif }}" font-size="24" font-weight="700" fill="{{ t.role }}">{{ role }}</text>
+{% for line in mission %}
+    <text x="29" y="{{ g.mission_y[loop.index0] }}" font-family="{{ serif }}" font-size="23" fill="{{ t.body }}">{{ line }}</text>
+{% endfor %}
 
-    <text x="29" y="307" font-family="{{ sans }}" font-size="13" fill="#655248">Disney Studios  →  HashiCorp  →  CNCF  →  Dosu</text>
-    <text x="29" y="337" font-family="{{ sans }}" font-size="12" font-weight="700" letter-spacing="0.8" fill="#655248">KUBERNETES 1.19 LEAD  /  KEYNOTER  /  AUTHOR</text>
-    <path d="M29 372 H306" stroke="#8c7165" stroke-opacity="0.52"/>
-    <text x="31" y="414" font-family="{{ serif }}" font-size="19" font-style="italic" fill="#7b4639">The project is code.</text>
-    <text x="31" y="440" font-family="{{ serif }}" font-size="19" font-style="italic" fill="#7b4639">The work is people.</text>
-    <path d="M30 451 Q154 458 278 449" fill="none" stroke="#b76650" stroke-opacity="0.58"/>
+    <g aria-hidden="true">
+      <path class="lane upstream draw steady" style="--dur: {{ g.upstream.dur }}s; --at: {{ g.upstream.at }}s" d="{{ g.upstream.d }}" pathLength="1"/>
+{% for segment in g.segments %}
+      <path class="lane draw" style="--dur: {{ segment.dur }}s; --at: {{ segment.at }}s" d="{{ segment.d }}" pathLength="1"/>
+{% endfor %}
+{% for commit in g.commits %}
+      <circle class="pop" style="--at: {{ commit.at }}s" cx="{{ commit.x }}" cy="{{ commit.y }}" r="4.5" fill="{{ t.accent }}"/>
+{% endfor %}
+{% for stop in g.stops %}
+{% if stop.head %}
+      <circle class="ping" style="--at: {{ g.pulse_at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="8" fill="{{ t.accent }}"/>
+      <circle class="pop" style="--at: {{ stop.at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="8" fill="{{ t.accent }}"/>
+{% else %}
+      <circle class="pop" style="--at: {{ stop.at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="7" fill="{{ t.paper[1] }}" stroke="{{ t.ink }}" stroke-width="3"/>
+{% endif %}
+      <g class="rise" style="--at: {{ stop.at }}s">
+        <text x="{{ stop.x + 26 }}" y="{{ stop.y + 3 }}" font-family="{{ sans }}" font-size="19" font-weight="700" fill="{{ t.accent if stop.head else t.role }}">{{ stop.name }}{% if stop.head %}<tspan font-size="13" letter-spacing="1.2" dx="10">HEAD</tspan>{% endif %}</text>
+        <text x="{{ stop.x + 26 }}" y="{{ stop.y + 24 }}" font-family="{{ sans }}" font-size="15" fill="{{ t.muted }}">{{ stop.role }}</text>
+      </g>
+{% endfor %}
+{% for item in g.legend %}
+      <g class="rise" style="--at: {{ item.at }}s">
+        <circle cx="36" cy="{{ item.y - 5 }}" r="4.5" fill="{{ t.accent }}"/>
+        <text x="52" y="{{ item.y }}" font-family="{{ sans }}" font-size="13" font-weight="700" letter-spacing="1" fill="{{ t.muted }}">{{ item.label }}</text>
+      </g>
+{% endfor %}
+    </g>
 
-    <image x="278" y="260" width="314" height="258" opacity="0.92" preserveAspectRatio="xMaxYMid meet" href="data:image/png;base64,{{ illustration_b64 }}"/>
+    <text x="31" y="{{ g.tagline_y[0] }}" font-family="{{ serif }}" font-size="19" font-style="italic" fill="{{ t.tagline }}">{{ tagline_lines[0] }}</text>
+    <text x="31" y="{{ g.tagline_y[1] }}" font-family="{{ serif }}" font-size="19" font-style="italic" fill="{{ t.tagline }}">{{ tagline_lines[1] }}</text>
   </g>
-  <rect x="1" y="1" width="598" height="518" rx="17" fill="none" stroke="#d5c0ae" stroke-width="2"/>
+  <rect x="1" y="1" width="{{ g.width - 2 }}" height="{{ g.height - 2 }}" rx="17" fill="none" stroke="{{ t.border }}" stroke-width="2"/>
 </svg>
