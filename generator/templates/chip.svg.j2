@@ -1,5 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="80" viewBox="0 0 160 40" role="img" aria-label="{{ label }}">
   <rect x="1" y="1" width="158" height="38" rx="7" fill="{{ theme.bg }}" stroke="{{ theme.border }}"/>
-  <circle cx="18" cy="20" r="7" fill="{{ theme.accent }}" fill-opacity="0.18" stroke="{{ theme.accent }}"/>
+  <g transform="translate(18 20)" fill="{{ theme.accent }}" stroke="{{ theme.accent }}" stroke-linejoin="round" aria-hidden="true">
+{% if key == "substack" %}
+    <path d="M-6 -7 H6 V-5.2 H-6Z M-6 -3.4 H6 V-1.6 H-6Z M-6 0.2 H6 V7 L0 3.8 L-6 7Z" stroke="none"/>
+{% elif key == "linkedin" %}
+    <rect x="-7" y="-7" width="14" height="14" rx="2.5" stroke="none"/>
+    <path d="M-3.6 -1 V4.2 M-0.6 4.2 V-1 M-0.6 1 C-0.6 -1.6 3.8 -1.8 3.8 1 V4.2" fill="none" stroke="{{ theme.bg }}" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="-3.6" cy="-3.6" r="1" fill="{{ theme.bg }}" stroke="none"/>
+{% elif key == "bluesky" %}
+    <path d="M0 -0.6 C-1.4 -3.6 -4.8 -6.6 -6.8 -6.6 C-8 -6.6 -8.2 -5.2 -8.2 -4.4 C-8.2 -3.6 -7.8 -0.8 -4.6 -0.2 C-7.6 0.4 -8.2 2.2 -6.4 3.8 C-3.4 6.4 -1.2 3 0 0.6 C1.2 3 3.4 6.4 6.4 3.8 C8.2 2.2 7.6 0.4 4.6 -0.2 C7.8 -0.8 8.2 -3.6 8.2 -4.4 C8.2 -5.2 8 -6.6 6.8 -6.6 C4.8 -6.6 1.4 -3.6 0 -0.6Z" stroke="none"/>
+{% else %}
+    <g fill="none" stroke-width="1.4">
+      <circle r="6.6"/>
+      <ellipse rx="2.8" ry="6.6"/>
+      <path d="M-6.6 0 H6.6 M-5.6 -3.4 H5.6 M-5.6 3.4 H5.6" stroke-width="1.1"/>
+    </g>
+{% endif %}
+  </g>
   <text x="88" y="25" text-anchor="middle" font-family="{{ font }}" font-size="14" font-weight="600" fill="{{ theme.text }}">{{ label }} <tspan fill="{{ theme.accent }}">↗</tspan></text>
 </svg>

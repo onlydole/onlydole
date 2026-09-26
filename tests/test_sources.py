@@ -7,6 +7,7 @@ import pytest
 from generator import sources
 from generator.sources import (
     ACTIVITY_QUERY,
+    PR_SEARCH,
     SourceError,
     _entry_date,
     parse_activity,
@@ -198,16 +199,23 @@ def test_substack_relay_checks_publication_and_sorts(monkeypatch):
 
 
 def test_public_search_is_used_before_private_activity_can_crowd_it_out():
-    payload = json.loads((FIXTURES / "activity.json").read_text())
-    public = [
-        p
-        for p in payload["data"]["user"]["pullRequests"]["nodes"]
-        if p["title"] == "Fix scheduler docs"
-    ]
-    payload["data"]["publicPullRequests"] = {"nodes": public}
-    payload["data"]["user"].pop("pullRequests")
-    assert parse_activity(payload)[0]["title"] == "Fix scheduler docs"
-    assert "is:public" in ACTIVITY_QUERY
+    assert "is:public" in PR_SEARCH
+    assert f"author:{sources.GITHUB_LOGIN}" in PR_SEARCH
+    assert f"-repo:{sources.PROFILE_REPO}" in PR_SEARCH
+    assert "$prSearch" in ACTIVITY_QUERY
+
+
+def test_fetch_activity_sends_the_public_search(monkeypatch):
+    sent = {}
+
+    def post(url, **kwargs):
+        sent.update(kwargs["json"]["variables"])
+        payload = json.loads((FIXTURES / "activity.json").read_text())
+        return httpx.Response(200, json=payload, request=httpx.Request("POST", url))
+
+    monkeypatch.setattr(sources.httpx, "post", post)
+    assert sources.fetch_activity("token")[0]["title"] == "Fix scheduler docs"
+    assert sent == {"login": sources.GITHUB_LOGIN, "prSearch": PR_SEARCH}
 
 
 def test_parse_substack_garbage_raises():
@@ -261,11 +269,59 @@ def test_parse_activity_skips_private_and_profile_repo():
     titles = [i["title"] for i in parse_activity(payload)]
     assert "Secret work" not in titles
     assert "Profile tweak" not in titles
+    assert "onlydole v9.9.9" not in titles
+
+
+def test_parse_activity_orders_same_day_items_by_time():
+    payload = {
+        "data": {
+            "publicPullRequests": {
+                "nodes": [
+                    {
+                        "title": "Morning",
+                        "url": "https://x/1",
+                        "mergedAt": "2026-06-07T08:00:00Z",
+                        "repository": {"nameWithOwner": "a/b", "isPrivate": False},
+                    }
+                ]
+            },
+            "user": {
+                "repositories": {
+                    "nodes": [
+                        {
+                            "nameWithOwner": "onlydole/tool",
+                            "releases": {
+                                "nodes": [
+                                    {
+                                        "tagName": "v2",
+                                        "publishedAt": "2026-06-07T20:00:00Z",
+                                        "url": "https://x/r",
+                                    }
+                                ]
+                            },
+                        }
+                    ]
+                }
+            },
+        }
+    }
+    items = parse_activity(payload)
+    assert [i["title"] for i in items] == ["tool v2", "Morning"]
+    assert all("_at" not in item for item in items)
 
 
 def test_parse_activity_bad_shape_raises():
     with pytest.raises(SourceError):
         parse_activity({"data": {"user": None}})
+    with pytest.raises(SourceError):
+        parse_activity(
+            {
+                "data": {
+                    "publicPullRequests": {"nodes": [None]},
+                    "user": {"repositories": {"nodes": []}},
+                }
+            }
+        )
 
 
 def test_fetch_activity_invalid_json_raises_source_error(monkeypatch):
@@ -377,28 +433,26 @@ def test_parse_talks_rejects_doctype_and_entities():
 def test_parse_activity_skips_deleted_repo_prs():
     payload = {
         "data": {
-            "user": {
-                "repositories": {"nodes": []},
-                "pullRequests": {
-                    "nodes": [
-                        {
-                            "title": "Ghost PR",
-                            "url": "https://x/1",
-                            "mergedAt": "2026-01-01T00:00:00Z",
-                            "repository": None,
+            "user": {"repositories": {"nodes": []}},
+            "publicPullRequests": {
+                "nodes": [
+                    {
+                        "title": "Ghost PR",
+                        "url": "https://x/1",
+                        "mergedAt": "2026-01-01T00:00:00Z",
+                        "repository": None,
+                    },
+                    {
+                        "title": "Live PR",
+                        "url": "https://x/2",
+                        "mergedAt": "2026-01-02T00:00:00Z",
+                        "repository": {
+                            "nameWithOwner": "a/b",
+                            "isPrivate": False,
                         },
-                        {
-                            "title": "Live PR",
-                            "url": "https://x/2",
-                            "mergedAt": "2026-01-02T00:00:00Z",
-                            "repository": {
-                                "nameWithOwner": "a/b",
-                                "isPrivate": False,
-                            },
-                        },
-                    ]
-                },
-            }
+                    },
+                ]
+            },
         }
     }
     assert [i["title"] for i in parse_activity(payload)] == ["Live PR"]

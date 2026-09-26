@@ -1,5 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="80" viewBox="0 0 160 40" role="img" aria-label="LinkedIn">
   <rect x="1" y="1" width="158" height="38" rx="7" fill="#faf3e9" stroke="#dfcfc0"/>
-  <circle cx="18" cy="20" r="7" fill="#c2414f" fill-opacity="0.18" stroke="#c2414f"/>
+  <g transform="translate(18 20)" fill="#c2414f" stroke="#c2414f" stroke-linejoin="round" aria-hidden="true">
+
+    <rect x="-7" y="-7" width="14" height="14" rx="2.5" stroke="none"/>
+    <path d="M-3.6 -1 V4.2 M-0.6 4.2 V-1 M-0.6 1 C-0.6 -1.6 3.8 -1.8 3.8 1 V4.2" fill="none" stroke="#faf3e9" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="-3.6" cy="-3.6" r="1" fill="#faf3e9" stroke="none"/>
+
+  </g>
   <text x="88" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2d2521">LinkedIn <tspan fill="#c2414f">↗</tspan></text>
 </svg>

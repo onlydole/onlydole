@@ -3,9 +3,17 @@
 import unicodedata
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 TEMPLATE_DIR = Path(__file__).parent / "templates"
+
+# Undefined template variables fail the build instead of rendering blank.
+ENV = Environment(
+    loader=FileSystemLoader(TEMPLATE_DIR),
+    autoescape=True,
+    keep_trailing_newline=True,
+    undefined=StrictUndefined,
+)
 
 DARK = {
     "bg": "#1d1816",
@@ -21,18 +29,56 @@ LIGHT = {
     "text": "#2d2521",
     "muted": "#78665d",
 }
+THEMES = {"light": LIGHT, "dark": DARK}
+
+# The hero is paper in daylight and the same city at night. The dark
+# variant inverts the illustration's lightness and rotates its hue back,
+# so ink lines turn pale while the sun keeps its color. There's no
+# feTurbulence grain: animated SVGs repaint every frame, and noise is the
+# most expensive filter to recompute.
+HERO_THEMES = {
+    "light": {
+        "paper": ("#fffaf1", "#f8eee1", "#eedcca"),
+        "fiber": "#654d42",
+        "fiber_warm": "#b66c54",
+        "kicker": "#944634",
+        "name": "#281f1b",
+        "role": "#3a2d28",
+        "body": "#3f312b",
+        "muted": "#6b574c",
+        "ink": "#8c5a48",
+        "accent": "#b6553e",
+        "pill_text": "#fff8f0",
+        "tagline": "#7b4639",
+        "border": "#d5c0ae",
+        "sun": "#ffb27a",
+        "glow": (0.35, 0.8),
+        "invert_art": False,
+    },
+    "dark": {
+        "paper": ("#231c1a", "#1d1716", "#171211"),
+        "fiber": "#f7efe5",
+        "fiber_warm": "#ff9d76",
+        "kicker": "#f0a07f",
+        "name": "#f7efe5",
+        "role": "#eadccf",
+        "body": "#d9c9bb",
+        "muted": "#b3a194",
+        "ink": "#c99a84",
+        "accent": "#f0916c",
+        "pill_text": "#231c1a",
+        "tagline": "#f0b49a",
+        "border": "#4a3d37",
+        "sun": "#ff8a5c",
+        "glow": (0.25, 0.55),
+        "invert_art": True,
+    },
+}
+
 FONT_SANS = (
     "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
 )
 FONT_SERIF = "Georgia, 'Times New Roman', serif"
-
-
-def fit(text: str, max_chars: int) -> str:
-    """Collapse whitespace and truncate to max_chars with an ellipsis."""
-    text = " ".join(text.split())
-    if len(text) <= max_chars:
-        return text
-    return text[: max_chars - 1].rstrip() + "…"
 
 
 def text_width(text: str, size: int) -> float:
@@ -50,7 +96,7 @@ def text_width(text: str, size: int) -> float:
     return sum(advance(char) for char in text) * size
 
 
-def wrap_text(text: str, width: int, size: int, limit: int = 2) -> list[str]:
+def wrap_text(text: str, width: float, size: int, limit: int = 2) -> list[str]:
     """Wrap at words, split long tokens, and ellipsize only the final line."""
     remaining = " ".join(text.split())
     lines = []
@@ -75,23 +121,4 @@ def wrap_text(text: str, width: int, size: int, limit: int = 2) -> list[str]:
 
 
 def render_svg(template_name: str, context: dict) -> str:
-    env = Environment(
-        loader=FileSystemLoader(TEMPLATE_DIR),
-        autoescape=True,
-        keep_trailing_newline=True,
-    )
-    if template_name == "tile.svg.j2":
-        context = dict(context)
-        title_size = 29
-        available = context["width"] - context["text_x"] - 210
-        featured = context["lines"][0]
-        context["featured"] = {
-            "primary": wrap_text(featured["primary"], available, title_size, limit=2),
-            "secondary": wrap_text(
-                featured.get("display_secondary", featured["secondary"]),
-                available,
-                17,
-                limit=1,
-            )[0],
-        }
-    return env.get_template(template_name).render(**context)
+    return ENV.get_template(template_name).render(**context)

@@ -1,11 +1,32 @@
 {
   "data": {
+    "publicPullRequests": {
+      "nodes": [
+        {
+          "title": "Fix scheduler docs",
+          "url": "https://github.com/kubernetes/website/pull/999",
+          "mergedAt": "2026-06-07T10:00:00Z",
+          "repository": { "nameWithOwner": "kubernetes/website", "isPrivate": false }
+        },
+        {
+          "title": "Secret work",
+          "url": "https://github.com/private/repo/pull/1",
+          "mergedAt": "2026-06-08T10:00:00Z",
+          "repository": { "nameWithOwner": "private/repo", "isPrivate": true }
+        },
+        {
+          "title": "Profile tweak",
+          "url": "https://github.com/onlydole/onlydole/pull/35",
+          "mergedAt": "2026-06-06T10:00:00Z",
+          "repository": { "nameWithOwner": "onlydole/onlydole", "isPrivate": false }
+        }
+      ]
+    },
     "user": {
       "repositories": {
         "nodes": [
           {
-            "name": "demo-repo",
-            "url": "https://github.com/onlydole/demo-repo",
+            "nameWithOwner": "onlydole/demo-repo",
             "releases": {
               "nodes": [
                 {
@@ -17,8 +38,7 @@
             }
           },
           {
-            "name": "older-repo",
-            "url": "https://github.com/onlydole/older-repo",
+            "nameWithOwner": "onlydole/older-repo",
             "releases": {
               "nodes": [
                 {
@@ -30,31 +50,20 @@
             }
           },
           {
-            "name": "no-releases",
-            "url": "https://github.com/onlydole/no-releases",
+            "nameWithOwner": "onlydole/onlydole",
+            "releases": {
+              "nodes": [
+                {
+                  "tagName": "v9.9.9",
+                  "publishedAt": "2026-06-09T10:00:00Z",
+                  "url": "https://github.com/onlydole/onlydole/releases/tag/v9.9.9"
+                }
+              ]
+            }
+          },
+          {
+            "nameWithOwner": "onlydole/no-releases",
             "releases": { "nodes": [] }
-          }
-        ]
-      },
-      "pullRequests": {
-        "nodes": [
-          {
-            "title": "Fix scheduler docs",
-            "url": "https://github.com/kubernetes/website/pull/999",
-            "mergedAt": "2026-06-07T10:00:00Z",
-            "repository": { "nameWithOwner": "kubernetes/website", "isPrivate": false }
-          },
-          {
-            "title": "Secret work",
-            "url": "https://github.com/private/repo/pull/1",
-            "mergedAt": "2026-06-08T10:00:00Z",
-            "repository": { "nameWithOwner": "private/repo", "isPrivate": true }
-          },
-          {
-            "title": "Profile tweak",
-            "url": "https://github.com/onlydole/onlydole/pull/35",
-            "mergedAt": "2026-06-06T10:00:00Z",
-            "repository": { "nameWithOwner": "onlydole/onlydole", "isPrivate": false }
           }
         ]
       }

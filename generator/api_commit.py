@@ -3,7 +3,7 @@
 Plain `git push` from Actions is rejected by the repository ruleset that
 requires verified commit signatures on main. Commits created with the
 GraphQL `createCommitOnBranch` mutation are signed by GitHub automatically,
-so the daily refresh satisfies the rule without managing signing keys.
+so the scheduled refresh satisfies the rule without managing signing keys.
 """
 
 from __future__ import annotations
@@ -31,18 +31,23 @@ mutation ($input: CreateCommitOnBranchInput!) {
 
 
 def plan_changes(porcelain: str) -> dict:
-    """Map `git status --porcelain` output to GraphQL fileChanges.
+    """Map `git status --porcelain=v1 -z` output to GraphQL fileChanges.
 
-    Paths are assumed not to contain spaces or quoting (true for this
-    repo's README.md and assets/*.svg outputs).
+    NUL-separated output keeps paths unquoted, and a rename entry carries
+    its old path as the next field.
     """
     additions: list[dict] = []
     deletions: list[dict] = []
-    for line in porcelain.splitlines():
-        if not line.strip():
+    fields = iter(porcelain.split("\0"))
+    for entry in fields:
+        if not entry.strip():
             continue
-        status, path = line[:2], line[3:].strip()
-        if status.strip().startswith("D"):
+        status, path = entry[:2], entry[3:]
+        if "R" in status:
+            deletions.append({"path": next(fields)})
+        elif "C" in status:
+            next(fields)
+        if "D" in status:
             deletions.append({"path": path})
         else:
             additions.append({"path": path})
@@ -66,7 +71,16 @@ def _git(*args: str) -> str:
 
 
 def main() -> int:
-    changes = plan_changes(_git("status", "--porcelain", "--", *TRACKED_PATHS))
+    changes = plan_changes(
+        _git(
+            "status",
+            "--porcelain=v1",
+            "-z",
+            "--untracked-files=all",
+            "--",
+            *TRACKED_PATHS,
+        )
+    )
     if not (changes["additions"] or changes["deletions"]):
         print("no changes to commit")
         return 0

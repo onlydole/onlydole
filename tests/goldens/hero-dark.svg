@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480" role="img" aria-label="Taylor Dolezal, Head of Open Source at Dosu, in Los Angeles. Building open source communities, making useful things, and sharing what I learn. Career so far: Disney Studios (Lead SRE), HashiCorp (Developer Advocate), CNCF (Head of Ecosystem), Dosu (Head of Open Source). Alongside: Kubernetes 1.19 lead, SIG Docs tech lead, KubeCon keynoter. The project is code. The work is people.">
+  <title>Taylor Dolezal, Head of Open Source at Dosu, in Los Angeles. Building open source communities, making useful things, and sharing what I learn. Career so far: Disney Studios (Lead SRE), HashiCorp (Developer Advocate), CNCF (Head of Ecosystem), Dosu (Head of Open Source). Alongside: Kubernetes 1.19 lead, SIG Docs tech lead, KubeCon keynoter. The project is code. The work is people.</title>
+  <style>
+    .lane { fill: none; stroke: #c99a84; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .upstream { stroke: #f0916c; stroke-width: 2.5; }
+    .draw { animation-name: draw; animation-timing-function: cubic-bezier(.65, 0, .35, 1); animation-fill-mode: backwards; }
+    .steady { animation-timing-function: linear; }
+    .pop { transform-box: fill-box; transform-origin: center; animation: pop .45s cubic-bezier(.3, .7, .4, 1) backwards; }
+    .rise { animation: rise .5s ease-out backwards; }
+    .ping { transform-box: fill-box; transform-origin: center; opacity: 0; animation: ping 3.2s cubic-bezier(0, 0, .2, 1) infinite; }
+    .glow { animation: glow 9s ease-in-out infinite; }
+    @keyframes draw { from { stroke-dasharray: 1 1.1; stroke-dashoffset: 1.1; } to { stroke-dasharray: 1 1.1; stroke-dashoffset: 0; } }
+    @keyframes pop { from { transform: scale(0); } 70% { transform: scale(1.3); } to { transform: scale(1); } }
+    @keyframes rise { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+    @keyframes ping { 0% { opacity: .5; transform: scale(1); } 75%, 100% { opacity: 0; transform: scale(3); } }
+    @keyframes glow { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.55; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="paper" x2="1" y2="1">
+      <stop stop-color="#231c1a"/>
+      <stop offset="0.58" stop-color="#1d1716"/>
+      <stop offset="1" stop-color="#171211"/>
+    </linearGradient>
+    <pattern id="paper-fibers" width="26" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="4" r="0.9" fill="#f7efe5" fill-opacity="0.1"/>
+      <circle cx="19" cy="17" r="0.7" fill="#ff9d76" fill-opacity="0.09"/>
+      <path d="M7 20 l6 -1 M18 5 l4 1 M1 12 l4 0.5" stroke="#f7efe5" stroke-opacity="0.07"/>
+    </pattern>
+    <radialGradient id="sun-glow">
+      <stop offset="0.45" stop-color="#ff8a5c" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ff8a5c" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="night" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"/>
+      <feColorMatrix type="hueRotate" values="180"/>
+    </filter>
+    <clipPath id="frame"><rect width="1200" height="480" rx="18"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <rect width="1200" height="480" fill="url(#paper)"/>
+    <rect width="1200" height="480" fill="url(#paper-fibers)"/>
+
+    <circle class="glow" cx="1119.66" cy="66.2" r="87.96999999999998" fill="url(#sun-glow)" opacity="0.25"/>
+    <image x="688" y="3" width="500" height="474" preserveAspectRatio="xMaxYMid meet" filter="url(#night)" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="/>
+
+    <text x="49" y="50" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="4.8" fill="#f0a07f">OPEN SOURCE  /  LOS ANGELES</text>
+    <path class="lane draw" style="stroke: #f0916c; stroke-width: 2; animation-duration: .6s; animation-delay: .1s" d="M49 66 H138" pathLength="1"/>
+    <text x="45" y="134" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="72" font-weight="700" fill="#f7efe5">Taylor Dolezal</text>
+    <text x="49" y="178" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#eadccf">Head of Open Source at Dosu</text>
+
+    <text x="49" y="222" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="24" fill="#d9c9bb">Building open source communities, making useful things,</text>
+
+    <text x="49" y="251" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="24" fill="#d9c9bb">and sharing what I learn.</text>
+
+
+    <g aria-hidden="true">
+      <path class="lane upstream draw steady" style="animation-duration: 2.13s; animation-delay: 0.62s" d="M118 330 C142 330 134 298 158 298 H708 C732 298 724 330 748 330" pathLength="1"/>
+
+      <path class="lane draw" style="animation-duration: 0.7s; animation-delay: 0.35s" d="M58 330 L288 330" pathLength="1"/>
+
+      <path class="lane draw" style="animation-duration: 0.7s; animation-delay: 1.2s" d="M288 330 L518 330" pathLength="1"/>
+
+      <path class="lane draw" style="animation-duration: 0.7s; animation-delay: 2.05s" d="M518 330 L748 330" pathLength="1"/>
+
+
+      <g class="pop" style="animation-delay: 1.09s">
+        <rect x="170.2" y="287" width="158.94" height="22" rx="11" fill="#f0916c"/>
+        <text x="249.67" y="302.5" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="0.3" fill="#231c1a">Kubernetes 1.19 lead</text>
+      </g>
+
+      <g class="pop" style="animation-delay: 1.69s">
+        <rect x="358.61" y="287" width="148.78" height="22" rx="11" fill="#f0916c"/>
+        <text x="433.0" y="302.5" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="0.3" fill="#231c1a">SIG Docs tech lead</text>
+      </g>
+
+      <g class="pop" style="animation-delay: 2.28s">
+        <rect x="546.07" y="287" width="140.52" height="22" rx="11" fill="#f0916c"/>
+        <text x="616.33" y="302.5" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="0.3" fill="#231c1a">KubeCon keynoter</text>
+      </g>
+
+
+
+      <circle class="pop" style="animation-delay: 0.2s" cx="58" cy="330" r="7" fill="#1d1716" stroke="#c99a84" stroke-width="3"/>
+
+      <g class="rise" style="animation-delay: 0.2s">
+        <text x="52" y="366" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#eadccf">Disney Studios</text>
+        <text x="52" y="389" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="16" fill="#b3a194">Lead SRE</text>
+      </g>
+
+
+      <circle class="pop" style="animation-delay: 1.05s" cx="288" cy="330" r="7" fill="#1d1716" stroke="#c99a84" stroke-width="3"/>
+
+      <g class="rise" style="animation-delay: 1.05s">
+        <text x="282" y="366" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#eadccf">HashiCorp</text>
+        <text x="282" y="389" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="16" fill="#b3a194">Developer Advocate</text>
+      </g>
+
+
+      <circle class="pop" style="animation-delay: 1.9s" cx="518" cy="330" r="7" fill="#1d1716" stroke="#c99a84" stroke-width="3"/>
+
+      <g class="rise" style="animation-delay: 1.9s">
+        <text x="512" y="366" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#eadccf">CNCF</text>
+        <text x="512" y="389" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="16" fill="#b3a194">Head of Ecosystem</text>
+      </g>
+
+
+      <circle class="ping" style="animation-delay: 3.05s" cx="748" cy="330" r="8" fill="#f0916c"/>
+      <circle class="pop" style="animation-delay: 2.75s" cx="748" cy="330" r="8" fill="#f0916c"/>
+
+      <g class="rise" style="animation-delay: 2.75s">
+        <text x="742" y="366" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#f0916c">Dosu</text>
+        <text x="742" y="389" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="16" fill="#b3a194">Head of Open Source</text>
+      </g>
+
+      <g class="pop" style="animation-delay: 2.85s">
+        <rect x="763.82" y="319" width="52.36" height="22" rx="4" fill="none" stroke="#f0916c" stroke-width="1.5"/>
+        <text x="790" y="334" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.2" fill="#f0916c">HEAD</text>
+      </g>
+    </g>
+
+    <g transform="rotate(-1 52 435)">
+      <text x="52" y="438" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="21" font-style="italic" fill="#f0b49a">The project is code. The work is people.</text>
+      <path class="lane draw" style="stroke: #f0916c; stroke-width: 1.2; stroke-opacity: 0.6; animation-duration: .9s; animation-delay: 3.1s" d="M51 448 Q234.79 455 418.58 445" pathLength="1"/>
+    </g>
+  </g>
+  <rect x="1" y="1" width="1198" height="478" rx="17" fill="none" stroke="#4a3d37" stroke-width="2"/>
+</svg>

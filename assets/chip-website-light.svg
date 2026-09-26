@@ -1,5 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="80" viewBox="0 0 160 40" role="img" aria-label="Website">
   <rect x="1" y="1" width="158" height="38" rx="7" fill="#faf3e9" stroke="#dfcfc0"/>
-  <circle cx="18" cy="20" r="7" fill="#c2414f" fill-opacity="0.18" stroke="#c2414f"/>
+  <g transform="translate(18 20)" fill="#c2414f" stroke="#c2414f" stroke-linejoin="round" aria-hidden="true">
+
+    <g fill="none" stroke-width="1.4">
+      <circle r="6.6"/>
+      <ellipse rx="2.8" ry="6.6"/>
+      <path d="M-6.6 0 H6.6 M-5.6 -3.4 H5.6 M-5.6 3.4 H5.6" stroke-width="1.1"/>
+    </g>
+
+  </g>
   <text x="88" y="25" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2d2521">Website <tspan fill="#c2414f">↗</tspan></text>
 </svg>

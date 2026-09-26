@@ -73,21 +73,25 @@ def test_main_builds_assets_readme_and_cache(workspace, monkeypatch):
     assert 'srcset="assets/writing-dark.svg"' in readme
     assert "writing-mobile" not in readme
     assert '<a href="https://s/p">Post</a>' in readme
-    assert 'src="assets/hero.svg" width="100%"' in readme
-    assert 'srcset="assets/hero-mobile.svg"' in readme
+    assert 'src="assets/hero-light.svg" width="100%"' in readme
+    for variant in ("hero-dark", "hero-mobile-light", "hero-mobile-dark"):
+        assert f'srcset="assets/{variant}.svg"' in readme
     assert (
         'width="1200" height="176"' in (build.ASSETS / "writing-light.svg").read_text()
     )
     assert "READ" in (build.ASSETS / "writing-light.svg").read_text()
     assert "Post" in (build.ASSETS / "writing-light.svg").read_text()
-    assert "data:image/png;base64," in (build.ASSETS / "hero.svg").read_text()
+    assert "data:image/webp;base64," in (build.ASSETS / "hero-light.svg").read_text()
     assert '<a href="https://s/p">' in readme
     assert "Browse all field notes and individual links" in readme
     assert readme.count("<details>") == 1
     assert "Last refreshed: 2026-06-10" in readme
     assert "prose stays" in readme
     for name in (
-        "hero.svg",
+        "hero-light.svg",
+        "hero-dark.svg",
+        "hero-mobile-light.svg",
+        "hero-mobile-dark.svg",
         "writing-dark.svg",
         "writing-light.svg",
         "shipped-dark.svg",
@@ -227,7 +231,7 @@ def test_tile_contexts_treats_missing_books_as_empty():
     tiles = build.tile_contexts({"reading": {"books": [], "cover": None}})
     reading = next(t for t in tiles if t["key"] == "reading")
     assert reading["lines"] == build.EMPTY_LINES
-    assert reading["url"] == ""
+    assert reading["url"] == sources.GOODREADS_SHELF
 
 
 def test_shipped_card_shortens_metadata_without_losing_link_detail():
@@ -333,6 +337,15 @@ def test_download_cover_encodes_within_cap(monkeypatch):
     assert cover == {"url": "https://img/c.jpg", "b64": "QUJD", "mime": "image/jpeg"}
 
 
+def test_download_cover_rejects_svg_covers(monkeypatch):
+    monkeypatch.setattr(
+        build.httpx,
+        "stream",
+        lambda *a, **k: _FakeStream(b"<svg/>", "image/svg+xml"),
+    )
+    assert build._download_cover("https://img/c.svg") is None
+
+
 def test_download_cover_rejects_non_image_mime(monkeypatch):
     monkeypatch.setattr(
         build.httpx, "stream", lambda *a, **k: _FakeStream(b"<html>", "text/html")
@@ -363,3 +376,82 @@ def test_goodreads_outage_serves_new_shape_cache(workspace, monkeypatch):
     assert "data:image/jpeg;base64,QUJD" in svg
     readme = build.README.read_text(encoding="utf-8")
     assert '<a href="https://gr/b">' in readme
+
+
+def test_build_prunes_svgs_it_no_longer_writes(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    build.ASSETS.mkdir(parents=True, exist_ok=True)
+    (build.ASSETS / "hero.svg").write_text("<svg/>", encoding="utf-8")
+    (build.ASSETS / "notes.txt").write_text("keep", encoding="utf-8")
+    assert build.main() == 0
+    assert not (build.ASSETS / "hero.svg").exists()
+    assert (build.ASSETS / "notes.txt").exists()
+    assert (build.ASSETS / "data-cache.json").exists()
+
+
+def test_missing_token_serves_cached_activity(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+    monkeypatch.delenv("GITHUB_TOKEN")
+    monkeypatch.setenv("BUILD_DATE", "2026-06-11")
+    assert build.main() == 0
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["source_status"]["shipped"]["state"] == "cached"
+    assert "repo v1" in (build.ASSETS / "shipped-dark.svg").read_text()
+
+
+def test_malformed_cached_post_does_not_crash_the_build(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    build.ASSETS.mkdir(parents=True, exist_ok=True)
+    build.CACHE.write_text(
+        json.dumps({"writing": [{"title": "no dates"}], "source_status": []}),
+        encoding="utf-8",
+    )
+    assert build.main() == 0
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["writing"] == WRITING
+
+
+def test_every_card_links_somewhere_and_describes_empty_feeds():
+    tiles = build.tile_contexts({})
+    assert all(tile["url"] for tile in tiles)
+    podcast = next(t for t in tiles if t["key"] == "podcast")
+    assert podcast["url"] == build.PODCAST_HOME
+    assert podcast["alt"] == (
+        "Attention Deficit, with Alexa Griffith: nothing to show right now"
+    )
+
+
+def test_hero_alt_matches_what_the_hero_shows(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+    alt = build.hero_alt()
+    hero = build.HERO
+    for line in hero["mission"]["desktop"]:
+        assert line in alt
+    for name, role in hero["career"]:
+        assert f"{name} ({role})" in alt
+    for label in hero["upstream"]:
+        assert label in alt
+    assert hero["tagline"] in alt
+    svg = (build.ASSETS / "hero-light.svg").read_text(encoding="utf-8")
+    root = ET.fromstring(svg)
+    shown = " ".join(
+        "".join(t.itertext()) for t in root.iter("{http://www.w3.org/2000/svg}text")
+    )
+    for name, role in hero["career"]:
+        assert name in shown and role in shown
+    for label in hero["upstream"]:
+        assert label in shown
+
+
+def test_hero_picture_prefers_phone_layouts_then_theme():
+    picture = build._hero_picture()
+    order = [
+        picture.index("hero-mobile-dark.svg"),
+        picture.index("hero-mobile-light.svg"),
+        picture.index("hero-dark.svg"),
+        picture.index("hero-light.svg"),
+    ]
+    assert order == sorted(order)
+    assert "(max-width: 600px) and (prefers-color-scheme: dark)" in picture
