@@ -17,13 +17,13 @@ and every sound lands on that grid.
 
 | Beats | Chapter          | What it shows                                                                                                                     |
 | ----- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| 0–4   | Squash & stretch | A ball with real gravity, bounces that halve in height, an After Effects style motion path with keyframes, anticipation, release |
+| 0–4   | Squash & stretch | A ball with real gravity, bounces that halve in height, an After Effects style motion path with keyframes, anticipation, release  |
 | 4–8   | Kinetic type     | Three lines justified to one measure by solving for the variable font's width axis, each line animated with a different technique |
 | 8–12  | Pattern          | A dot grid emanating on a distance stagger, a shock wave, then every dot reseated on a golden-angle sunflower spiral              |
 | 12–16 | Liquid           | Shader metaballs with a height-field normal, so the goo shades smoothly through every split and merge                             |
 | 16–20 | Dimension        | 1,400 points morphing sphere to torus to trefoil knot, depth sorted with depth of field, then flattened into a line               |
 | 20–24 | Data             | Spring bars, odometer counters, a line chart that draws on and bends into a ring, then a donut                                    |
-| 24–28 | Rhythm           | The reel folds into a live 2×2 grid of its own scenes, then 4×4, then an 8×8 step sequencer, then back to one dot                |
+| 24–28 | Rhythm           | The reel folds into a live 2×2 grid of its own scenes, then 4×4, then an 8×8 step sequencer, then back to one dot                 |
 | 28–32 | Hello            | The dot arcs over and lands as the full stop                                                                                      |
 
 ## How it is built

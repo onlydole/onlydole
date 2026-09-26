@@ -128,7 +128,7 @@ uniform float uGrain;
 uniform float uVignette;
 uniform float uBloom;
 uniform float uFlash;
-uniform float uSeed;
+uniform float uNoiseOffset;
 
 float hash12(vec2 p) {
   vec3 p3 = fract(vec3(p.xyx) * 0.1031);
@@ -144,7 +144,7 @@ void main() {
   q.x *= uRes.x / uRes.y;
   c *= 1.0 - uVignette * smoothstep(0.3, 1.15, length(q));
   vec2 fc = gl_FragCoord.xy;
-  float n = hash12(fc + uSeed * 97.31) + hash12(fc.yx * 1.31 + uSeed * 13.7) - 1.0;
+  float n = hash12(fc + uNoiseOffset * 97.31) + hash12(fc.yx * 1.31 + uNoiseOffset * 13.7) - 1.0;
   c += n * uGrain;
   outColor = vec4(c, 1.0);
 }`;
@@ -319,7 +319,7 @@ export class Compositor {
       gl.uniform1f(u.uVignette, fx.vignette);
       gl.uniform1f(u.uBloom, fx.bloom);
       gl.uniform1f(u.uFlash, fx.flash);
-      gl.uniform1f(u.uSeed, seed % 1000);
+      gl.uniform1f(u.uNoiseOffset, seed % 1000);
     });
   }
 }
