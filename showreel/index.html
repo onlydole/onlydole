@@ -68,6 +68,7 @@
       }
       .meta {
         margin: 0;
+        text-wrap: balance;
         color: var(--muted);
         text-transform: uppercase;
         letter-spacing: 0.14em;
@@ -88,9 +89,9 @@
       }
       .play {
         position: absolute;
-        inset: 0;
-        margin: auto;
-        width: clamp(72px, 11%, 128px);
+        inset: auto 0 9%;
+        margin-inline: auto;
+        width: clamp(56px, 9%, 112px);
         aspect-ratio: 1;
         border-radius: 50%;
         border: 0;
@@ -149,6 +150,9 @@
         margin: 0;
         padding: 0;
         list-style: none;
+      }
+      .chapters li {
+        display: flex;
       }
       .chapters button {
         width: 100%;
