@@ -1,21 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="{{ g.width }}" height="{{ g.height }}" viewBox="0 0 {{ g.width }} {{ g.height }}" role="img" aria-label="{{ aria }}">
   <title>{{ aria }}</title>
-  <style>
-    .lane { fill: none; stroke: {{ t.ink }}; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-    .upstream { stroke: {{ t.accent }}; stroke-width: 2.5; }
-    .draw { animation-name: draw; animation-timing-function: cubic-bezier(.65, 0, .35, 1); animation-fill-mode: backwards; }
-    .steady { animation-timing-function: linear; }
-    .pop { transform-box: fill-box; transform-origin: center; animation: pop .45s cubic-bezier(.3, .7, .4, 1) backwards; }
-    .rise { animation: rise .5s ease-out backwards; }
-    .ping { transform-box: fill-box; transform-origin: center; opacity: 0; animation: ping 3.2s cubic-bezier(0, 0, .2, 1) infinite; }
-    .glow { animation: glow 9s ease-in-out infinite; }
-    @keyframes draw { from { stroke-dasharray: 1 1.1; stroke-dashoffset: 1.1; } to { stroke-dasharray: 1 1.1; stroke-dashoffset: 0; } }
-    @keyframes pop { from { transform: scale(0); } 70% { transform: scale(1.3); } to { transform: scale(1); } }
-    @keyframes rise { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: none; } }
-    @keyframes ping { 0% { opacity: .5; transform: scale(1); } 75%, 100% { opacity: 0; transform: scale(3); } }
-    @keyframes glow { 0%, 100% { opacity: {{ t.glow[0] }}; } 50% { opacity: {{ t.glow[1] }}; } }
-    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
-  </style>
+{% include "_hero_style.svg.j2" %}
   <defs>
     <linearGradient id="paper" x2="1" y2="1"><stop stop-color="{{ t.paper[0] }}"/><stop offset="0.6" stop-color="{{ t.paper[1] }}"/><stop offset="1" stop-color="{{ t.paper[2] }}"/></linearGradient>
     <pattern id="paper-fibers" width="24" height="22" patternUnits="userSpaceOnUse"><circle cx="3" cy="4" r="0.9" fill="{{ t.fiber }}" fill-opacity="0.1"/><circle cx="18" cy="15" r="0.7" fill="{{ t.fiber_warm }}" fill-opacity="0.08"/><path d="M8 18 l5 -1 M1 11 l4 0.5" stroke="{{ t.fiber }}" stroke-opacity="0.065"/></pattern>
@@ -33,7 +18,7 @@
     <image x="{{ g.art.x }}" y="{{ g.art.y }}" width="{{ g.art.width }}" height="{{ g.art.height }}" opacity="0.94" preserveAspectRatio="xMaxYMid meet"{% if t.invert_art %} filter="url(#night)"{% endif %} href="data:{{ art_mime }};base64,{{ art_b64 }}"/>
 
     <text x="29" y="40" font-family="{{ sans }}" font-size="13" font-weight="700" letter-spacing="3.4" fill="{{ t.kicker }}">{{ kicker }}</text>
-    <path class="lane draw" style="stroke: {{ t.accent }}; stroke-width: 2; animation-duration: .6s; animation-delay: .1s" d="M29 55 H99" pathLength="1"/>
+    <path class="lane draw" style="stroke: {{ t.accent }}; stroke-width: 2; --dur: .6s; --at: .1s" d="M29 55 H99" pathLength="1"/>
     <text x="27" y="112" font-family="{{ serif }}" font-size="50" font-weight="700" fill="{{ t.name }}">{{ name }}</text>
     <text x="29" y="150" font-family="{{ serif }}" font-size="24" font-weight="700" fill="{{ t.role }}">{{ role }}</text>
 {% for line in mission %}
@@ -41,27 +26,27 @@
 {% endfor %}
 
     <g aria-hidden="true">
-      <path class="lane upstream draw steady" style="animation-duration: {{ g.upstream.dur }}s; animation-delay: {{ g.upstream.at }}s" d="{{ g.upstream.d }}" pathLength="1"/>
+      <path class="lane upstream draw steady" style="--dur: {{ g.upstream.dur }}s; --at: {{ g.upstream.at }}s" d="{{ g.upstream.d }}" pathLength="1"/>
 {% for segment in g.segments %}
-      <path class="lane draw" style="animation-duration: {{ segment.dur }}s; animation-delay: {{ segment.at }}s" d="{{ segment.d }}" pathLength="1"/>
+      <path class="lane draw" style="--dur: {{ segment.dur }}s; --at: {{ segment.at }}s" d="{{ segment.d }}" pathLength="1"/>
 {% endfor %}
 {% for commit in g.commits %}
-      <circle class="pop" style="animation-delay: {{ commit.at }}s" cx="{{ commit.x }}" cy="{{ commit.y }}" r="4.5" fill="{{ t.accent }}"/>
+      <circle class="pop" style="--at: {{ commit.at }}s" cx="{{ commit.x }}" cy="{{ commit.y }}" r="4.5" fill="{{ t.accent }}"/>
 {% endfor %}
 {% for stop in g.stops %}
 {% if stop.head %}
-      <circle class="ping" style="animation-delay: {{ g.pulse_at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="8" fill="{{ t.accent }}"/>
-      <circle class="pop" style="animation-delay: {{ stop.at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="8" fill="{{ t.accent }}"/>
+      <circle class="ping" style="--at: {{ g.pulse_at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="8" fill="{{ t.accent }}"/>
+      <circle class="pop" style="--at: {{ stop.at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="8" fill="{{ t.accent }}"/>
 {% else %}
-      <circle class="pop" style="animation-delay: {{ stop.at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="7" fill="{{ t.paper[1] }}" stroke="{{ t.ink }}" stroke-width="3"/>
+      <circle class="pop" style="--at: {{ stop.at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="7" fill="{{ t.paper[1] }}" stroke="{{ t.ink }}" stroke-width="3"/>
 {% endif %}
-      <g class="rise" style="animation-delay: {{ stop.at }}s">
+      <g class="rise" style="--at: {{ stop.at }}s">
         <text x="{{ stop.x + 26 }}" y="{{ stop.y + 3 }}" font-family="{{ sans }}" font-size="19" font-weight="700" fill="{{ t.accent if stop.head else t.role }}">{{ stop.name }}{% if stop.head %}<tspan font-size="13" letter-spacing="1.2" dx="10">HEAD</tspan>{% endif %}</text>
         <text x="{{ stop.x + 26 }}" y="{{ stop.y + 24 }}" font-family="{{ sans }}" font-size="15" fill="{{ t.muted }}">{{ stop.role }}</text>
       </g>
 {% endfor %}
 {% for item in g.legend %}
-      <g class="rise" style="animation-delay: {{ item.at }}s">
+      <g class="rise" style="--at: {{ item.at }}s">
         <circle cx="36" cy="{{ item.y - 5 }}" r="4.5" fill="{{ t.accent }}"/>
         <text x="52" y="{{ item.y }}" font-family="{{ sans }}" font-size="13" font-weight="700" letter-spacing="1" fill="{{ t.muted }}">{{ item.label }}</text>
       </g>

@@ -1,21 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="{{ g.width }}" height="{{ g.height }}" viewBox="0 0 {{ g.width }} {{ g.height }}" role="img" aria-label="{{ aria }}">
   <title>{{ aria }}</title>
-  <style>
-    .lane { fill: none; stroke: {{ t.ink }}; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-    .upstream { stroke: {{ t.accent }}; stroke-width: 2.5; }
-    .draw { animation-name: draw; animation-timing-function: cubic-bezier(.65, 0, .35, 1); animation-fill-mode: backwards; }
-    .steady { animation-timing-function: linear; }
-    .pop { transform-box: fill-box; transform-origin: center; animation: pop .45s cubic-bezier(.3, .7, .4, 1) backwards; }
-    .rise { animation: rise .5s ease-out backwards; }
-    .ping { transform-box: fill-box; transform-origin: center; opacity: 0; animation: ping 3.2s cubic-bezier(0, 0, .2, 1) infinite; }
-    .glow { animation: glow 9s ease-in-out infinite; }
-    @keyframes draw { from { stroke-dasharray: 1 1.1; stroke-dashoffset: 1.1; } to { stroke-dasharray: 1 1.1; stroke-dashoffset: 0; } }
-    @keyframes pop { from { transform: scale(0); } 70% { transform: scale(1.3); } to { transform: scale(1); } }
-    @keyframes rise { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
-    @keyframes ping { 0% { opacity: .5; transform: scale(1); } 75%, 100% { opacity: 0; transform: scale(3); } }
-    @keyframes glow { 0%, 100% { opacity: {{ t.glow[0] }}; } 50% { opacity: {{ t.glow[1] }}; } }
-    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
-  </style>
+{% include "_hero_style.svg.j2" %}
   <defs>
     <linearGradient id="paper" x2="1" y2="1">
       <stop stop-color="{{ t.paper[0] }}"/>
@@ -47,7 +32,7 @@
     <image x="{{ g.art.x }}" y="{{ g.art.y }}" width="{{ g.art.width }}" height="{{ g.art.height }}" preserveAspectRatio="xMaxYMid meet"{% if t.invert_art %} filter="url(#night)"{% endif %} href="data:{{ art_mime }};base64,{{ art_b64 }}"/>
 
     <text x="49" y="50" font-family="{{ sans }}" font-size="14" font-weight="700" letter-spacing="4.8" fill="{{ t.kicker }}">{{ kicker }}</text>
-    <path class="lane draw" style="stroke: {{ t.accent }}; stroke-width: 2; animation-duration: .6s; animation-delay: .1s" d="M49 66 H138" pathLength="1"/>
+    <path class="lane draw" style="stroke: {{ t.accent }}; stroke-width: 2; --dur: .6s; --at: .1s" d="M49 66 H138" pathLength="1"/>
     <text x="45" y="134" font-family="{{ serif }}" font-size="72" font-weight="700" fill="{{ t.name }}">{{ name }}</text>
     <text x="49" y="178" font-family="{{ serif }}" font-size="29" font-weight="700" fill="{{ t.role }}">{{ role }}</text>
 {% for line in mission %}
@@ -55,29 +40,29 @@
 {% endfor %}
 
     <g aria-hidden="true">
-      <path class="lane upstream draw steady" style="animation-duration: {{ g.upstream.dur }}s; animation-delay: {{ g.upstream.at }}s" d="{{ g.upstream.d }}" pathLength="1"/>
+      <path class="lane upstream draw steady" style="--dur: {{ g.upstream.dur }}s; --at: {{ g.upstream.at }}s" d="{{ g.upstream.d }}" pathLength="1"/>
 {% for segment in g.segments %}
-      <path class="lane draw" style="animation-duration: {{ segment.dur }}s; animation-delay: {{ segment.at }}s" d="{{ segment.d }}" pathLength="1"/>
+      <path class="lane draw" style="--dur: {{ segment.dur }}s; --at: {{ segment.at }}s" d="{{ segment.d }}" pathLength="1"/>
 {% endfor %}
 {% for pill in g.pills %}
-      <g class="pop" style="animation-delay: {{ pill.at }}s">
+      <g class="pop" style="--at: {{ pill.at }}s">
         <rect x="{{ pill.x }}" y="{{ pill.y }}" width="{{ pill.width }}" height="22" rx="11" fill="{{ t.accent }}"/>
         <text x="{{ pill.cx }}" y="{{ pill.y + 15.5 }}" text-anchor="middle" font-family="{{ sans }}" font-size="13" font-weight="700" letter-spacing="0.3" fill="{{ t.pill_text }}">{{ pill.label }}</text>
       </g>
 {% endfor %}
 {% for stop in g.stops %}
 {% if stop.head %}
-      <circle class="ping" style="animation-delay: {{ g.pulse_at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="8" fill="{{ t.accent }}"/>
-      <circle class="pop" style="animation-delay: {{ stop.at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="8" fill="{{ t.accent }}"/>
+      <circle class="ping" style="--at: {{ g.pulse_at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="8" fill="{{ t.accent }}"/>
+      <circle class="pop" style="--at: {{ stop.at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="8" fill="{{ t.accent }}"/>
 {% else %}
-      <circle class="pop" style="animation-delay: {{ stop.at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="7" fill="{{ t.paper[1] }}" stroke="{{ t.ink }}" stroke-width="3"/>
+      <circle class="pop" style="--at: {{ stop.at }}s" cx="{{ stop.x }}" cy="{{ stop.y }}" r="7" fill="{{ t.paper[1] }}" stroke="{{ t.ink }}" stroke-width="3"/>
 {% endif %}
-      <g class="rise" style="animation-delay: {{ stop.at }}s">
+      <g class="rise" style="--at: {{ stop.at }}s">
         <text x="{{ stop.x - 6 }}" y="{{ stop.y + 36 }}" font-family="{{ sans }}" font-size="19" font-weight="700" fill="{{ t.accent if stop.head else t.role }}">{{ stop.name }}</text>
         <text x="{{ stop.x - 6 }}" y="{{ stop.y + 59 }}" font-family="{{ sans }}" font-size="16" fill="{{ t.muted }}">{{ stop.role }}</text>
       </g>
 {% endfor %}
-      <g class="pop" style="animation-delay: {{ g.head_pill.at }}s">
+      <g class="pop" style="--at: {{ g.head_pill.at }}s">
         <rect x="{{ g.head_pill.x }}" y="{{ g.head_pill.y }}" width="{{ g.head_pill.width }}" height="22" rx="4" fill="none" stroke="{{ t.accent }}" stroke-width="1.5"/>
         <text x="{{ g.head_pill.cx }}" y="{{ g.head_pill.y + 15 }}" text-anchor="middle" font-family="{{ sans }}" font-size="11" font-weight="700" letter-spacing="1.2" fill="{{ t.accent }}">HEAD</text>
       </g>
@@ -85,7 +70,7 @@
 
     <g transform="rotate(-1 52 {{ g.tagline.y - 3 }})">
       <text x="52" y="{{ g.tagline.y }}" font-family="{{ serif }}" font-size="21" font-style="italic" fill="{{ t.tagline }}">{{ tagline }}</text>
-      <path class="lane draw" style="stroke: {{ t.accent }}; stroke-width: 1.2; stroke-opacity: 0.6; animation-duration: .9s; animation-delay: {{ g.tagline.at }}s" d="M51 {{ g.tagline.y + 10 }} Q{{ (51 + g.tagline.underline) / 2 }} {{ g.tagline.y + 17 }} {{ g.tagline.underline }} {{ g.tagline.y + 7 }}" pathLength="1"/>
+      <path class="lane draw" style="stroke: {{ t.accent }}; stroke-width: 1.2; stroke-opacity: 0.6; --dur: .9s; --at: {{ g.tagline.at }}s" d="M51 {{ g.tagline.y + 10 }} Q{{ (51 + g.tagline.underline) / 2 }} {{ g.tagline.y + 17 }} {{ g.tagline.underline }} {{ g.tagline.y + 7 }}" pathLength="1"/>
     </g>
   </g>
   <rect x="1" y="1" width="{{ g.width - 2 }}" height="{{ g.height - 2 }}" rx="17" fill="none" stroke="{{ t.border }}" stroke-width="2"/>

@@ -169,6 +169,7 @@ def hero_layout(hero: dict) -> dict:
         "width": width,
         "height": height,
         "mission_y": [222, 251],
+        "rise": "translateY(5px)",
         "stops": stops,
         "segments": segments,
         "upstream": {"d": upstream_d, "at": upstream_at, "dur": _round(upstream_dur)},
@@ -226,6 +227,7 @@ def hero_mobile_layout(hero: dict) -> dict:
         "width": width,
         "height": height,
         "mission_y": [196, 226, 256],
+        "rise": "translateX(-5px)",
         "stops": stops,
         "segments": segments,
         "upstream": {

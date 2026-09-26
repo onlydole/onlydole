@@ -3,6 +3,7 @@
   <style>
     .icon { fill: none; stroke: #c2414f; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
     .fit { transform-box: fill-box; transform-origin: center; }
+    .turn { transform-box: fill-box; transform-origin: left center; }
     @keyframes draw { from { stroke-dasharray: 1 1.1; stroke-dashoffset: 1.1; } to { stroke-dasharray: 1 1.1; stroke-dashoffset: 0; } }
     @keyframes write { 0% { stroke-dasharray: 1 1.1; stroke-dashoffset: 1.1; } 7%, 100% { stroke-dasharray: 1 1.1; stroke-dashoffset: 0; } }
     @keyframes pop { from { transform: scale(0); } 70% { transform: scale(1.3); } to { transform: scale(1); } }
@@ -14,7 +15,19 @@
     @keyframes turn { 0% { opacity: 0; transform: scaleX(1); } 1% { opacity: 1; } 9% { opacity: 1; transform: scaleX(-1); } 10%, 100% { opacity: 0; transform: scaleX(-1); } }
     @keyframes sheen { 0% { opacity: 0; transform: translateX(-150px); } 2% { opacity: 1; } 11% { opacity: 1; transform: translateX(150px); } 12%, 100% { opacity: 0; transform: translateX(150px); } }
     @keyframes nudge { 0%, 7%, 100% { transform: none; } 3.5% { transform: translateX(6px); } }
-    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+    @media (prefers-reduced-motion: no-preference) {
+      .enter { animation: draw .9s cubic-bezier(.65, 0, .35, 1) 0.39s backwards; }
+      .land { animation: pop .4s cubic-bezier(.3, .7, .4, 1) 1.0899999999999999s backwards; }
+      .write { animation: draw .9s cubic-bezier(.65, 0, .35, 1) 0.39s backwards, write 12.0s ease-in-out var(--d) 3; }
+      .talk { animation: pop .4s cubic-bezier(.3, .7, .4, 1) 1.0899999999999999s backwards, talk 12.0s ease-in-out var(--d) 3; }
+      .beat { animation: pop .4s cubic-bezier(.3, .7, .4, 1) 1.0899999999999999s backwards, beat 12.0s ease-in-out var(--d) 3; }
+      .ring { animation: ring 12.0s ease-in-out var(--d) 3; }
+      .wave-l { animation: wave-l 12.0s ease-in-out var(--d) 3; }
+      .wave-r { animation: wave-r 12.0s ease-in-out var(--d) 3; }
+      .turn { animation: turn 12.0s ease-in-out var(--d) 3; }
+      .sheen { animation: sheen 12.0s ease-in-out var(--d) 3; }
+      .nudge { animation: nudge 12.0s ease-in-out var(--d) 3; }
+    }
   </style>
   <defs>
     <linearGradient id="wash" x2="1">
@@ -34,12 +47,12 @@
   <rect x="28" y="26" width="108" height="124" rx="6" fill="#c2414f" fill-opacity="0.12" stroke="#c2414f" stroke-opacity="0.28"/>
   <g class="icon" transform="translate(82 88)" aria-hidden="true">
 
-    <path d="M-14 -31 V31" pathLength="1" style="animation: draw .9s cubic-bezier(.65, 0, .35, 1) 0.39s backwards"/>
-    <path d="M-14 -22 C-14 -12 16 -18 16 -8 V6 C16 16 -14 12 -14 21" pathLength="1" style="animation: draw .9s cubic-bezier(.65, 0, .35, 1) 0.39s backwards, write 12.0s ease-in-out 8.0s 3"/>
-    <circle class="fit" cx="-14" cy="-29" r="4.5" fill="#faf3e9" stroke-width="2.5" style="animation: pop .4s cubic-bezier(.3, .7, .4, 1) 1.0899999999999999s backwards"/>
-    <circle class="fit" cx="16" cy="-1" r="4.5" fill="#faf3e9" stroke-width="2.5" style="animation: pop .4s cubic-bezier(.3, .7, .4, 1) 1.0899999999999999s backwards"/>
-    <circle class="fit" cx="-14" cy="21" r="6" fill="#c2414f" stroke="none" opacity="0" style="animation: ring 12.0s ease-out 8.85s 3"/>
-    <circle class="fit" cx="-14" cy="21" r="6" fill="#c2414f" stroke="none" style="animation: pop .4s cubic-bezier(.3, .7, .4, 1) 1.0899999999999999s backwards, beat 12.0s ease-in-out 8.8s 3"/>
+    <path d="M-14 -31 V31" pathLength="1" class="enter"/>
+    <path d="M-14 -22 C-14 -12 16 -18 16 -8 V6 C16 16 -14 12 -14 21" pathLength="1" class="write" style="--d: 8.0s"/>
+    <circle class="fit land" cx="-14" cy="-29" r="4.5" fill="#faf3e9" stroke-width="2.5"/>
+    <circle class="fit land" cx="16" cy="-1" r="4.5" fill="#faf3e9" stroke-width="2.5"/>
+    <circle class="fit ring" cx="-14" cy="21" r="6" fill="#c2414f" stroke="none" opacity="0" style="--d: 8.85s"/>
+    <circle class="fit beat" cx="-14" cy="21" r="6" fill="#c2414f" stroke="none" style="--d: 8.8s"/>
 
   </g>
 
@@ -51,7 +64,7 @@
   <text x="174" y="108" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#2d2521">to wrap onto a second line of the card and then so…</text>
 
   <text x="174" y="148" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="0.6" fill="#78665d">onlydole/repo · 2026-01-02</text>
-  <g style="animation: nudge 12.0s ease-in-out 8.3s 3">
+  <g class="nudge" style="--d: 8.3s">
     <text x="1104" y="94" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="2.3" fill="#c2414f">VIEW</text>
     <path d="M1124 88 H1161 M1150 77 L1161 88 L1150 99" fill="none" stroke="#c2414f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   </g>

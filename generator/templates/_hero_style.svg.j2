@@ -1,0 +1,19 @@
+  <style>
+    .lane { fill: none; stroke: {{ t.ink }}; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .upstream { stroke: {{ t.accent }}; stroke-width: 2.5; }
+    .pop, .ping { transform-box: fill-box; transform-origin: center; }
+    .ping { opacity: 0; }
+    @keyframes draw { from { stroke-dasharray: 1 1.1; stroke-dashoffset: 1.1; } to { stroke-dasharray: 1 1.1; stroke-dashoffset: 0; } }
+    @keyframes pop { from { transform: scale(0); } 70% { transform: scale(1.3); } to { transform: scale(1); } }
+    @keyframes rise { from { opacity: 0; transform: {{ g.rise }}; } to { opacity: 1; transform: none; } }
+    @keyframes ping { 0% { opacity: .5; transform: scale(1); } 75%, 100% { opacity: 0; transform: scale(3); } }
+    @keyframes glow { 0%, 100% { opacity: {{ t.glow[0] }}; } 50% { opacity: {{ t.glow[1] }}; } }
+    @media (prefers-reduced-motion: no-preference) {
+      .draw { animation: draw var(--dur) cubic-bezier(.65, 0, .35, 1) var(--at) backwards; }
+      .steady { animation-timing-function: linear; }
+      .pop { animation: pop .45s cubic-bezier(.3, .7, .4, 1) var(--at) backwards; }
+      .rise { animation: rise .5s ease-out var(--at) backwards; }
+      .ping { animation: ping 3.2s cubic-bezier(0, 0, .2, 1) var(--at) infinite; }
+      .glow { animation: glow 9s ease-in-out infinite; }
+    }
+  </style>

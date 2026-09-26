@@ -50,8 +50,12 @@ The templates follow four rules, and `tests/test_render.py` checks them.
 - Every animation runs from a hidden or partial state back to the
   element's own SVG attributes. Nothing uses `forwards` or `both`, so a
   renderer without animation shows the finished drawing.
-- Every animated SVG drops all animation under `prefers-reduced-motion`.
-- Text never starts hidden.
+- Motion is opt-in. Every animation rule sits inside
+  `@media (prefers-reduced-motion: no-preference)`, and elements carry only
+  their timing as CSS variables, so a visitor who asks for reduced motion,
+  or a renderer that can't tell, gets the still drawing.
+- Copy never starts hidden. Only the career graph's labels enter with
+  their stops, and the alt text carries every one of them.
 - No `feTurbulence` or other expensive filters. An animated SVG image
   repaints every frame.
 
@@ -62,9 +66,9 @@ the same data, so the picture and its description can't drift apart.
 
 The hero is paper in light mode and the same city at night in dark mode.
 The dark variant inverts the illustration's lightness and rotates its hue
-back, so the ink turns pale and the sun keeps its color. The README offers
-four hero files, phone layouts first, and GitHub picks by viewport width and
-`prefers-color-scheme`. The illustration is embedded as WebP, which cut
+back, so the ink turns pale and the sun keeps its color. The profile page
+offers four hero files, phone layouts first, and GitHub picks by viewport
+width and `prefers-color-scheme`. The illustration is embedded as WebP, which cut
 each hero from 418 KB to about 107 KB.
 
 The build owns every SVG in `assets/`. Each run deletes SVGs it didn't
