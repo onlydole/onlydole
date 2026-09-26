@@ -64,6 +64,7 @@ if (params.has("capture")) {
   };
   let audio = null;
   let buffer = null;
+  let soundtrack = null;
   let source = null;
   let gain = null;
   let playing = false;
@@ -100,10 +101,12 @@ if (params.has("capture")) {
       audio = new AudioContext();
       gain = audio.createGain();
       gain.connect(audio.destination);
-      buffer = await renderSoundtrack(audio.sampleRate);
+      soundtrack = renderSoundtrack(audio.sampleRate);
     }
+    // Every start waits on the same render; only one source ever plays.
+    buffer = await soundtrack;
     await audio.resume();
-    if (!playing) return;
+    if (!playing || source) return;
     source = audio.createBufferSource();
     source.buffer = buffer;
     source.loop = true;

@@ -66,5 +66,7 @@ download. `node render.mjs --stills 3.4,14.2` writes single frames to
 
 Type is outlined from [Anybody](https://github.com/Etcetera-Type-Co/Anybody),
 [Instrument Serif](https://github.com/Instrument/instrument-serif) and
-[JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), all under the
-SIL Open Font License 1.1.
+[JetBrains Mono](https://github.com/JetBrains/JetBrainsMono). The outlines in
+`glyphs.js` are derived from those fonts, so that file is licensed under the
+SIL Open Font License 1.1 rather than the repository's Apache-2.0 license. The
+copyright notices and full license text are in [`OFL.txt`](OFL.txt).

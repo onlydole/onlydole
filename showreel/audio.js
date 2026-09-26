@@ -515,9 +515,9 @@ function score(s) {
   s.crash(B(16), 0.3);
   s.boom(B(16), 0.35);
   s.glide([B(16.35), B(17.25)], [400, 1600], 0.04);
-  s.whoosh(B(17) - 0.05, 0.5, 0.14, true, [-0.6, 0.6]);
-  s.whoosh(B(18) - 0.05, 0.5, 0.14, true, [0.6, -0.6]);
-  s.whoosh(B(19), 0.55, 0.16, false);
+  s.whoosh(B(16.9) - 0.05, 0.45, 0.14, true, [-0.6, 0.6]);
+  s.whoosh(B(17.9) - 0.05, 0.45, 0.14, true, [0.6, -0.6]);
+  s.whoosh(B(18.85), 0.55, 0.16, false, [-0.7, 0.7]);
 
   // 06 Data: bars and the line are sonified from the data itself.
   BARS.forEach((h, k) => {

@@ -2,6 +2,9 @@
   "name": "showreel",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20.11"
+  },
   "description": "A 15-second motion design reel, rendered frame by frame from code.",
   "scripts": {
     "glyphs": "node tools/build-glyphs.mjs",

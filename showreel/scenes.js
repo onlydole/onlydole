@@ -729,9 +729,10 @@ const cloud = (() => {
       knot: knotPoint(i / N, i * 2.39996),
       lineX: lerp(-600, 600, i / (N - 1)),
       accent: i % 11 === 0,
-      d1: ((1 - y) / 2) * 0.2,
-      d2: (i / N) * 0.2,
-      d3: hash(i + 5) * 0.16,
+      d1: ((1 - y) / 2) * 0.12,
+      d2: (i / N) * 0.12,
+      // The knot unspools into the line in curve order, left to right.
+      d3: (i / N) * 0.22,
     });
   }
   return { N, pts, order: new Uint16Array(N), z: new Float32Array(N) };
@@ -788,7 +789,7 @@ function scene5(ctx, t, fx, hud, lite) {
   const pop =
     1 + 0.2 * Math.sin(Math.min(1, lt / 0.35) * Math.PI) * Math.exp(-lt * 2);
   const band = lerp(1.2, -1.2, norm(lt, B(0.35), B(1.25)));
-  const lineY = lerp(CY, 800, tween(t, B(19.4), B(19.85)));
+  const lineY = 800;
   const D = 3.4;
   const stride = lite ? 3 : 1;
 
@@ -800,9 +801,9 @@ function scene5(ctx, t, fx, hud, lite) {
   let n = 0;
   for (let i = 0; i < N; i += stride) {
     const p = pts[i];
-    const a = tween(t, B(17) + p.d1, B(17) + p.d1 + 0.42);
-    const b = tween(t, B(18) + p.d2, B(18) + p.d2 + 0.42);
-    const c = tween(t, B(19) + p.d3, B(19) + p.d3 + 0.45);
+    const a = tween(t, B(16.9) + p.d1, B(16.9) + p.d1 + 0.3);
+    const b = tween(t, B(17.9) + p.d2, B(17.9) + p.d2 + 0.3);
+    const c = tween(t, B(18.85) + p.d3, B(18.85) + p.d3 + 0.25);
     const pos = [0, 1, 2].map(
       (k) => lerp(lerp(p.sphere[k], p.torus[k], a), p.knot[k], b) * pop,
     );
@@ -831,7 +832,7 @@ function scene5(ctx, t, fx, hud, lite) {
   ctx.globalAlpha = 1;
 
   if (!lite) {
-    const c = tween(t, B(19), B(19.5));
+    const c = tween(t, B(18.85), B(19.4));
     gizmo(ctx, t, 0.85 * tween(t, B(16.1), B(16.5)) * (1 - c));
   }
 }
@@ -1086,22 +1087,22 @@ const G8 = grid(8, 8);
 
 // [scene, start beat, playback rate]; the first four carry over from 2x2.
 const CELLS = [
-  { at: [0, 0], s: 1, b: 1.3, rate: 1, from: 0 },
-  { at: [0, 3], s: 3, b: 10.2, rate: 0.75, from: 1 },
-  { at: [3, 0], s: 5, b: 18.2, rate: 1 },
+  { at: [0, 0], s: 1, b: 1.3, rate: 0.8 },
+  { at: [0, 3], s: 3, b: 9.4, rate: 0.75 },
+  { at: [3, 0], s: 5, b: 17.9, rate: 0.7 },
   { at: [3, 3], s: 6, b: 23.6, rate: 1 },
   { at: [0, 1], s: 2, b: 4.6, rate: 1 },
   { at: [0, 2], s: 4, b: 13, rate: 1 },
   { at: [1, 0], s: 6, b: 20.3, rate: 1 },
-  { at: [1, 1], s: 2, b: 6.1, rate: 1 },
-  { at: [1, 2], s: 5, b: 17.1, rate: 1 },
-  { at: [1, 3], s: 1, b: 3.3, rate: 0.6 },
+  { at: [1, 1], s: 2, b: 6.4, rate: 0.5 },
+  { at: [1, 2], s: 5, b: 16.5, rate: 1 },
+  { at: [1, 3], s: 1, b: 0.2, rate: 1 },
   { at: [2, 0], s: 3, b: 8.2, rate: 1 },
-  { at: [2, 1], s: 5, b: 18.1, rate: 1 },
+  { at: [2, 1], s: 5, b: 15.9, rate: 1 },
   { at: [2, 2], s: 6, b: 21.2, rate: 1 },
-  { at: [2, 3], s: 2, b: 7.2, rate: 1 },
+  { at: [2, 3], s: 2, b: 3, rate: 1 },
   { at: [3, 1], s: 3, b: 9.1, rate: 1 },
-  { at: [3, 2], s: 4, b: 14.2, rate: 1 },
+  { at: [3, 2], s: 4, b: 12.3, rate: 1 },
 ];
 const DUMMY_FX = {};
 
@@ -1362,7 +1363,7 @@ function scene8(ctx, t, fx, hud) {
   // The dot arcs over and lands as the full stop, then winks at the end.
   const p = norm(t, B(28), END_LAND);
   const [ex, ey] = dot;
-  let x = lerp(CX, ex, p);
+  const x = lerp(CX, ex, p);
   let y = lerp(CY, ey, p) - 4 * 240 * p * (1 - p);
   const vy = ey - CY - 4 * 240 * (1 - 2 * p);
   const st = p < 1 ? 0.3 * Math.sin(Math.PI * p) : 0;
@@ -1373,7 +1374,6 @@ function scene8(ctx, t, fx, hud) {
     jiggle(t, END_WINK + 0.28, 0.35, 5.5, 11) +
     0.25 * tween(t, END_WINK - 0.12, END_WINK) * (t < END_WINK ? 1 : 0);
   if (p >= 1 && (hop <= 0 || hop >= 1)) y += DOT_R * d;
-  x += 0;
   blob(
     ctx,
     x,
@@ -1513,7 +1513,7 @@ export function drawFrame(ctx, t) {
     ca: 0,
     bloom: 0.2,
     flash: 0,
-    grain: 0.032,
+    grain: 0.028,
     vignette: 0.28,
   };
   const hud = { color: P.paper, alpha: 1 };
@@ -1535,11 +1535,11 @@ export function drawFrame(ctx, t) {
   else if (b < 8) scene2(ctx, t, fx, hud);
   else if (b < 12) scene3(ctx, t, fx, hud);
   else if (b < 16) scene4(ctx, t, fx, hud);
-  else if (b < 19.8) scene5(ctx, t, fx, hud);
+  else if (b < 19.85) scene5(ctx, t, fx, hud);
   else if (b < 20.25) {
     // The line of points opens into the next scene.
     scene5(ctx, t, fx, hud);
-    const q = tween(t, B(19.8), B(20.25), ease.inOutExpo);
+    const q = tween(t, B(19.85), B(20.25), ease.inOutExpo);
     const top = lerp(800, -2, q);
     const bottom = lerp(801, H + 2, q);
     ctx.save();

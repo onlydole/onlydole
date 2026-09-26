@@ -7,7 +7,7 @@
 //   node render.mjs --audio             soundtrack only, to .frames/
 //   node render.mjs --serve             serve the live player on :8080
 //
-// Options: --samples 8 --workers 3 --crf 18 --out showreel.mp4
+// Options: --samples 8 --workers 3 --crf 19 --out showreel.mp4
 // Set FFMPEG to an ffmpeg build with libx264 if it is not on PATH, and
 // CHROMIUM to a Chromium binary to use instead of Playwright's download.
 
@@ -41,7 +41,7 @@ const { values: opt } = parseArgs({
       type: "string",
       default: String(Math.max(1, Math.min(4, cpus().length - 1))),
     },
-    crf: { type: "string", default: "18" },
+    crf: { type: "string", default: "19" },
     out: { type: "string", default: "showreel.mp4" },
     port: { type: "string", default: "8080" },
   },
@@ -50,7 +50,13 @@ const FFMPEG = process.env.FFMPEG ?? "ffmpeg";
 
 function serve(port) {
   const server = createServer(async (req, res) => {
-    const path = decodeURIComponent(new URL(req.url, "http://x").pathname);
+    let path;
+    try {
+      path = decodeURIComponent(new URL(req.url, "http://x").pathname);
+    } catch {
+      res.writeHead(400).end();
+      return;
+    }
     const file = normalize(join(ROOT, path === "/" ? "index.html" : path));
     if (!file.startsWith(ROOT + sep)) {
       res.writeHead(403).end();

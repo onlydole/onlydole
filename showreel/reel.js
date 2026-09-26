@@ -28,7 +28,8 @@ export function createReel(canvas) {
       fx = drawFrame(ctx, Math.min(Math.max(ts, 0), last));
       comp.add(layer, fx, 1 / samples);
     }
-    comp.end(fx, seed);
+    // Grain refreshes at 30 Hz: it reads as film and compresses far better.
+    comp.end(fx, Math.floor(seed / 2));
   }
 
   return { render, layer };

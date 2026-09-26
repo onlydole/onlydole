@@ -2,5 +2,5 @@
 # Skip lock files and generated assets — they contain package names that
 # trigger false positives (e.g. "astroid" is a real Python package, not
 # a misspelling of "asteroid").
-skip = generator/uv.lock,assets/
+skip = generator/uv.lock,assets/,showreel/glyphs.js
 ignore-words-list = astroid
