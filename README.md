@@ -15,7 +15,7 @@
   <a href="https://creators.spotify.com/pod/profile/alexagriffith/episodes/Paying-Attention-in-the-Age-of-Agents-e3m9i24"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: Paying Attention in the Age of Agents (Alexa&#x27;s Input (AI), panel episode · 2026-07-20); Lambda&#x27;s Long Game, Claude&#x27;s Complexity, and the AI Adoption Gap (LogiCast, Season 5 Episode 16 · 2026-04-29); Shaping the Future of Documentation. OSS, Knowledge, and Dosu (Software Plaza · 2025-12-05)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://www.goodreads.com/review/show/8905760855?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Currently-reading shelf on Goodreads: A Parade of Horribles (Dungeon Crawler Carl, #8) (Matt Dinniman); Beyond Belief: The Science-Backed Way to Stop Limiting Yourself and Achieve Breakthrough Results (Nir Eyal); All That&#x27;s Unseen: An Appalachian Memoir (Emilee Hackney)"></picture></a>
+  <a href="https://www.goodreads.com/review/show/8990659938?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Currently-reading shelf on Goodreads: Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed (Veritas Paperbacks) (James C. Scott); A Parade of Horribles (Dungeon Crawler Carl, #8) (Matt Dinniman); Beyond Belief: The Science-Backed Way to Stop Limiting Yourself and Achieve Breakthrough Results (Nir Eyal)"></picture></a>
 </p>
 <details>
 <summary>Browse all field notes and individual links</summary>
@@ -50,9 +50,9 @@
 </li>
 <li><strong>On My Bookshelf</strong>
 <ul>
+<li><a href="https://www.goodreads.com/review/show/8990659938?utm_medium=api&amp;utm_source=rss">Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed (Veritas Paperbacks)</a> · James C. Scott</li>
 <li><a href="https://www.goodreads.com/review/show/8905760855?utm_medium=api&amp;utm_source=rss">A Parade of Horribles (Dungeon Crawler Carl, #8)</a> · Matt Dinniman</li>
 <li><a href="https://www.goodreads.com/review/show/8886300863?utm_medium=api&amp;utm_source=rss">Beyond Belief: The Science-Backed Way to Stop Limiting Yourself and Achieve Breakthrough Results</a> · Nir Eyal</li>
-<li><a href="https://www.goodreads.com/review/show/8863496208?utm_medium=api&amp;utm_source=rss">All That&#x27;s Unseen: An Appalachian Memoir</a> · Emilee Hackney</li>
 </ul>
 </li>
 </ul>
