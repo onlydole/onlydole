@@ -1,5 +1,7 @@
 # One config for generator/ and tests/. Formatting uses ruff's defaults.
 line-length = 88
+# ruff can't see generator/pyproject.toml from here, so name its floor.
+target-version = "py312"
 
 [lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
