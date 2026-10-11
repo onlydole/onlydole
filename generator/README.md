@@ -136,7 +136,9 @@ uv run --locked --project generator python -m generator.health
 
 Set `GITHUB_TOKEN` through your environment for live GitHub activity.
 Without it, that source uses the cache and counts toward the staleness budget.
-`BUILD_DATE` can set the displayed date for a reproducible fixture build.
+`BUILD_DATE` overrides the date stamped on the README, cards, and cache.
+Sources are still fetched live, so discard a local build's changes rather
+than commit them.
 
 Edit the templates and generator, not the generated SVGs. Titles wrap
 against the available text width, including the space occupied by book
