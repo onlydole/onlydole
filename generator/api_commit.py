@@ -55,8 +55,8 @@ def plan_changes(porcelain: str) -> dict:
 
 
 def _stale_data_only(errors: list[dict]) -> bool:
-    """True when every error is STALE_DATA — i.e. another run already
-    committed and moved the branch, so there is nothing left to do."""
+    """True when every error is STALE_DATA: main moved after checkout, so
+    this run's refresh was not committed."""
     return bool(errors) and all(e.get("type") == "STALE_DATA" for e in errors)
 
 
