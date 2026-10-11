@@ -2,14 +2,11 @@ from generator.api_commit import _stale_data_only, plan_changes
 
 
 def test_plan_changes_maps_modified_added_and_deleted():
-    porcelain = "\0".join(
-        [
-            " M README.md",
-            " M assets/hero-light.svg",
-            " D assets/old-tile.svg",
-            "?? assets/new tile.svg",
-            "",
-        ]
+    porcelain = (
+        " M README.md\0"
+        " M assets/hero-light.svg\0"
+        " D assets/old-tile.svg\0"
+        "?? assets/new tile.svg\0"
     )
     changes = plan_changes(porcelain)
     assert {a["path"] for a in changes["additions"]} == {
