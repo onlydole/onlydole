@@ -87,8 +87,8 @@ COVER_TYPES = ("image/jpeg", "image/png", "image/webp", "image/gif")
 # cards depend on a free relay that misses a refresh now and then. A
 # missed six-hour refresh is normal; no success today or yesterday isn't.
 STALE_AFTER_DAYS = 1
-# Per-run transport detail. The next run carries forward only last_success,
-# so a relay flipping between fresh and cached mustn't rewrite the cache.
+# Per-run transport detail, on source_status and on relayed posts. The next
+# run never reads it back, so a transport flip mustn't rewrite the cache.
 TRANSPORT_FIELDS = ("state", "via")
 
 
@@ -114,20 +114,24 @@ def hero_alt() -> str:
     )
 
 
+def _without_transport(entry: object) -> object:
+    if not isinstance(entry, dict):
+        return entry
+    return {k: v for k, v in entry.items() if k not in TRANSPORT_FIELDS}
+
+
 def _durable(cache: dict) -> dict:
     """The cache as the next run reads it back."""
+    durable = dict(cache)
     statuses = cache.get("source_status")
-    if not isinstance(statuses, dict):
-        return cache
-    return {
-        **cache,
-        "source_status": {
-            key: {k: v for k, v in status.items() if k not in TRANSPORT_FIELDS}
-            if isinstance(status, dict)
-            else status
-            for key, status in statuses.items()
-        },
-    }
+    if isinstance(statuses, dict):
+        durable["source_status"] = {
+            key: _without_transport(status) for key, status in statuses.items()
+        }
+    for key in RELAYED:
+        if isinstance(cache.get(key), list):
+            durable[key] = [_without_transport(post) for post in cache[key]]
+    return durable
 
 
 def _load_cache() -> dict:

@@ -176,6 +176,19 @@ def test_same_day_relay_flip_leaves_cache_untouched(workspace, monkeypatch):
     assert build.CACHE.read_text(encoding="utf-8") == before
 
 
+def test_switching_between_relay_and_direct_routes_leaves_cache_untouched(
+    workspace, monkeypatch
+):
+    relayed = [{**post, "via": "rss2json"} for post in WRITING]
+    _patch_sources(monkeypatch, writing=relayed)
+    assert build.main() == 0
+    before = build.CACHE.read_text(encoding="utf-8")
+
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+    assert build.CACHE.read_text(encoding="utf-8") == before
+
+
 def test_cache_still_records_rollover_and_same_day_recovery(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     assert build.main() == 0
