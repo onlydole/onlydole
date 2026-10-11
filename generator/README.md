@@ -71,7 +71,7 @@ The dark variant inverts the illustration's lightness and rotates its hue
 back, so the ink turns pale and the sun keeps its color. The profile page
 offers four hero files, phone layouts first, and GitHub picks by viewport
 width and `prefers-color-scheme`. The illustration is embedded as WebP, which cut
-each hero from 418 KB to about 107 KB.
+each hero from 418 KB to about 96 KB.
 
 The build owns every SVG in `assets/`. Each run deletes SVGs it didn't
 write, so renamed or retired cards don't linger.
@@ -142,8 +142,8 @@ than commit them.
 
 Edit the templates and generator, not the generated SVGs. Titles wrap
 against the available text width, including the space occupied by book
-covers. Extra-long titles end with an ellipsis; full titles and individual
-links remain available below each card. SVG clipping is a final boundary,
+covers. Extra-long titles end with an ellipsis. Full titles and individual
+links stay in the list below the cards. SVG clipping is a final boundary,
 not the layout algorithm. Check both themes and a narrow viewport after
 changing typography, and check reduced motion after changing animation.
 Activity cards use one wide, shallow layout at every viewport so GitHub
