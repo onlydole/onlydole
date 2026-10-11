@@ -189,6 +189,29 @@ def test_switching_between_relay_and_direct_routes_leaves_cache_untouched(
     assert build.CACHE.read_text(encoding="utf-8") == before
 
 
+def test_health_reads_dates_not_a_state_left_by_a_skipped_write(
+    workspace, monkeypatch, capsys
+):
+    monkeypatch.setattr(health, "CACHE", build.CACHE)
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+
+    new_talk = [{**TALKS[0], "title": "New talk"}]
+    monkeypatch.setattr(sources, "fetch_substack", _relay_down)
+    monkeypatch.setattr(sources, "fetch_talks", lambda: new_talk)
+    assert build.main() == 0
+    recorded = build.CACHE.read_text(encoding="utf-8")
+    assert json.loads(recorded)["source_status"]["writing"]["state"] == "cached"
+
+    _patch_sources(monkeypatch)
+    monkeypatch.setattr(sources, "fetch_talks", lambda: new_talk)
+    assert build.main() == 0
+    assert build.CACHE.read_text(encoding="utf-8") == recorded
+    capsys.readouterr()
+    assert health.main() == 0
+    assert "writing" not in capsys.readouterr().out
+
+
 def test_cache_still_records_rollover_and_same_day_recovery(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     assert build.main() == 0

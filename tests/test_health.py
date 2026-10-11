@@ -4,7 +4,9 @@ import pytest
 
 from generator import build, health
 
-FRESH = {key: {"state": "fresh"} for key in build.SOURCE_KEYS}
+FRESH = {
+    key: {"state": "fresh", "last_success": "2026-06-10"} for key in build.SOURCE_KEYS
+}
 
 
 @pytest.fixture
@@ -26,7 +28,7 @@ def test_health_passes_when_every_source_is_fresh(cache):
 def test_health_tolerates_a_recent_cache(cache, capsys):
     cache({**FRESH, "writing": {"state": "cached", "last_success": "2026-06-09"}})
     assert health.main() == 0
-    assert "within the 1-day budget: writing" in capsys.readouterr().out
+    assert "within the 1-day budget: writing\n" in capsys.readouterr().out
 
 
 def test_health_fails_past_the_budget(cache, capsys):
