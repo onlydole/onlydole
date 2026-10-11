@@ -189,6 +189,20 @@ def test_switching_between_relay_and_direct_routes_leaves_cache_untouched(
     assert build.CACHE.read_text(encoding="utf-8") == before
 
 
+def test_job_summary_names_each_source_and_its_transport(workspace, monkeypatch):
+    summary = workspace / "summary.md"
+    monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary))
+    _patch_sources(
+        monkeypatch, writing=[{**post, "via": "rss2json"} for post in WRITING]
+    )
+    assert build.main() == 0
+    table = summary.read_text(encoding="utf-8")
+    assert "| writing | fresh | 2026-06-10 | rss2json |" in table
+    assert "| shipped | fresh | 2026-06-10 | direct |" in table
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["source_status"]["writing"]["via"] == "rss2json"
+
+
 def test_health_reads_dates_not_a_state_left_by_a_skipped_write(
     workspace, monkeypatch, capsys
 ):
