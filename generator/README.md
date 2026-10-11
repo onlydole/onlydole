@@ -24,6 +24,8 @@ releases from this profile repository are left out of both.
 Goodreads doesn't expose Kindle reading progress or last-opened order in
 this RSS feed. Its `pubDate` matches the shelf-added date in the observed
 feed. The generator requests up to 200 shelf entries and displays three.
+It asks Goodreads' image CDN for the top book's cover at 256 px tall, which
+covers the card at 2x and keeps full-size originals under the size cap.
 An explicit currently-reading shelf takes precedence over an older finished
 date, so rereads stay visible. A valid empty shelf clears the displayed books;
 an unavailable feed preserves them. A book can stay on that

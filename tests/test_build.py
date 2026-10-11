@@ -369,6 +369,41 @@ def test_cover_reuses_cache_when_url_unchanged(workspace, monkeypatch):
     assert "data:image/jpeg;base64,QUJD" in svg
 
 
+GR = "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1l/"
+
+
+@pytest.mark.parametrize(
+    ("url", "sized"),
+    [
+        (GR + "53498823._SY475_.jpg", GR + "53498823._SY256_.jpg"),
+        (GR + "12345._SX318_.jpg", GR + "12345._SY256_.jpg"),
+        (GR + "125094495.jpg", GR + "125094495._SY256_.jpg"),
+        (GR + "3828902._SX50_SY75_.jpg", GR + "3828902._SY256_.jpg"),
+        ("https://img/c.jpg", "https://img/c.jpg"),
+    ],
+)
+def test_goodreads_covers_are_requested_at_card_size(url, sized):
+    assert build._sized_cover(url) == sized
+
+
+def test_reading_fetches_and_caches_the_sized_cover(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    monkeypatch.setattr(
+        sources,
+        "fetch_goodreads",
+        lambda: [{**BOOKS[0], "image_url": GR + "53498823._SY475_.jpg"}],
+    )
+    requested = []
+    monkeypatch.setattr(
+        build,
+        "_download_cover",
+        lambda url: requested.append(url) or {**COVER, "url": url},
+    )
+    assert build.main() == 0
+    assert build.main() == 0
+    assert requested == [GR + "53498823._SY256_.jpg"]
+
+
 def test_cover_failure_renders_text_only(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     monkeypatch.setattr(build, "_download_cover", lambda url: None)

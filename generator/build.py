@@ -9,6 +9,7 @@ import functools
 import html
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -82,6 +83,10 @@ SOURCE_KEYS = ("writing", "podcast", "shipped", "stage", "reading")
 RELAYED = ("writing", "podcast")
 COVER_MAX_BYTES = 80_000
 COVER_TYPES = ("image/jpeg", "image/png", "image/webp", "image/gif")
+# Goodreads' image CDN resizes on request. 256 px covers the ~95 px card
+# cover at 2x and keeps full-size originals under COVER_MAX_BYTES.
+COVER_HEIGHT = 256
+_COVER_SIZE = re.compile(r"(?:\.(?:_S[XY]\d+)+_)?(\.(?:jpe?g|png))$", re.IGNORECASE)
 # Days a source may serve its cache before the card is labeled and the
 # scheduled run fails. Substack blocks hosted runners, so both Substack
 # cards depend on a free relay that misses a refresh now and then. A
@@ -177,10 +182,16 @@ def _download_cover(url: str) -> dict | None:
     }
 
 
+def _sized_cover(url: str) -> str:
+    if not url.startswith("https://i.gr-assets.com/images/"):
+        return url
+    return _COVER_SIZE.sub(rf"._SY{COVER_HEIGHT}_\1", url, count=1)
+
+
 def _fetch_reading(cached: object) -> dict:
     """Fetch Goodreads books, reusing the cached cover when its URL matches."""
     books = sources.fetch_goodreads()
-    image_url = (books[0].get("image_url") or "") if books else ""
+    image_url = _sized_cover((books[0].get("image_url") or "") if books else "")
     cached_cover = (cached.get("cover") if isinstance(cached, dict) else None) or {}
     cover = None
     if image_url and cached_cover.get("url") == image_url and cached_cover.get("b64"):
