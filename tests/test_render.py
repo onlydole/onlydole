@@ -63,6 +63,14 @@ def test_motion_is_opt_in_and_ends_on_the_plain_drawing():
                 assert "stroke-dashoffset: 0" in match.group(1), (name, keyframes)
 
 
+def test_no_filters_beyond_the_night_color_matrix():
+    """An animated SVG repaints every frame, so noise, blur and lighting
+    filters are out. The dark hero's color matrix is the one exception."""
+    for name, (template, context) in CASES.items():
+        svg = render_svg(template, context)
+        assert not re.search(r"<fe(?!ColorMatrix)", svg), name
+
+
 # Motion classes whose keyframes start at zero opacity or zero scale.
 HIDING_CLASSES = {"rise", "pop", "land"}
 SVG = "{http://www.w3.org/2000/svg}"

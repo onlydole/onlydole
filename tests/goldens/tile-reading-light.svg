@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="176" viewBox="0 0 1200 176" role="img" aria-label="Currently-reading shelf on Goodreads: Fixture book (Fixture author)">
+  <title>Currently-reading shelf on Goodreads: Fixture book (Fixture author)</title>
+  <style>
+    .icon { fill: none; stroke: #c2414f; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .fit { transform-box: fill-box; transform-origin: center; }
+    .turn { transform-box: fill-box; transform-origin: left center; }
+    @keyframes draw { from { stroke-dasharray: 1 1.1; stroke-dashoffset: 1.1; } to { stroke-dasharray: 1 1.1; stroke-dashoffset: 0; } }
+    @keyframes write { 0% { stroke-dasharray: 1 1.1; stroke-dashoffset: 1.1; } 7%, 100% { stroke-dasharray: 1 1.1; stroke-dashoffset: 0; } }
+    @keyframes pop { from { transform: scale(0); } 70% { transform: scale(1.3); } to { transform: scale(1); } }
+    @keyframes beat { 0%, 9%, 100% { transform: scale(1); } 4% { transform: scale(1.5); } }
+    @keyframes ring { 0% { opacity: .6; transform: scale(1); } 9%, 100% { opacity: 0; transform: scale(2.6); } }
+    @keyframes talk { 0%, 13%, 100% { transform: scaleY(1); } 2% { transform: scaleY(1.7); } 4% { transform: scaleY(.45); } 6% { transform: scaleY(1.45); } 8% { transform: scaleY(.7); } 10.5% { transform: scaleY(1.25); } }
+    @keyframes wave-l { 0%, 100% { opacity: 0; transform: none; } 3%, 9% { opacity: .9; } 6%, 12% { opacity: 0; transform: translateX(-7px); } 6.01% { transform: none; } }
+    @keyframes wave-r { 0%, 100% { opacity: 0; transform: none; } 3%, 9% { opacity: .9; } 6%, 12% { opacity: 0; transform: translateX(7px); } 6.01% { transform: none; } }
+    @keyframes turn { 0% { opacity: 0; transform: scaleX(1); } 1% { opacity: 1; } 9% { opacity: 1; transform: scaleX(-1); } 10%, 100% { opacity: 0; transform: scaleX(-1); } }
+    @keyframes sheen { 0% { opacity: 0; transform: translateX(-150px); } 2% { opacity: 1; } 11% { opacity: 1; transform: translateX(150px); } 12%, 100% { opacity: 0; transform: translateX(150px); } }
+    @keyframes nudge { 0%, 7%, 100% { transform: none; } 3.5% { transform: translateX(6px); } }
+    @media (prefers-reduced-motion: no-preference) {
+      .enter { animation: draw .9s cubic-bezier(.65, 0, .35, 1) 0.63s backwards; }
+      .land { animation: pop .4s cubic-bezier(.3, .7, .4, 1) 1.33s backwards; }
+      .write { animation: draw .9s cubic-bezier(.65, 0, .35, 1) 0.63s backwards, write 12.0s ease-in-out var(--d) 3; }
+      .talk { animation: pop .4s cubic-bezier(.3, .7, .4, 1) 1.33s backwards, talk 12.0s ease-in-out var(--d) 3; }
+      .beat { animation: pop .4s cubic-bezier(.3, .7, .4, 1) 1.33s backwards, beat 12.0s ease-in-out var(--d) 3; }
+      .ring { animation: ring 12.0s ease-in-out var(--d) 3; }
+      .wave-l { animation: wave-l 12.0s ease-in-out var(--d) 3; }
+      .wave-r { animation: wave-r 12.0s ease-in-out var(--d) 3; }
+      .turn { animation: turn 12.0s ease-in-out var(--d) 3; }
+      .sheen { animation: sheen 12.0s ease-in-out var(--d) 3; }
+      .nudge { animation: nudge 12.0s ease-in-out var(--d) 3; }
+    }
+  </style>
+  <defs>
+    <linearGradient id="wash" x2="1">
+      <stop stop-color="#c2414f" stop-opacity="0.25"/>
+      <stop offset="0.72" stop-color="#faf3e9" stop-opacity="0.02"/>
+    </linearGradient>
+    <pattern id="fibers" width="24" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="5" r="0.8" fill="#2d2521" fill-opacity="0.07"/>
+      <circle cx="19" cy="16" r="0.7" fill="#c2414f" fill-opacity="0.09"/>
+      <path d="M8 19 l6 -1 M1 11 l4 0.5" stroke="#2d2521" stroke-opacity="0.055"/>
+    </pattern>
+  </defs>
+  <rect x="1" y="1" width="1198" height="174" rx="8" fill="#faf3e9" stroke="#c2414f" stroke-opacity="0.4" stroke-width="2"/>
+  <rect x="2" y="2" width="1196" height="172" rx="7" fill="url(#wash)"/>
+  <rect x="2" y="2" width="1196" height="172" rx="7" fill="url(#fibers)"/>
+
+  <rect x="28" y="26" width="108" height="124" rx="6" fill="#c2414f" fill-opacity="0.12" stroke="#c2414f" stroke-opacity="0.28"/>
+  <g class="icon" transform="translate(82 88)" aria-hidden="true">
+
+    <path d="M0 -24 C-10 -31 -22 -30 -28 -24 V20 C-18 15 -9 16 0 23" pathLength="1" class="enter"/>
+    <path d="M0 -24 C10 -31 22 -30 28 -24 V20 C18 15 9 16 0 23" pathLength="1" class="enter"/>
+    <path d="M0 -24 V23" pathLength="1" class="enter"/>
+    <path d="M0 -24 C10 -31 22 -30 28 -24 V20 C18 15 9 16 0 23 Z" fill="#faf3e9" stroke-width="2.5" opacity="0" class="turn" style="--d: 12.8s"/>
+
+  </g>
+
+  <path d="M150 24 V152" stroke="#c2414f" stroke-opacity="0.36"/>
+  <text x="174" y="51" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2.6" fill="#c2414f">ON MY BOOKSHELF</text>
+
+  <text x="174" y="92" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#2d2521">Fixture book</text>
+
+  <text x="174" y="132" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="0.6" fill="#78665d">Fixture author</text>
+  <g class="nudge" style="--d: 13.100000000000001s">
+    <text x="1104" y="94" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="2.3" fill="#c2414f">EXPLORE</text>
+    <path d="M1124 88 H1161 M1150 77 L1161 88 L1150 99" fill="none" stroke="#c2414f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import base64
+import copy
 import datetime
 import functools
 import html
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -81,11 +83,18 @@ SOURCE_KEYS = ("writing", "podcast", "shipped", "stage", "reading")
 RELAYED = ("writing", "podcast")
 COVER_MAX_BYTES = 80_000
 COVER_TYPES = ("image/jpeg", "image/png", "image/webp", "image/gif")
+# Goodreads' image CDN resizes on request. 256 px covers the ~95 px card
+# cover at 2x and keeps full-size originals under COVER_MAX_BYTES.
+COVER_HEIGHT = 256
+_COVER_SIZE = re.compile(r"(?:\.(?:_S[XY]\d+)+_)?(\.(?:jpe?g|png))$", re.IGNORECASE)
 # Days a source may serve its cache before the card is labeled and the
 # scheduled run fails. Substack blocks hosted runners, so both Substack
 # cards depend on a free relay that misses a refresh now and then. A
 # missed six-hour refresh is normal; no success today or yesterday isn't.
 STALE_AFTER_DAYS = 1
+# Per-run transport detail, on source_status and on relayed posts. The next
+# run never reads it back, so a transport flip mustn't rewrite the cache.
+TRANSPORT_FIELDS = ("state", "via")
 
 
 def is_stale(status: dict, today: str) -> bool:
@@ -108,6 +117,26 @@ def hero_alt() -> str:
         f"Career so far: {career}. "
         f"Alongside: {', '.join(HERO['upstream'])}. {HERO['tagline']}"
     )
+
+
+def _without_transport(entry: object) -> object:
+    if not isinstance(entry, dict):
+        return entry
+    return {k: v for k, v in entry.items() if k not in TRANSPORT_FIELDS}
+
+
+def _durable(cache: dict) -> dict:
+    """The cache as the next run reads it back."""
+    durable = dict(cache)
+    statuses = cache.get("source_status")
+    if isinstance(statuses, dict):
+        durable["source_status"] = {
+            key: _without_transport(status) for key, status in statuses.items()
+        }
+    for key in RELAYED:
+        if isinstance(cache.get(key), list):
+            durable[key] = [_without_transport(post) for post in cache[key]]
+    return durable
 
 
 def _load_cache() -> dict:
@@ -153,10 +182,16 @@ def _download_cover(url: str) -> dict | None:
     }
 
 
+def _sized_cover(url: str) -> str:
+    if not url.startswith("https://i.gr-assets.com/images/"):
+        return url
+    return _COVER_SIZE.sub(rf"._SY{COVER_HEIGHT}_\1", url, count=1)
+
+
 def _fetch_reading(cached: object) -> dict:
     """Fetch Goodreads books, reusing the cached cover when its URL matches."""
     books = sources.fetch_goodreads()
-    image_url = (books[0].get("image_url") or "") if books else ""
+    image_url = _sized_cover((books[0].get("image_url") or "") if books else "")
     cached_cover = (cached.get("cover") if isinstance(cached, dict) else None) or {}
     cover = None
     if image_url and cached_cover.get("url") == image_url and cached_cover.get("b64"):
@@ -206,6 +241,7 @@ def _write_summary(statuses: dict) -> None:
 def gather(today: str) -> dict:
     """Fetch every source; fall back to last-good cache on failure."""
     cache = _load_cache()
+    persisted = copy.deepcopy(cache)
     fetchers = {
         "writing": sources.fetch_substack,
         "podcast": sources.fetch_podcast,
@@ -248,9 +284,10 @@ def gather(today: str) -> dict:
     data["_sources"] = statuses
     data["_today"] = today
     ASSETS.mkdir(exist_ok=True)
-    CACHE.write_text(
-        json.dumps(cache, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+    if _durable(cache) != _durable(persisted):
+        CACHE.write_text(
+            json.dumps(cache, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
     _write_summary(statuses)
     return data
 

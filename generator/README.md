@@ -24,6 +24,8 @@ releases from this profile repository are left out of both.
 Goodreads doesn't expose Kindle reading progress or last-opened order in
 this RSS feed. Its `pubDate` matches the shelf-added date in the observed
 feed. The generator requests up to 200 shelf entries and displays three.
+It asks Goodreads' image CDN for the top book's cover at 256 px tall, which
+covers the card at 2x and keeps full-size originals under the size cap.
 An explicit currently-reading shelf takes precedence over an older finished
 date, so rereads stay visible. A valid empty shelf clears the displayed books;
 an unavailable feed preserves them. A book can stay on that
@@ -69,7 +71,7 @@ The dark variant inverts the illustration's lightness and rotates its hue
 back, so the ink turns pale and the sun keeps its color. The profile page
 offers four hero files, phone layouts first, and GitHub picks by viewport
 width and `prefers-color-scheme`. The illustration is embedded as WebP, which cut
-each hero from 418 KB to about 107 KB.
+each hero from 418 KB to about 96 KB.
 
 The build owns every SVG in `assets/`. Each run deletes SVGs it didn't
 write, so renamed or retired cards don't linger.
@@ -85,8 +87,10 @@ GitHub. It never needs Goodreads, Kindle, or Substack credentials.
 
 Each successful fetch updates its own `last_success` in
 `assets/data-cache.json`. A failed source keeps its last usable data and
-last success date. Old caches without per-source dates show an unknown
-last success until the next successful fetch, and count as stale.
+last success date. The next run reads back only that date, so a source
+flipping between fresh and cached within one day leaves the file alone
+and doesn't create a commit. Old caches without per-source dates show an
+unknown last success until the next successful fetch, and count as stale.
 
 The workflow commits successful updates before checking source health.
 Health is a staleness budget, not a per-run check. A source may serve its
@@ -111,7 +115,7 @@ twice, after 2 and 5 seconds. A 4xx such as Substack's 403 is a policy
 answer and fails at once, and timeouts aren't retried. Relay content can
 lag the source. An older newest-post timestamp never replaces a newer
 snapshot already in the cache. Publication timestamps are normalized to
-UTC before sorting, including same-day posts. The Actions summary records
+whole-second UTC before sorting, including same-day posts. The Actions summary records
 when the relay was used. If every network route fails, the build keeps
 its local cache.
 
@@ -132,12 +136,14 @@ uv run --locked --project generator python -m generator.health
 
 Set `GITHUB_TOKEN` through your environment for live GitHub activity.
 Without it, that source uses the cache and counts toward the staleness budget.
-`BUILD_DATE` can set the displayed date for a reproducible fixture build.
+`BUILD_DATE` overrides the date stamped on `README.md`, the cards, and the
+cache. Sources are still fetched live, so discard a local build's changes
+rather than commit them.
 
 Edit the templates and generator, not the generated SVGs. Titles wrap
 against the available text width, including the space occupied by book
-covers. Extra-long titles end with an ellipsis; full titles and individual
-links remain available below each card. SVG clipping is a final boundary,
+covers. Extra-long titles end with an ellipsis. Full titles and individual
+links stay in the list below the cards. SVG clipping is a final boundary,
 not the layout algorithm. Check both themes and a narrow viewport after
 changing typography, and check reduced motion after changing animation.
 Activity cards use one wide, shallow layout at every viewport so GitHub

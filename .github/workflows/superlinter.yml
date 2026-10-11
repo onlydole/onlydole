@@ -20,11 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
-    permissions:
-      contents: read
-      packages: read
-      statuses: write
-
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -33,12 +28,18 @@ jobs:
           persist-credentials: false
 
       - name: Super-linter
-        uses: super-linter/super-linter@2da136927bd4a73596db63044b504547c62cb854 # v9.0.0
+        uses: super-linter/super-linter/slim@2da136927bd4a73596db63044b504547c62cb854 # v9.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SAVE_SUPER_LINTER_SUMMARY: true
           ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
+          # One Lint check instead of 20 serial commit-status posts. The job
+          # summary still names each linter.
+          MULTI_STATUS: false
           MARKDOWN_CONFIG_FILE: .markdownlint.yaml
+          # Config paths resolve under .github/linters. Without this,
+          # super-linter lints with ruff's default rules, not ruff.toml.
+          PYTHON_RUFF_CONFIG_FILE: ../../ruff.toml
           FILTER_REGEX_EXCLUDE: (assets/|tests/goldens/|tests/fixtures/)
           VALIDATE_PYTHON_PYLINT: false
           VALIDATE_PYTHON_MYPY: false

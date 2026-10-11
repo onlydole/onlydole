@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 import httpx
 import pytest
 
-from generator import build, sources
+from generator import build, health, sources
 
 README_FRAME = (
     "<!-- bento:start --><!-- bento:end -->\n"
@@ -156,6 +156,96 @@ def test_dead_source_falls_back_to_cache(workspace, monkeypatch):
     assert "cached · last fetched 2026-06-10" in svg
 
 
+def _relay_down():
+    raise sources.SourceError("relay answered 500")
+
+
+def test_same_day_relay_flip_leaves_cache_untouched(workspace, monkeypatch):
+    monkeypatch.setattr(health, "CACHE", build.CACHE)
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+    before = build.CACHE.read_text(encoding="utf-8")
+
+    monkeypatch.setattr(sources, "fetch_substack", _relay_down)
+    assert build.main() == 0
+    assert build.CACHE.read_text(encoding="utf-8") == before
+    assert health.main() == 0
+
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+    assert build.CACHE.read_text(encoding="utf-8") == before
+
+
+def test_switching_between_relay_and_direct_routes_leaves_cache_untouched(
+    workspace, monkeypatch
+):
+    relayed = [{**post, "via": "rss2json"} for post in WRITING]
+    _patch_sources(monkeypatch, writing=relayed)
+    assert build.main() == 0
+    before = build.CACHE.read_text(encoding="utf-8")
+
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+    assert build.CACHE.read_text(encoding="utf-8") == before
+
+
+def test_job_summary_names_each_source_and_its_transport(workspace, monkeypatch):
+    summary = workspace / "summary.md"
+    monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary))
+    _patch_sources(
+        monkeypatch, writing=[{**post, "via": "rss2json"} for post in WRITING]
+    )
+    assert build.main() == 0
+    table = summary.read_text(encoding="utf-8")
+    assert "| writing | fresh | 2026-06-10 | rss2json |" in table
+    assert "| shipped | fresh | 2026-06-10 | direct |" in table
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["source_status"]["writing"]["via"] == "rss2json"
+
+
+def test_health_reads_dates_not_a_state_left_by_a_skipped_write(
+    workspace, monkeypatch, capsys
+):
+    monkeypatch.setattr(health, "CACHE", build.CACHE)
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+
+    new_talk = [{**TALKS[0], "title": "New talk"}]
+    monkeypatch.setattr(sources, "fetch_substack", _relay_down)
+    monkeypatch.setattr(sources, "fetch_talks", lambda: new_talk)
+    assert build.main() == 0
+    recorded = build.CACHE.read_text(encoding="utf-8")
+    assert json.loads(recorded)["source_status"]["writing"]["state"] == "cached"
+
+    _patch_sources(monkeypatch)
+    monkeypatch.setattr(sources, "fetch_talks", lambda: new_talk)
+    assert build.main() == 0
+    assert build.CACHE.read_text(encoding="utf-8") == recorded
+    capsys.readouterr()
+    assert health.main() == 0
+    assert "writing" not in capsys.readouterr().out
+
+
+def test_cache_still_records_rollover_and_same_day_recovery(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+
+    monkeypatch.setenv("BUILD_DATE", "2026-06-11")
+    monkeypatch.setattr(sources, "fetch_substack", _relay_down)
+    assert build.main() == 0
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["updated"] == "2026-06-11"
+    assert cache["source_status"]["writing"]["last_success"] == "2026-06-10"
+
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["source_status"]["writing"] == {
+        "state": "fresh",
+        "last_success": "2026-06-11",
+    }
+
+
 @pytest.mark.parametrize(
     ("status", "stale"),
     [
@@ -277,6 +367,41 @@ def test_cover_reuses_cache_when_url_unchanged(workspace, monkeypatch):
     assert build.main() == 0
     svg = (build.ASSETS / "reading-dark.svg").read_text(encoding="utf-8")
     assert "data:image/jpeg;base64,QUJD" in svg
+
+
+GR = "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1l/"
+
+
+@pytest.mark.parametrize(
+    ("url", "sized"),
+    [
+        (GR + "53498823._SY475_.jpg", GR + "53498823._SY256_.jpg"),
+        (GR + "12345._SX318_.jpg", GR + "12345._SY256_.jpg"),
+        (GR + "125094495.jpg", GR + "125094495._SY256_.jpg"),
+        (GR + "3828902._SX50_SY75_.jpg", GR + "3828902._SY256_.jpg"),
+        ("https://img/c.jpg", "https://img/c.jpg"),
+    ],
+)
+def test_goodreads_covers_are_requested_at_card_size(url, sized):
+    assert build._sized_cover(url) == sized
+
+
+def test_reading_fetches_and_caches_the_sized_cover(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    monkeypatch.setattr(
+        sources,
+        "fetch_goodreads",
+        lambda: [{**BOOKS[0], "image_url": GR + "53498823._SY475_.jpg"}],
+    )
+    requested = []
+    monkeypatch.setattr(
+        build,
+        "_download_cover",
+        lambda url: requested.append(url) or {**COVER, "url": url},
+    )
+    assert build.main() == 0
+    assert build.main() == 0
+    assert requested == [GR + "53498823._SY256_.jpg"]
 
 
 def test_cover_failure_renders_text_only(workspace, monkeypatch):

@@ -72,10 +72,14 @@ def _entry_date(published) -> str | None:
 
 
 def _published_fields(value: datetime.datetime) -> dict:
-    """Keep full UTC precision for ordering while displaying a short date."""
+    """Whole-second UTC, so every route stamps the same post identically.
+
+    The archive reports milliseconds and the relay doesn't. gather compares
+    stamps as strings, where "28+00:00" sorts before "28.942000+00:00".
+    """
     if value.tzinfo is None:
         value = value.replace(tzinfo=datetime.UTC)
-    value = value.astimezone(datetime.UTC)
+    value = value.astimezone(datetime.UTC).replace(microsecond=0)
     return {"date": value.date().isoformat(), "published_at": value.isoformat()}
 
 

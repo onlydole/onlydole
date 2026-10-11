@@ -48,6 +48,18 @@ CASES = {
             aria="Latest writing: Fixture post (2026-01-02)",
         ),
     ),
+    "tile-podcast-light.svg": (
+        "tile.svg.j2",
+        _tile(
+            LIGHT,
+            "podcast",
+            [{"primary": "Fixture episode", "secondary": "2026-01-02"}],
+            1,
+            header="ATTENTION DEFICIT",
+            action="LISTEN",
+            aria="Attention Deficit: Fixture episode (2026-01-02)",
+        ),
+    ),
     "tile-shipped-light.svg": (
         "tile.svg.j2",
         _tile(
@@ -65,6 +77,30 @@ CASES = {
             header="RECENTLY SHIPPED",
             action="VIEW",
             aria="Recently shipped: fixture",
+        ),
+    ),
+    "tile-stage-dark.svg": (
+        "tile.svg.j2",
+        _tile(
+            DARK,
+            "stage",
+            [{"primary": "Fixture talk", "secondary": "Conf · 2026-01-02"}],
+            3,
+            header="ON STAGE",
+            action="WATCH",
+            aria="On stage: Fixture talk (Conf · 2026-01-02)",
+        ),
+    ),
+    "tile-reading-light.svg": (
+        "tile.svg.j2",
+        _tile(
+            LIGHT,
+            "reading",
+            [{"primary": "Fixture book", "secondary": "Fixture author"}],
+            4,
+            header="ON MY BOOKSHELF",
+            action="EXPLORE",
+            aria="Currently-reading shelf on Goodreads: Fixture book (Fixture author)",
         ),
     ),
     "tile-reading-cover-dark.svg": (
