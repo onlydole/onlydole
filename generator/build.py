@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+import copy
 import datetime
 import functools
 import html
@@ -86,6 +87,9 @@ COVER_TYPES = ("image/jpeg", "image/png", "image/webp", "image/gif")
 # cards depend on a free relay that misses a refresh now and then. A
 # missed six-hour refresh is normal; no success today or yesterday isn't.
 STALE_AFTER_DAYS = 1
+# Per-run transport detail. The next run carries forward only last_success,
+# so a relay flipping between fresh and cached mustn't rewrite the cache.
+TRANSPORT_FIELDS = ("state", "via")
 
 
 def is_stale(status: dict, today: str) -> bool:
@@ -108,6 +112,22 @@ def hero_alt() -> str:
         f"Career so far: {career}. "
         f"Alongside: {', '.join(HERO['upstream'])}. {HERO['tagline']}"
     )
+
+
+def _durable(cache: dict) -> dict:
+    """The cache as the next run reads it back."""
+    statuses = cache.get("source_status")
+    if not isinstance(statuses, dict):
+        return cache
+    return {
+        **cache,
+        "source_status": {
+            key: {k: v for k, v in status.items() if k not in TRANSPORT_FIELDS}
+            if isinstance(status, dict)
+            else status
+            for key, status in statuses.items()
+        },
+    }
 
 
 def _load_cache() -> dict:
@@ -206,6 +226,7 @@ def _write_summary(statuses: dict) -> None:
 def gather(today: str) -> dict:
     """Fetch every source; fall back to last-good cache on failure."""
     cache = _load_cache()
+    persisted = copy.deepcopy(cache)
     fetchers = {
         "writing": sources.fetch_substack,
         "podcast": sources.fetch_podcast,
@@ -248,9 +269,10 @@ def gather(today: str) -> dict:
     data["_sources"] = statuses
     data["_today"] = today
     ASSETS.mkdir(exist_ok=True)
-    CACHE.write_text(
-        json.dumps(cache, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+    if _durable(cache) != _durable(persisted):
+        CACHE.write_text(
+            json.dumps(cache, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
     _write_summary(statuses)
     return data
 

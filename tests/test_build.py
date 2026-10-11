@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 import httpx
 import pytest
 
-from generator import build, sources
+from generator import build, health, sources
 
 README_FRAME = (
     "<!-- bento:start --><!-- bento:end -->\n"
@@ -154,6 +154,46 @@ def test_dead_source_falls_back_to_cache(workspace, monkeypatch):
     assert "Built: 2026-06-12 · cached or unavailable: writing" in third
     svg = (build.ASSETS / "writing-dark.svg").read_text(encoding="utf-8")
     assert "cached · last fetched 2026-06-10" in svg
+
+
+def _relay_down():
+    raise sources.SourceError("relay answered 500")
+
+
+def test_same_day_relay_flip_leaves_cache_untouched(workspace, monkeypatch):
+    monkeypatch.setattr(health, "CACHE", build.CACHE)
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+    before = build.CACHE.read_text(encoding="utf-8")
+
+    monkeypatch.setattr(sources, "fetch_substack", _relay_down)
+    assert build.main() == 0
+    assert build.CACHE.read_text(encoding="utf-8") == before
+    assert health.main() == 0
+
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+    assert build.CACHE.read_text(encoding="utf-8") == before
+
+
+def test_cache_still_records_rollover_and_same_day_recovery(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+
+    monkeypatch.setenv("BUILD_DATE", "2026-06-11")
+    monkeypatch.setattr(sources, "fetch_substack", _relay_down)
+    assert build.main() == 0
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["updated"] == "2026-06-11"
+    assert cache["source_status"]["writing"]["last_success"] == "2026-06-10"
+
+    _patch_sources(monkeypatch)
+    assert build.main() == 0
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["source_status"]["writing"] == {
+        "state": "fresh",
+        "last_success": "2026-06-11",
+    }
 
 
 @pytest.mark.parametrize(

@@ -85,8 +85,10 @@ GitHub. It never needs Goodreads, Kindle, or Substack credentials.
 
 Each successful fetch updates its own `last_success` in
 `assets/data-cache.json`. A failed source keeps its last usable data and
-last success date. Old caches without per-source dates show an unknown
-last success until the next successful fetch, and count as stale.
+last success date. The next run reads back only that date, so a source
+flipping between fresh and cached within one day leaves the file alone
+and doesn't create a commit. Old caches without per-source dates show an
+unknown last success until the next successful fetch, and count as stale.
 
 The workflow commits successful updates before checking source health.
 Health is a staleness budget, not a per-run check. A source may serve its
