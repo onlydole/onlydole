@@ -67,13 +67,15 @@ def test_substack_blocked_rss_uses_public_archive(monkeypatch):
                 {
                     "title": "New",
                     "canonical_url": "https://s/new",
-                    "post_date": "2026-09-05T15:50:36Z",
+                    "post_date": "2026-09-05T15:50:36.188Z",
                 },
             ],
         )
 
     monkeypatch.setattr(sources.httpx, "get", get)
-    assert sources.fetch_substack()[0]["title"] == "New"
+    newest = sources.fetch_substack()[0]
+    assert newest["title"] == "New"
+    assert newest["published_at"] == "2026-09-05T15:50:36+00:00"
     assert calls == [
         sources.SUBSTACK_FEED,
         "https://onlydole.substack.com/api/v1/archive",

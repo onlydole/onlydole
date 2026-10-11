@@ -113,7 +113,7 @@ twice, after 2 and 5 seconds. A 4xx such as Substack's 403 is a policy
 answer and fails at once, and timeouts aren't retried. Relay content can
 lag the source. An older newest-post timestamp never replaces a newer
 snapshot already in the cache. Publication timestamps are normalized to
-UTC before sorting, including same-day posts. The Actions summary records
+whole-second UTC before sorting, including same-day posts. The Actions summary records
 when the relay was used. If every network route fails, the build keeps
 its local cache.
 
