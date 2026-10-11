@@ -14,7 +14,7 @@ def main() -> int:
         status = statuses.get(key, {})
         if is_stale(status, today):
             stale.append(key)
-        # Dates, not state: a run that only flips state skips the cache write.
+        # Read dates, not state. A run that only flips state skips the cache write.
         elif status.get("last_success") != today:
             behind.append(key)
     if behind:
