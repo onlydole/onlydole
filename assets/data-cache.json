@@ -118,12 +118,14 @@
   ],
   "source_status": {
     "writing": {
-      "state": "cached",
-      "last_success": "2026-10-14"
+      "state": "fresh",
+      "last_success": "2026-10-15",
+      "via": "rss2json"
     },
     "podcast": {
-      "state": "cached",
-      "last_success": "2026-10-14"
+      "state": "fresh",
+      "last_success": "2026-10-15",
+      "via": "rss2json"
     },
     "shipped": {
       "state": "fresh",
