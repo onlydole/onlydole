@@ -118,8 +118,9 @@
   ],
   "source_status": {
     "writing": {
-      "state": "cached",
-      "last_success": "2026-10-18"
+      "state": "fresh",
+      "last_success": "2026-10-19",
+      "via": "rss2json"
     },
     "podcast": {
       "state": "cached",
