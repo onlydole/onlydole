@@ -24,22 +24,22 @@
   ],
   "shipped": [
     {
-      "title": "fix: update dependencies and harden library workflows",
-      "detail": "merged · onlydole/overdue",
-      "url": "https://github.com/onlydole/overdue/pull/152",
-      "date": "2026-10-22"
+      "title": "tailord v1.3.2",
+      "detail": "release",
+      "url": "https://github.com/onlydole/tailord/releases/tag/v1.3.2",
+      "date": "2026-05-09"
     },
     {
-      "title": "chore: prepare Python environment for Amp orbs",
-      "detail": "merged · onlydole/onlydole.github.io",
-      "url": "https://github.com/onlydole/onlydole.github.io/pull/20",
-      "date": "2026-09-26"
+      "title": "tailord v1.3.1",
+      "detail": "release",
+      "url": "https://github.com/onlydole/tailord/releases/tag/v1.3.1",
+      "date": "2026-05-09"
     },
     {
-      "title": "Point Pullfrog at deepseek-v4-pro on Ollama",
-      "detail": "merged · onlydole/onlydole.github.io",
-      "url": "https://github.com/onlydole/onlydole.github.io/pull/15",
-      "date": "2026-08-20"
+      "title": "tailord v1.3.0",
+      "detail": "release",
+      "url": "https://github.com/onlydole/tailord/releases/tag/v1.3.0",
+      "date": "2026-05-09"
     }
   ],
   "stage": [
@@ -69,21 +69,21 @@
     "books": [
       {
         "title": "Vibe: The Secrets of Strong Connections in a Lonely World",
-        "author": "Adam  Grant",
-        "url": "https://www.goodreads.com/review/show/9054351199?utm_medium=api&utm_source=rss",
-        "image_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1771946476l/248284963._SY475_.jpg"
+        "author": "Adam Grant",
+        "url": "https://www.goodreads.com/book/show/248284963-vibe",
+        "image_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1771946476l/248284963._SX98_.jpg"
       },
       {
         "title": "Built to Grow: A Handbook for High-Performance Sales Teams",
-        "author": "Stephanie  Friedman",
-        "url": "https://www.goodreads.com/review/show/9029572715?utm_medium=api&utm_source=rss",
-        "image_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1781802701l/253970329._SY475_.jpg"
+        "author": "Stephanie Friedman",
+        "url": "https://www.goodreads.com/book/show/253970329-built-to-grow",
+        "image_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1781802701l/253970329._SX98_.jpg"
       },
       {
         "title": "Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed (Veritas Paperbacks)",
         "author": "James C. Scott",
-        "url": "https://www.goodreads.com/review/show/8990659938?utm_medium=api&utm_source=rss",
-        "image_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1590608638l/53498823._SY475_.jpg"
+        "url": "https://www.goodreads.com/book/show/53498823-seeing-like-a-state",
+        "image_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1590608638l/53498823._SX98_.jpg"
       }
     ],
     "cover": {
@@ -136,8 +136,8 @@
       "last_success": "2026-10-30"
     },
     "reading": {
-      "state": "cached",
-      "last_success": "2026-10-27"
+      "state": "fresh",
+      "last_success": "2026-10-30"
     }
   }
 }

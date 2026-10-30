@@ -9,13 +9,13 @@
   <a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-8-gpt-6-luna"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/podcast-dark.svg"><img src="assets/podcast-light.svg" width="100%" alt="Attention Deficit, with Alexa Griffith: Attention Deficit Ep. 8 – GPT-6 Luna vs Sol. Can a harness close the gap? (2026-10-21); Attention Deficit Ep. 7 – Be Like a Data Center (2026-09-07); Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers (2026-08-30)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://github.com/onlydole/overdue/pull/152"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: fix: update dependencies and harden library workflows (merged · onlydole/overdue · 2026-10-22); chore: prepare Python environment for Amp orbs (merged · onlydole/onlydole.github.io · 2026-09-26); Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20)"></picture></a>
+  <a href="https://github.com/onlydole/tailord/releases/tag/v1.3.2"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: tailord v1.3.2 (release · 2026-05-09); tailord v1.3.1 (release · 2026-05-09); tailord v1.3.0 (release · 2026-05-09)"></picture></a>
 </p>
 <p align="center">
   <a href="https://creators.spotify.com/pod/profile/alexagriffith/episodes/Paying-Attention-in-the-Age-of-Agents-e3m9i24"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: Paying Attention in the Age of Agents (Alexa&#x27;s Input (AI), panel episode · 2026-07-20); Lambda&#x27;s Long Game, Claude&#x27;s Complexity, and the AI Adoption Gap (LogiCast, Season 5 Episode 16 · 2026-04-29); Shaping the Future of Documentation. OSS, Knowledge, and Dosu (Software Plaza · 2025-12-05)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://www.goodreads.com/review/show/9054351199?utm_medium=api&amp;utm_source=rss"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Currently-reading shelf on Goodreads: Vibe: The Secrets of Strong Connections in a Lonely World (Adam Grant); Built to Grow: A Handbook for High-Performance Sales Teams (Stephanie Friedman); Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed (Veritas Paperbacks) (James C. Scott)"></picture></a>
+  <a href="https://www.goodreads.com/book/show/248284963-vibe"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Currently-reading shelf on Goodreads: Vibe: The Secrets of Strong Connections in a Lonely World (Adam Grant); Built to Grow: A Handbook for High-Performance Sales Teams (Stephanie Friedman); Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed (Veritas Paperbacks) (James C. Scott)"></picture></a>
 </p>
 <details>
 <summary>Browse all field notes and individual links</summary>
@@ -36,9 +36,9 @@
 </li>
 <li><strong>Recently Shipped</strong>
 <ul>
-<li><a href="https://github.com/onlydole/overdue/pull/152">fix: update dependencies and harden library workflows</a> · merged · onlydole/overdue · 2026-10-22</li>
-<li><a href="https://github.com/onlydole/onlydole.github.io/pull/20">chore: prepare Python environment for Amp orbs</a> · merged · onlydole/onlydole.github.io · 2026-09-26</li>
-<li><a href="https://github.com/onlydole/onlydole.github.io/pull/15">Point Pullfrog at deepseek-v4-pro on Ollama</a> · merged · onlydole/onlydole.github.io · 2026-08-20</li>
+<li><a href="https://github.com/onlydole/tailord/releases/tag/v1.3.2">tailord v1.3.2</a> · release · 2026-05-09</li>
+<li><a href="https://github.com/onlydole/tailord/releases/tag/v1.3.1">tailord v1.3.1</a> · release · 2026-05-09</li>
+<li><a href="https://github.com/onlydole/tailord/releases/tag/v1.3.0">tailord v1.3.0</a> · release · 2026-05-09</li>
 </ul>
 </li>
 <li><strong>On Stage</strong>
@@ -50,9 +50,9 @@
 </li>
 <li><strong>On My Bookshelf</strong>
 <ul>
-<li><a href="https://www.goodreads.com/review/show/9054351199?utm_medium=api&amp;utm_source=rss">Vibe: The Secrets of Strong Connections in a Lonely World</a> · Adam Grant</li>
-<li><a href="https://www.goodreads.com/review/show/9029572715?utm_medium=api&amp;utm_source=rss">Built to Grow: A Handbook for High-Performance Sales Teams</a> · Stephanie Friedman</li>
-<li><a href="https://www.goodreads.com/review/show/8990659938?utm_medium=api&amp;utm_source=rss">Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed (Veritas Paperbacks)</a> · James C. Scott</li>
+<li><a href="https://www.goodreads.com/book/show/248284963-vibe">Vibe: The Secrets of Strong Connections in a Lonely World</a> · Adam Grant</li>
+<li><a href="https://www.goodreads.com/book/show/253970329-built-to-grow">Built to Grow: A Handbook for High-Performance Sales Teams</a> · Stephanie Friedman</li>
+<li><a href="https://www.goodreads.com/book/show/53498823-seeing-like-a-state">Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed (Veritas Paperbacks)</a> · James C. Scott</li>
 </ul>
 </li>
 </ul>
@@ -79,6 +79,6 @@ for the people building with it.
 Talk to me about Kubernetes, open source, your latest side project,
 or a good hike in LA.
 
-<sub><!-- stamp:start -->Built: 2026-10-30 · cached or unavailable: reading<!-- stamp:end --> · refreshed every six hours by
+<sub><!-- stamp:start -->Last refreshed: 2026-10-30<!-- stamp:end --> · refreshed every six hours by
 [GitHub Actions](.github/workflows/build-profile.yml) ·
 [how it works](generator/)</sub>
