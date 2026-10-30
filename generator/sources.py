@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import datetime
 import json
+import re
 import time
 from email.utils import parsedate_to_datetime
+from html.parser import HTMLParser
 from xml.etree import ElementTree
 
 import feedparser
@@ -18,13 +20,10 @@ GITHUB_LOGIN = "onlydole"
 PROFILE_REPO = "onlydole/onlydole"
 GRAPHQL_URL = "https://api.github.com/graphql"
 GOODREADS_USER_ID = "22801001"
-GOODREADS_SHELF = (
-    f"https://www.goodreads.com/review/list/{GOODREADS_USER_ID}?shelf=currently-reading"
-)
-GOODREADS_FEED = (
-    "https://www.goodreads.com/review/list_rss/"
-    f"{GOODREADS_USER_ID}?shelf=currently-reading&sort=date_updated&order=d&per_page=200"
-)
+# Shelf and review pages need sign-in. Profiles and book pages don't.
+GOODREADS_PROFILE = f"https://www.goodreads.com/user/show/{GOODREADS_USER_ID}"
+GOODREADS_BOOK = "https://www.goodreads.com/book/show/"
+_BOOK_PATH = re.compile(r"(?:https://www\.goodreads\.com)?/book/show/(\d+[\w.-]*)")
 TALKS_FEED = "https://onlydole.dev/feeds/talks.xml"
 USER_AGENT = "Mozilla/5.0 (compatible; onlydole-profile-bot/1.0)"
 
@@ -342,29 +341,14 @@ def _rfc822_date(value: str | None) -> str | None:
         return None
 
 
-def _rfc822_sort_key(value: str | None) -> datetime.datetime:
-    """Sortable datetime from an RFC 822 pubDate.
-
-    Absent or malformed dates sort oldest. Callers sort with a stable
-    sort, so those items keep their feed order behind the dated ones.
-    Naive timestamps are read as UTC so they stay comparable with the
-    offset-aware ones Goodreads normally sends.
-    """
-    try:
-        parsed = parsedate_to_datetime(value)
-    except (TypeError, ValueError, OverflowError):
-        return datetime.datetime.min.replace(tzinfo=datetime.UTC)
-    if parsed.tzinfo is None:
-        return parsed.replace(tzinfo=datetime.UTC)
-    return parsed
-
-
 def parse_talks(feed_text: str) -> list[dict]:
     """Parse the onlydole.dev talks RSS feed into up to 3 talk dicts.
 
-    Same DTD and entity rejection guard as parse_goodreads. The feed
-    carries the venue in each item's description and the kind in its
-    category, per the producer spec in onlydole.github.io.
+    Rejects any document carrying DTD or entity declarations before
+    parsing. That closes the XXE and entity-expansion attack classes
+    without a defusedxml dependency. The feed carries the venue in each
+    item's description and the kind in its category, per the producer
+    spec in onlydole.github.io.
     """
     lowered = feed_text.lower()
     if "<!doctype" in lowered or "<!entity" in lowered:
@@ -405,68 +389,93 @@ def fetch_talks() -> list[dict]:
     return parse_talks(resp.text)
 
 
-def parse_goodreads(feed_text: str) -> list[dict]:
-    """Parse a Goodreads shelf RSS feed into up to 3 book dicts.
+class _CurrentlyReading(HTMLParser):
+    """Collect books from the profile's Currently Reading box.
 
-    Prefer an explicit review update timestamp when present, then the
-    shelf-added date. Neither is a Kindle last-opened timestamp. Request
-    the expanded shelf upstream so sorting isn't limited to its first page.
-
-    Rejects any document carrying DTD or entity declarations before
-    parsing. That closes the XXE and entity-expansion attack classes
-    without a defusedxml dependency, and real Goodreads feeds never
-    include a DOCTYPE. Python 3.12's expat amplification limits are the
-    second layer.
+    Goodreads renders the box as a div with id="currentlyReadingReviews"
+    holding one div.Updates per book, with the cover first, then
+    a.bookTitle and a.authorName. Anything outside the box is ignored.
     """
-    lowered = feed_text.lower()
-    if "<!doctype" in lowered or "<!entity" in lowered:
-        raise SourceError("feed contains DTD or entity declarations")
-    try:
-        root = ElementTree.fromstring(feed_text)
-    except ElementTree.ParseError as exc:
-        raise SourceError(f"unparsable goodreads feed: {exc}") from exc
-    if root.tag != "rss" or root.find("channel") is None:
-        raise SourceError("goodreads response was not an RSS channel")
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.found = False
+        self.books: list[dict] = []
+        self._depth = 0
+        self._field: str | None = None
+
+    def handle_starttag(self, tag: str, attrs: list) -> None:
+        attr = {k: v or "" for k, v in attrs}
+        classes = set(attr.get("class", "").split())
+        if not self._depth:
+            if tag == "div" and attr.get("id") == "currentlyReadingReviews":
+                self.found = True
+                self._depth = 1
+            return
+        if tag == "div":
+            self._depth += 1
+            if "Updates" in classes:
+                self.books.append({"title": "", "author": "", "href": "", "image": ""})
+        if not self.books:
+            return
+        book = self.books[-1]
+        if tag == "img" and not book["image"]:
+            book["image"] = attr.get("src", "")
+        elif tag == "a" and "bookTitle" in classes and not book["title"]:
+            book["href"] = attr.get("href", "")
+            self._field = "title"
+        elif tag == "a" and "authorName" in classes and not book["author"]:
+            self._field = "author"
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "a":
+            self._field = None
+        elif tag == "div" and self._depth:
+            self._depth -= 1
+
+    def handle_data(self, data: str) -> None:
+        if self._field:
+            self.books[-1][self._field] += data
+
+
+def _book_url(href: str) -> str | None:
+    """Public book page for a /book/show/ link, or None for anything else."""
+    match = _BOOK_PATH.fullmatch(href)
+    return GOODREADS_BOOK + match[1] if match else None
+
+
+def parse_goodreads(page: str) -> list[dict]:
+    """Parse the public profile page into up to 3 currently-reading books.
+
+    Goodreads dropped shelf RSS and put shelf pages behind sign-in in
+    October 2026. The profile still shows the shelf to logged-out visitors,
+    and the card keeps its order. A page without the box, such as the
+    sign-in page or a redesign, raises so the build keeps its cache.
+    """
+    parser = _CurrentlyReading()
+    parser.feed(page)
+    parser.close()
+    if not parser.found:
+        raise SourceError("goodreads profile had no Currently Reading box")
     books = []
-    eligible = 0
-    for item in root.iter("item"):
-        shelves = item.findtext("user_shelves")
-        if shelves is not None and "currently-reading" not in {
-            s.strip() for s in shelves.split(",")
-        }:
-            continue
-        if shelves is None and (item.findtext("user_read_at") or "").strip():
-            continue
-        eligible += 1
-        title = (item.findtext("title") or "").strip()
-        author = (item.findtext("author_name") or "").strip()
-        url = (item.findtext("link") or "").strip()
-        image = (item.findtext("book_large_image_url") or "").strip() or (
-            item.findtext("book_image_url") or ""
-        ).strip()
+    for raw in parser.books:
+        title = " ".join(raw["title"].split())
+        author = " ".join(raw["author"].split())
+        url = _book_url(raw["href"])
         if not (title and author and url):
             continue
-        books.append(
-            (
-                _rfc822_sort_key(
-                    item.findtext("user_date_updated")
-                    or item.findtext("user_date_added")
-                    or item.findtext("pubDate")
-                ),
-                {"title": title, "author": author, "url": url, "image_url": image},
-            )
-        )
-    if not books and eligible:
-        raise SourceError("goodreads shelf feed had no usable items")
-    books.sort(key=lambda entry: entry[0], reverse=True)
-    return [book for _key, book in books[:3]]
+        image = raw["image"] if raw["image"].startswith("https://") else ""
+        books.append({"title": title, "author": author, "url": url, "image_url": image})
+    if not books and parser.books:
+        raise SourceError("goodreads Currently Reading box had no usable books")
+    return books[:3]
 
 
 def fetch_goodreads() -> list[dict]:
     try:
         resp = _send(
             "GET",
-            GOODREADS_FEED,
+            GOODREADS_PROFILE,
             timeout=30,
             follow_redirects=True,
             headers={"User-Agent": USER_AGENT},

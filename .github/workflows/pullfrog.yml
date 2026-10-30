@@ -73,3 +73,7 @@ jobs:
           # 65536 default, 131072 maximum.
           OPENAI_COMPATIBLE_CONTEXT: "1048576"
           OPENAI_COMPATIBLE_MAX_OUTPUT: "131072"
+          # Run the pinned SHA's CLI, not npx pullfrog@^version from npm,
+          # which would skip both the pin and Dependabot's cooldown.
+          # It is undocumented, so grep runCli.ts for it on each action bump.
+          PULLFROG_FORCE_LOCAL_CLI: "1"

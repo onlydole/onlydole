@@ -13,7 +13,7 @@ The prose outside those regions stays hand-written.
 | Attention Deficit | [Podcast RSS](https://attentiondeficitpod.substack.com/feed), with the public archive as fallback | Publication date, newest first |
 | Shipped | GitHub public releases and merged public PRs | Merge or publication date, newest first |
 | On stage | [Talks feed](https://onlydole.dev/feeds/talks.xml) | Event date, newest first |
-| Bookshelf | [Goodreads currently-reading shelf](https://www.goodreads.com/review/list/22801001?shelf=currently-reading) | Update date when available, then shelf-added date |
+| Bookshelf | [Goodreads profile](https://www.goodreads.com/user/show/22801001), Currently Reading box | The profile's order |
 
 GitHub activity searches public PRs before applying the result limit.
 Filtering a user's latest PRs afterward lets private work crowd out public
@@ -21,16 +21,16 @@ work. The query samples 100 public PRs and releases from 50 recently pushed
 public repositories; it isn't a complete activity history. PRs and
 releases from this profile repository are left out of both.
 
-Goodreads doesn't expose Kindle reading progress or last-opened order in
-this RSS feed. Its `pubDate` matches the shelf-added date in the observed
-feed. The generator requests up to 200 shelf entries and displays three.
-It asks Goodreads' image CDN for the top book's cover at 256 px tall, which
-covers the card at 2x and keeps full-size originals under the size cap.
-An explicit currently-reading shelf takes precedence over an older finished
-date, so rereads stay visible. A valid empty shelf clears the displayed books;
-an unavailable feed preserves them. A book can stay on that
-shelf long after you put it down. Fix that at the source by updating your
-Goodreads shelf; a more frequent build cannot recover missing Kindle data.
+Goodreads removed shelf RSS in late October 2026, and shelf and review
+pages now redirect logged-out visitors to sign-in. The public profile page
+still shows a Currently Reading box, so the generator reads the first three
+books from it and links each one to its public `book/show` page. It asks
+Goodreads' image CDN for the top book's cover at 256 px tall, which covers
+the card at 2x and keeps full-size originals under the size cap. A box with
+no books clears the displayed books. A page without the box, such as the
+sign-in page or a redesign, counts as an outage and keeps them. A book can
+stay on that shelf long after you put it down. Fix that at the source by
+updating your Goodreads shelf.
 
 ## Motion
 
@@ -83,7 +83,7 @@ dispatch. Scheduled runs use the default branch and can start late.
 Manual runs on a feature branch fetch and validate without publishing;
 only runs on `main` can commit generated changes.
 The fetch step reads public sources with the workflow token used only for
-GitHub. It never needs Goodreads, Kindle, or Substack credentials.
+GitHub. It never needs Goodreads or Substack credentials.
 
 Each successful fetch updates its own `last_success` in
 `assets/data-cache.json`. A failed source keeps its last usable data and
@@ -94,11 +94,14 @@ unknown last success until the next successful fetch, and count as stale.
 
 The workflow commits successful updates before checking source health.
 Health is a staleness budget, not a per-run check. A source may serve its
-cache for one calendar day (UTC) without failing the run or labeling the
-card. Once its last success is older than yesterday, the card and footer
-name the outage and the scheduled run fails. `STALE_AFTER_DAYS` in
-`build.py` sets the budget, and the Actions job summary lists every source
-on every run.
+cache for one calendar day (UTC) without labeling the card. Once its last
+success is older than yesterday, the card and footer name the outage, and
+the run opens an issue titled "Profile sources past the refresh budget".
+Later runs update that issue while any source stays stale and close it
+once every source recovers. A stale source doesn't fail the run, because
+the build has already published everything it could. `STALE_AFTER_DAYS`
+in `build.py` sets the budget, and the Actions job summary lists every
+source on every run.
 
 The budget exists because of Substack. It blocks Ubuntu and macOS hosted
 runners on both the RSS feed and the public archive, including a
@@ -106,9 +109,12 @@ browser-compatible HTTP client. Both Substack cards therefore depend on
 [rss2json](https://rss2json.com/docs), a free relay that reads the public
 feed without an API key. Only the public feed URL is sent to it. The
 response must identify the requested publication and link back to its
-posts. The relay answers 500 on roughly one run in four, and before the
-budget each of those turned the scheduled run red while the card was at
-most six hours behind.
+posts. The relay answers 500 on roughly one run in four. From October 20
+to 29, 2026 it answered runners with 403, and on October 29 it served a
+home network a Cloudflare bot challenge. When it's down,
+both Substack cards serve their cache and the tracking issue records how
+long. The build doesn't add other proxies to route around Substack's
+block.
 
 Every source request retries 429 and 5xx answers and dropped connections
 twice, after 2 and 5 seconds. A 4xx such as Substack's 403 is a policy
@@ -136,6 +142,8 @@ uv run --locked --project generator python -m generator.health
 
 Set `GITHUB_TOKEN` through your environment for live GitHub activity.
 Without it, that source uses the cache and counts toward the staleness budget.
+The health check always exits 0. Read its output, or pass `--report PATH`
+to write the issue body it would post.
 `BUILD_DATE` overrides the date stamped on `README.md`, the cards, and the
 cache. Sources are still fetched live, so discard a local build's changes
 rather than commit them.

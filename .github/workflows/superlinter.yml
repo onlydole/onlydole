@@ -5,6 +5,11 @@ on:
   pull_request:
     branches:
       - main
+  # Agents push straight to main. Refresh commits made with GITHUB_TOKEN
+  # don't trigger workflows, so this fires for human, agent, and merge pushes.
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -12,7 +17,7 @@ permissions:
 
 concurrency:
   group: lint-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -36,6 +41,10 @@ jobs:
           # One Lint check instead of 20 serial commit-status posts. The job
           # summary still names each linter.
           MULTI_STATUS: false
+          # PRs and pushes lint their own diff, so a linter upgrade doesn't
+          # fail on untouched files. A manual dispatch sweeps the repo.
+          # Trivy, Biome, and Checkov scan the whole workspace regardless.
+          VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'workflow_dispatch' }}
           MARKDOWN_CONFIG_FILE: .markdownlint.yaml
           # Config paths resolve under .github/linters. Without this,
           # super-linter lints with ruff's default rules, not ruff.toml.

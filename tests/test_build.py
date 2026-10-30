@@ -169,7 +169,7 @@ def test_same_day_relay_flip_leaves_cache_untouched(workspace, monkeypatch):
     monkeypatch.setattr(sources, "fetch_substack", _relay_down)
     assert build.main() == 0
     assert build.CACHE.read_text(encoding="utf-8") == before
-    assert health.main() == 0
+    assert health.main([]) == 0
 
     _patch_sources(monkeypatch)
     assert build.main() == 0
@@ -222,7 +222,7 @@ def test_health_reads_dates_not_a_state_left_by_a_skipped_write(
     assert build.main() == 0
     assert build.CACHE.read_text(encoding="utf-8") == recorded
     capsys.readouterr()
-    assert health.main() == 0
+    assert health.main([]) == 0
     assert "writing" not in capsys.readouterr().out
 
 
@@ -321,7 +321,7 @@ def test_tile_contexts_treats_missing_books_as_empty():
     tiles = build.tile_contexts({"reading": {"books": [], "cover": None}})
     reading = next(t for t in tiles if t["key"] == "reading")
     assert reading["lines"] == build.EMPTY_LINES
-    assert reading["url"] == sources.GOODREADS_SHELF
+    assert reading["url"] == sources.GOODREADS_PROFILE
 
 
 def test_shipped_card_shortens_metadata_without_losing_link_detail():
@@ -377,6 +377,7 @@ GR = "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1l/"
     [
         (GR + "53498823._SY475_.jpg", GR + "53498823._SY256_.jpg"),
         (GR + "12345._SX318_.jpg", GR + "12345._SY256_.jpg"),
+        (GR + "248284963._SX98_.jpg", GR + "248284963._SY256_.jpg"),
         (GR + "125094495.jpg", GR + "125094495._SY256_.jpg"),
         (GR + "3828902._SX50_SY75_.jpg", GR + "3828902._SY256_.jpg"),
         ("https://img/c.jpg", "https://img/c.jpg"),

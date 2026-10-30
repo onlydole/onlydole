@@ -87,10 +87,11 @@ COVER_TYPES = ("image/jpeg", "image/png", "image/webp", "image/gif")
 # cover at 2x and keeps full-size originals under COVER_MAX_BYTES.
 COVER_HEIGHT = 256
 _COVER_SIZE = re.compile(r"(?:\.(?:_S[XY]\d+)+_)?(\.(?:jpe?g|png))$", re.IGNORECASE)
-# Days a source may serve its cache before the card is labeled and the
-# scheduled run fails. Substack blocks hosted runners, so both Substack
-# cards depend on a free relay that misses a refresh now and then. A
-# missed six-hour refresh is normal; no success today or yesterday isn't.
+# Days a source may serve its cache before its card is labeled and the
+# health check opens a tracking issue. Substack blocks hosted runners, so
+# both Substack cards depend on a free relay that misses refreshes, and
+# sometimes whole days. A missed six-hour refresh is normal. No success
+# today or yesterday isn't.
 STALE_AFTER_DAYS = 1
 # Per-run transport detail, on source_status and on relayed posts. The next
 # run never reads it back, so a transport flip mustn't rewrite the cache.
@@ -399,7 +400,7 @@ def tile_contexts(data: dict) -> list[dict]:
             "header_note": "via Goodreads",
             "cover": reading.get("cover") if books else None,
             "lines": reading_lines,
-            "url": books[0]["url"] if books else sources.GOODREADS_SHELF,
+            "url": books[0]["url"] if books else sources.GOODREADS_PROFILE,
             "alt_prefix": "Currently-reading shelf on Goodreads",
         },
     ]
