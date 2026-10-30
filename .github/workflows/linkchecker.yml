@@ -42,8 +42,8 @@ jobs:
           GH_REPO: ${{ github.repository }}
           LYCHEE_EXIT: ${{ steps.lychee.outputs.exit_code }}
         run: |
-          number=$(gh issue list --state open --search 'in:title "Link Checker Report"' \
-            --json number,title \
+          number=$(gh issue list --state open --author app/github-actions \
+            --search 'in:title "Link Checker Report"' --json number,title \
             --jq '.[] | select(.title == "Link Checker Report") | .number' | head -n 1)
           if [ "$LYCHEE_EXIT" != 0 ]; then
             if [ -n "$number" ]; then
