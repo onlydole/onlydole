@@ -180,31 +180,15 @@ def test_same_day_relay_flip_leaves_cache_untouched(workspace, monkeypatch):
     assert build.CACHE.read_text(encoding="utf-8") == before
 
 
-def test_switching_between_relay_and_direct_routes_leaves_cache_untouched(
-    workspace, monkeypatch
-):
-    relayed = [{**post, "via": "rss2json"} for post in WRITING]
-    _patch_sources(monkeypatch, writing=relayed)
-    assert build.main() == 0
-    before = build.CACHE.read_text(encoding="utf-8")
-
-    _patch_sources(monkeypatch)
-    assert build.main() == 0
-    assert build.CACHE.read_text(encoding="utf-8") == before
-
-
-def test_job_summary_names_each_source_and_its_transport(workspace, monkeypatch):
+def test_job_summary_names_each_source(workspace, monkeypatch):
     summary = workspace / "summary.md"
     monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary))
-    _patch_sources(
-        monkeypatch, writing=[{**post, "via": "rss2json"} for post in WRITING]
-    )
+    _patch_sources(monkeypatch)
     assert build.main() == 0
     table = summary.read_text(encoding="utf-8")
-    assert "| writing | fresh | 2026-06-10 | rss2json |" in table
-    assert "| shipped | fresh | 2026-06-10 | direct |" in table
-    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
-    assert cache["source_status"]["writing"]["via"] == "rss2json"
+    assert "| Source | Status | Last success |" in table
+    assert "| writing | fresh | 2026-06-10 |" in table
+    assert "| shipped | fresh | 2026-06-10 |" in table
 
 
 def test_health_reads_dates_not_a_state_left_by_a_skipped_write(
@@ -282,9 +266,7 @@ def test_dead_source_with_no_cache_renders_empty_state(workspace, monkeypatch):
 def test_stale_relay_cannot_replace_newer_cached_post(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     build.main()
-    _patch_sources(
-        monkeypatch, writing=[{**WRITING[0], "date": "2026-01-01", "via": "rss2json"}]
-    )
+    _patch_sources(monkeypatch, writing=[{**WRITING[0], "date": "2026-01-01"}])
     monkeypatch.setenv("BUILD_DATE", "2026-06-11")
     build.main()
     cache = json.loads(build.CACHE.read_text())

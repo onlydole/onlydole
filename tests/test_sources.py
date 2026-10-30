@@ -474,7 +474,7 @@ def test_fetch_readwise_sends_token_and_shelf(monkeypatch):
     assert sent["params"] == {
         "status": "currently_reading",
         "order": "-started_reading_at",
-        "limit": 3,
+        "limit": 6,
     }
 
 

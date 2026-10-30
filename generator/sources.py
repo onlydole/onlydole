@@ -381,7 +381,9 @@ def fetch_readwise(token: str) -> list[dict]:
             params={
                 "status": "currently_reading",
                 "order": "-started_reading_at",
-                "limit": 3,
+                # A book missing titles in both spots is dropped when parsed,
+                # so the page is oversized to keep the display cap filled.
+                "limit": 6,
             },
             headers={"Books-Public-Token": token, "User-Agent": USER_AGENT},
             timeout=30,

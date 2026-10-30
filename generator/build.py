@@ -98,9 +98,9 @@ COVER_MAX_BYTES = 80_000
 # refreshes the Substack cards; the local job in local/ does. A missed
 # local run is normal; no success today or yesterday isn't.
 STALE_AFTER_DAYS = 1
-# Per-run transport detail, on source_status and on relayed posts. The next
-# run never reads it back, so a transport flip mustn't rewrite the cache.
-TRANSPORT_FIELDS = ("state", "via")
+# Per-run detail, on source_status and on cached posts. The next run never
+# reads it back, so a state flip mustn't rewrite the cache.
+TRANSPORT_FIELDS = ("state",)
 
 
 def is_stale(status: dict, today: str) -> bool:
@@ -249,16 +249,12 @@ def _write_summary(statuses: dict) -> None:
         return
     rows = [
         "## Profile sources\n",
-        "| Source | Status | Last success | Transport |",
-        "| --- | --- | --- | --- |",
+        "| Source | Status | Last success |",
+        "| --- | --- | --- |",
     ]
     for key, status in statuses.items():
-        transport = (
-            status.get("via", "direct") if status["state"] == "fresh" else "local cache"
-        )
         rows.append(
-            f"| {key} | {status['state']} | {status['last_success'] or 'unknown'} "
-            f"| {transport} |"
+            f"| {key} | {status['state']} | {status['last_success'] or 'unknown'} |"
         )
     with Path(summary_path).open("a", encoding="utf-8") as summary:
         summary.write("\n".join(rows) + "\n")
@@ -303,8 +299,6 @@ def gather(today: str) -> dict:
             continue
         data[key] = cache[key] = fresh
         statuses[key] = {"state": "fresh", "last_success": today}
-        if key in RELAYED and fresh and fresh[0].get("via"):
-            statuses[key]["via"] = fresh[0]["via"]
     cache["source_status"] = statuses
     cache["updated"] = today
     data["_sources"] = statuses
