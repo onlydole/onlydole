@@ -95,6 +95,13 @@
   "updated": "2026-10-30",
   "podcast": [
     {
+      "title": "Attention Deficit Ep. 8 – GPT-6 Luna vs Sol. Can a harness close the gap?",
+      "url": "https://attentiondeficitpod.substack.com/p/attention-deficit-ep-8-gpt-6-luna",
+      "date": "2026-10-21",
+      "published_at": "2026-10-21T13:04:23+00:00",
+      "via": "rss2json"
+    },
+    {
       "title": "Attention Deficit Ep. 7 – Be Like a Data Center",
       "url": "https://attentiondeficitpod.substack.com/p/attention-deficit-ep-7-who-let-the",
       "date": "2026-09-07",
@@ -107,23 +114,18 @@
       "date": "2026-08-30",
       "published_at": "2026-08-30T16:03:12+00:00",
       "via": "rss2json"
-    },
-    {
-      "title": "Attention Deficit Ep. 5 – It's Not a Shark, It's a Data Center",
-      "url": "https://attentiondeficitpod.substack.com/p/attention-deficit-ep-5-its-not-a",
-      "date": "2026-08-16",
-      "published_at": "2026-08-16T16:13:24+00:00",
-      "via": "rss2json"
     }
   ],
   "source_status": {
     "writing": {
-      "state": "cached",
-      "last_success": "2026-10-20"
+      "state": "fresh",
+      "last_success": "2026-10-30",
+      "via": "rss2json"
     },
     "podcast": {
-      "state": "cached",
-      "last_success": "2026-10-20"
+      "state": "fresh",
+      "last_success": "2026-10-30",
+      "via": "rss2json"
     },
     "shipped": {
       "state": "fresh",

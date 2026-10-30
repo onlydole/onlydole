@@ -6,7 +6,7 @@
   <a href="https://onlydole.substack.com/p/git-with-the-times"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/writing-dark.svg"><img src="assets/writing-light.svg" width="100%" alt="Latest writing: Git with the times (2026-09-21); What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-7-who-let-the"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/podcast-dark.svg"><img src="assets/podcast-light.svg" width="100%" alt="Attention Deficit, with Alexa Griffith: Attention Deficit Ep. 7 – Be Like a Data Center (2026-09-07); Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers (2026-08-30); Attention Deficit Ep. 5 – It&#x27;s Not a Shark, It&#x27;s a Data Center (2026-08-16)"></picture></a>
+  <a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-8-gpt-6-luna"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/podcast-dark.svg"><img src="assets/podcast-light.svg" width="100%" alt="Attention Deficit, with Alexa Griffith: Attention Deficit Ep. 8 – GPT-6 Luna vs Sol. Can a harness close the gap? (2026-10-21); Attention Deficit Ep. 7 – Be Like a Data Center (2026-09-07); Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers (2026-08-30)"></picture></a>
 </p>
 <p align="center">
   <a href="https://github.com/onlydole/overdue/pull/152"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: fix: update dependencies and harden library workflows (merged · onlydole/overdue · 2026-10-22); chore: prepare Python environment for Amp orbs (merged · onlydole/onlydole.github.io · 2026-09-26); Point Pullfrog at deepseek-v4-pro on Ollama (merged · onlydole/onlydole.github.io · 2026-08-20)"></picture></a>
@@ -29,9 +29,9 @@
 </li>
 <li><strong>Attention Deficit</strong>
 <ul>
+<li><a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-8-gpt-6-luna">Attention Deficit Ep. 8 – GPT-6 Luna vs Sol. Can a harness close the gap?</a> · 2026-10-21</li>
 <li><a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-7-who-let-the">Attention Deficit Ep. 7 – Be Like a Data Center</a> · 2026-09-07</li>
 <li><a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-6-sixteen-adversarial">Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers</a> · 2026-08-30</li>
-<li><a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-5-its-not-a">Attention Deficit Ep. 5 – It&#x27;s Not a Shark, It&#x27;s a Data Center</a> · 2026-08-16</li>
 </ul>
 </li>
 <li><strong>Recently Shipped</strong>
@@ -79,6 +79,6 @@ for the people building with it.
 Talk to me about Kubernetes, open source, your latest side project,
 or a good hike in LA.
 
-<sub><!-- stamp:start -->Built: 2026-10-30 · cached or unavailable: writing, podcast, reading<!-- stamp:end --> · refreshed every six hours by
+<sub><!-- stamp:start -->Built: 2026-10-30 · cached or unavailable: reading<!-- stamp:end --> · refreshed every six hours by
 [GitHub Actions](.github/workflows/build-profile.yml) ·
 [how it works](generator/)</sub>
