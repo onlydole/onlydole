@@ -7,13 +7,14 @@ import copy
 import datetime
 import functools
 import html
+import io
 import json
 import os
-import re
 import sys
 from pathlib import Path
 
 import httpx
+from PIL import Image, UnidentifiedImageError
 
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -79,18 +80,23 @@ ACCENTS = {
     "reading": ("#8fafd0", "#466f98"),
 }
 SOURCE_KEYS = ("writing", "podcast", "shipped", "stage", "reading")
-# Feeds that can come through a caching relay, whose snapshot may lag.
+# Feeds whose newest post must never move backward. A CDN or a run from a
+# different network can serve an older snapshot than the cache holds.
 RELAYED = ("writing", "podcast")
-COVER_MAX_BYTES = 80_000
+# Readwise serves full-size covers, some as binary/octet-stream. The bytes
+# are decoded, so the declared type only has to not be something else.
+COVER_DOWNLOAD_MAX_BYTES = 2_000_000
+COVER_MAX_PIXELS = 25_000_000
 COVER_TYPES = ("image/jpeg", "image/png", "image/webp", "image/gif")
-# Goodreads' image CDN resizes on request. 256 px covers the ~95 px card
-# cover at 2x and keeps full-size originals under COVER_MAX_BYTES.
+COVER_UNTYPED = ("application/octet-stream", "binary/octet-stream")
+# 256 px covers the ~95 px card cover at 2x and keeps the re-encoded JPEG
+# well under COVER_MAX_BYTES, which bounds the embedded base64.
 COVER_HEIGHT = 256
-_COVER_SIZE = re.compile(r"(?:\.(?:_S[XY]\d+)+_)?(\.(?:jpe?g|png))$", re.IGNORECASE)
+COVER_MAX_BYTES = 80_000
 # Days a source may serve its cache before the card is labeled and the
-# scheduled run fails. Substack blocks hosted runners, so both Substack
-# cards depend on a free relay that misses a refresh now and then. A
-# missed six-hour refresh is normal; no success today or yesterday isn't.
+# scheduled run fails. Substack blocks hosted runners, so Actions never
+# refreshes the Substack cards; the local job in local/ does. A missed
+# local run is normal; no success today or yesterday isn't.
 STALE_AFTER_DAYS = 1
 # Per-run transport detail, on source_status and on relayed posts. The next
 # run never reads it back, so a transport flip mustn't rewrite the cache.
@@ -161,37 +167,57 @@ def _download_cover(url: str) -> dict | None:
         ) as resp:
             resp.raise_for_status()
             mime = resp.headers.get("content-type", "image/jpeg").split(";")[0]
-            if mime.strip().lower() not in COVER_TYPES:
+            if mime.strip().lower() not in COVER_TYPES + COVER_UNTYPED:
                 print(f"warning: cover is not a raster image ({mime})", file=sys.stderr)
                 return None
             chunks = []
             total = 0
             for chunk in resp.iter_bytes():
                 total += len(chunk)
-                if total > COVER_MAX_BYTES:
+                if total > COVER_DOWNLOAD_MAX_BYTES:
                     print("warning: cover exceeds size cap, skipping", file=sys.stderr)
                     return None
                 chunks.append(chunk)
     except (httpx.HTTPError, httpx.InvalidURL) as exc:
         print(f"warning: cover download failed: {exc}", file=sys.stderr)
         return None
-    return {
-        "url": url,
-        "b64": base64.b64encode(b"".join(chunks)).decode(),
-        "mime": mime.strip().lower(),
-    }
+    jpeg = _card_jpeg(b"".join(chunks))
+    if jpeg is None:
+        return None
+    return {"url": url, "b64": base64.b64encode(jpeg).decode(), "mime": "image/jpeg"}
 
 
-def _sized_cover(url: str) -> str:
-    if not url.startswith("https://i.gr-assets.com/images/"):
-        return url
-    return _COVER_SIZE.sub(rf"._SY{COVER_HEIGHT}_\1", url, count=1)
+def _card_jpeg(raw: bytes) -> bytes | None:
+    """Decode a cover and re-encode it as a card-sized JPEG, or None.
+
+    Decoding is the type check: SVG and HTML never get here as images.
+    The pixel cap is checked from the header, before any pixels decode.
+    """
+    try:
+        with Image.open(io.BytesIO(raw)) as img:
+            if img.format not in ("JPEG", "PNG", "WEBP", "GIF"):
+                raise UnidentifiedImageError(f"unsupported format {img.format}")
+            if img.width * img.height > COVER_MAX_PIXELS:
+                raise UnidentifiedImageError("cover has too many pixels")
+            img.thumbnail((COVER_HEIGHT * 2, COVER_HEIGHT))
+            out = io.BytesIO()
+            img.convert("RGB").save(out, "JPEG", quality=82, optimize=True)
+    except (OSError, ValueError, Image.DecompressionBombError) as exc:
+        print(f"warning: cover is not a usable image: {exc}", file=sys.stderr)
+        return None
+    if out.tell() > COVER_MAX_BYTES:
+        print("warning: resized cover exceeds size cap, skipping", file=sys.stderr)
+        return None
+    return out.getvalue()
 
 
 def _fetch_reading(cached: object) -> dict:
-    """Fetch Goodreads books, reusing the cached cover when its URL matches."""
-    books = sources.fetch_goodreads()
-    image_url = _sized_cover((books[0].get("image_url") or "") if books else "")
+    """Fetch Readwise books, reusing the cached cover when its URL matches."""
+    token = os.environ.get("READWISE_BOOKS_TOKEN")
+    if not token:
+        raise sources.SourceError("READWISE_BOOKS_TOKEN is not set")
+    books = sources.fetch_readwise(token)
+    image_url = (books[0].get("image_url") or "") if books else ""
     cached_cover = (cached.get("cover") if isinstance(cached, dict) else None) or {}
     cover = None
     if image_url and cached_cover.get("url") == image_url and cached_cover.get("b64"):
@@ -396,11 +422,11 @@ def tile_contexts(data: dict) -> list[dict]:
             "key": "reading",
             "header": "ON MY BOOKSHELF",
             "action": "EXPLORE",
-            "header_note": "via Goodreads",
+            "header_note": "via Readwise",
             "cover": reading.get("cover") if books else None,
             "lines": reading_lines,
-            "url": books[0]["url"] if books else sources.GOODREADS_SHELF,
-            "alt_prefix": "Currently-reading shelf on Goodreads",
+            "url": next((b["url"] for b in books if b.get("url")), SITE),
+            "alt_prefix": "Currently reading",
         },
     ]
     for tile in tiles:

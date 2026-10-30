@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "id": 4815162,
+      "title": "Vibe",
+      "author": "Adam Grant",
+      "status": "currently_reading",
+      "started_reading_at": "2026-10-25T00:00:00Z",
+      "finished_reading_at": null,
+      "rating": null,
+      "review": null,
+      "product": {
+        "id": "577209404860507229",
+        "title": "Vibe",
+        "author": "Adam Grant",
+        "isbn": "9798217059713",
+        "cover_url": "https://bookwise.com/product/cover/577209404860507229/vibe-adam-grant",
+        "store_url": "https://readwise.io/books/9798217059713/"
+      }
+    },
+    {
+      "id": 4790033,
+      "title": "A Parade of Horribles: Dungeon Crawler Carl, Book 8",
+      "author": "Matt Dinniman",
+      "status": "currently_reading",
+      "started_reading_at": "2026-09-15T00:00:00Z",
+      "finished_reading_at": null,
+      "rating": null,
+      "review": null,
+      "product": null
+    }
+  ],
+  "next": null
+}

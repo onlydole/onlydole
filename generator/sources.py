@@ -13,18 +13,13 @@ import httpx
 
 SUBSTACK_FEED = "https://onlydole.substack.com/feed"
 PODCAST_FEED = "https://attentiondeficitpod.substack.com/feed"
-RSS_RELAY = "https://api.rss2json.com/v1/api.json"
 GITHUB_LOGIN = "onlydole"
 PROFILE_REPO = "onlydole/onlydole"
 GRAPHQL_URL = "https://api.github.com/graphql"
-GOODREADS_USER_ID = "22801001"
-GOODREADS_SHELF = (
-    f"https://www.goodreads.com/review/list/{GOODREADS_USER_ID}?shelf=currently-reading"
-)
-GOODREADS_FEED = (
-    "https://www.goodreads.com/review/list_rss/"
-    f"{GOODREADS_USER_ID}?shelf=currently-reading&sort=date_updated&order=d&per_page=200"
-)
+# The Readwise Books account id. The public feed also needs a public token,
+# which the build reads from READWISE_BOOKS_TOKEN.
+READWISE_PROFILE_ID = "644961"
+READWISE_FEED = f"https://readwise.io/books/api/v1/public/{READWISE_PROFILE_ID}/books"
 TALKS_FEED = "https://onlydole.dev/feeds/talks.xml"
 USER_AGENT = "Mozilla/5.0 (compatible; onlydole-profile-bot/1.0)"
 
@@ -74,7 +69,7 @@ def _entry_date(published) -> str | None:
 def _published_fields(value: datetime.datetime) -> dict:
     """Whole-second UTC, so every route stamps the same post identically.
 
-    The archive reports milliseconds and the relay doesn't. gather compares
+    The archive reports milliseconds and RSS doesn't. gather compares
     stamps as strings, where "28+00:00" sorts before "28.942000+00:00".
     """
     if value.tzinfo is None:
@@ -163,10 +158,11 @@ def _fetch_substack_archive(feed_url: str) -> list[dict]:
 
 
 def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
-    """Try RSS, then the public archive, then the public RSS relay.
+    """Try RSS, then the public archive.
 
-    Substack blocks hosted runners on both of its own endpoints, so the
-    relay is the route that usually answers in Actions.
+    Substack blocks hosted runners on both endpoints, so in Actions both
+    Substack cards serve their cache. The local refresh job in local/
+    fetches them from a network Substack answers.
     """
     errors = []
     for route in (_fetch_substack_rss, _fetch_substack_archive):
@@ -176,52 +172,7 @@ def fetch_substack(feed_url: str = SUBSTACK_FEED) -> list[dict]:
             name = route.__name__.removeprefix("_fetch_substack_")
             detail = str(exc).splitlines()[0] if str(exc) else repr(exc)
             errors.append(f"{name}: {detail}")
-    print(f"Substack direct fetch unavailable ({'; '.join(errors)}); trying relay")
-    return fetch_substack_relay(feed_url)
-
-
-def fetch_substack_relay(feed_url: str) -> list[dict]:
-    """Last network fallback for hosted runners blocked by Substack.
-
-    The relay receives only a public feed URL. Its content may be cached;
-    gather rejects snapshots older than the already-verified local cache.
-    """
-    try:
-        resp = _send("GET", RSS_RELAY, params={"rss_url": feed_url}, timeout=30)
-        payload = resp.json()
-        if not isinstance(payload, dict) or payload.get("status") != "ok":
-            raise SourceError("RSS relay did not return a successful feed")
-        feed = payload.get("feed")
-        if not isinstance(feed, dict) or feed.get("url") != feed_url:
-            raise SourceError("RSS relay returned a different publication")
-        if not isinstance(payload.get("items"), list):
-            raise SourceError("RSS relay had no item list")
-        posts = []
-        for item in payload["items"]:
-            if not isinstance(item, dict):
-                continue
-            title, url, date = (item.get(k) for k in ("title", "link", "pubDate"))
-            if not all(isinstance(v, str) and v for v in (title, url, date)):
-                continue
-            if not url.startswith(feed_url.removesuffix("/feed") + "/p/"):
-                continue
-            try:
-                published = datetime.datetime.fromisoformat(date)
-            except ValueError:
-                continue
-            posts.append(
-                {
-                    "title": title,
-                    "url": url,
-                    **_published_fields(published),
-                    "via": "rss2json",
-                }
-            )
-        if not posts:
-            raise SourceError("RSS relay contained no usable posts")
-        return _newest_posts(posts)
-    except (httpx.HTTPError, ValueError, UnicodeDecodeError, SourceError) as exc:
-        raise SourceError(f"Substack and public RSS relay unavailable: {exc}") from exc
+    raise SourceError(f"Substack unavailable ({'; '.join(errors)})")
 
 
 def fetch_podcast() -> list[dict]:
@@ -342,27 +293,12 @@ def _rfc822_date(value: str | None) -> str | None:
         return None
 
 
-def _rfc822_sort_key(value: str | None) -> datetime.datetime:
-    """Sortable datetime from an RFC 822 pubDate.
-
-    Absent or malformed dates sort oldest. Callers sort with a stable
-    sort, so those items keep their feed order behind the dated ones.
-    Naive timestamps are read as UTC so they stay comparable with the
-    offset-aware ones Goodreads normally sends.
-    """
-    try:
-        parsed = parsedate_to_datetime(value)
-    except (TypeError, ValueError, OverflowError):
-        return datetime.datetime.min.replace(tzinfo=datetime.UTC)
-    if parsed.tzinfo is None:
-        return parsed.replace(tzinfo=datetime.UTC)
-    return parsed
-
-
 def parse_talks(feed_text: str) -> list[dict]:
     """Parse the onlydole.dev talks RSS feed into up to 3 talk dicts.
 
-    Same DTD and entity rejection guard as parse_goodreads. The feed
+    Rejects any document carrying DTD or entity declarations before
+    parsing, which closes the XXE and entity-expansion attack classes
+    without a defusedxml dependency. The feed
     carries the venue in each item's description and the kind in its
     category, per the producer spec in onlydole.github.io.
     """
@@ -405,72 +341,52 @@ def fetch_talks() -> list[dict]:
     return parse_talks(resp.text)
 
 
-def parse_goodreads(feed_text: str) -> list[dict]:
-    """Parse a Goodreads shelf RSS feed into up to 3 book dicts.
+def parse_readwise(payload: object) -> list[dict]:
+    """Parse a Readwise Books public feed page into up to 3 book dicts.
 
-    Prefer an explicit review update timestamp when present, then the
-    shelf-added date. Neither is a Kindle last-opened timestamp. Request
-    the expanded shelf upstream so sorting isn't limited to its first page.
-
-    Rejects any document carrying DTD or entity declarations before
-    parsing. That closes the XXE and entity-expansion attack classes
-    without a defusedxml dependency, and real Goodreads feeds never
-    include a DOCTYPE. Python 3.12's expat amplification limits are the
-    second layer.
+    The feed is requested newest start first, so its order is kept. A book
+    without a matched catalog product has no store link or cover.
     """
-    lowered = feed_text.lower()
-    if "<!doctype" in lowered or "<!entity" in lowered:
-        raise SourceError("feed contains DTD or entity declarations")
-    try:
-        root = ElementTree.fromstring(feed_text)
-    except ElementTree.ParseError as exc:
-        raise SourceError(f"unparsable goodreads feed: {exc}") from exc
-    if root.tag != "rss" or root.find("channel") is None:
-        raise SourceError("goodreads response was not an RSS channel")
+    if not isinstance(payload, dict) or not isinstance(payload.get("results"), list):
+        raise SourceError("readwise response had no results list")
     books = []
-    eligible = 0
-    for item in root.iter("item"):
-        shelves = item.findtext("user_shelves")
-        if shelves is not None and "currently-reading" not in {
-            s.strip() for s in shelves.split(",")
-        }:
+    for book in payload["results"]:
+        if not isinstance(book, dict) or book.get("status") != "currently_reading":
             continue
-        if shelves is None and (item.findtext("user_read_at") or "").strip():
+        product = book.get("product") if isinstance(book.get("product"), dict) else {}
+        title = book.get("title") or product.get("title")
+        if not isinstance(title, str) or not title.strip():
             continue
-        eligible += 1
-        title = (item.findtext("title") or "").strip()
-        author = (item.findtext("author_name") or "").strip()
-        url = (item.findtext("link") or "").strip()
-        image = (item.findtext("book_large_image_url") or "").strip() or (
-            item.findtext("book_image_url") or ""
-        ).strip()
-        if not (title and author and url):
-            continue
+        author = book.get("author") or product.get("author") or ""
         books.append(
-            (
-                _rfc822_sort_key(
-                    item.findtext("user_date_updated")
-                    or item.findtext("user_date_added")
-                    or item.findtext("pubDate")
-                ),
-                {"title": title, "author": author, "url": url, "image_url": image},
-            )
+            {
+                "title": title.strip(),
+                "author": author.strip() if isinstance(author, str) else "",
+                "url": _https_or_empty(product.get("store_url")),
+                "image_url": _https_or_empty(product.get("cover_url")),
+            }
         )
-    if not books and eligible:
-        raise SourceError("goodreads shelf feed had no usable items")
-    books.sort(key=lambda entry: entry[0], reverse=True)
-    return [book for _key, book in books[:3]]
+    return books[:3]
 
 
-def fetch_goodreads() -> list[dict]:
+def _https_or_empty(value: object) -> str:
+    return value if isinstance(value, str) and value.startswith("https://") else ""
+
+
+def fetch_readwise(token: str) -> list[dict]:
     try:
         resp = _send(
             "GET",
-            GOODREADS_FEED,
+            READWISE_FEED,
+            params={
+                "status": "currently_reading",
+                "order": "-started_reading_at",
+                "limit": 3,
+            },
+            headers={"Books-Public-Token": token, "User-Agent": USER_AGENT},
             timeout=30,
-            follow_redirects=True,
-            headers={"User-Agent": USER_AGENT},
         )
-    except httpx.HTTPError as exc:
-        raise SourceError(f"goodreads fetch failed: {exc}") from exc
-    return parse_goodreads(resp.text)
+        payload = resp.json()
+    except (httpx.HTTPError, ValueError, UnicodeDecodeError) as exc:
+        raise SourceError(f"readwise fetch failed: {exc}") from exc
+    return parse_readwise(payload)

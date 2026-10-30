@@ -1,8 +1,11 @@
+import base64
+import io
 import json
 import xml.etree.ElementTree as ET
 
 import httpx
 import pytest
+from PIL import Image
 
 from generator import build, health, sources
 
@@ -34,7 +37,7 @@ BOOKS = [
     {
         "title": "Book",
         "author": "Author",
-        "url": "https://gr/b",
+        "url": "https://rw/b",
         "image_url": "https://img/c.jpg",
     }
 ]
@@ -53,6 +56,7 @@ def workspace(tmp_path, monkeypatch):
     monkeypatch.setattr(build, "CACHE", assets / "data-cache.json")
     monkeypatch.setenv("BUILD_DATE", "2026-06-10")
     monkeypatch.setenv("GITHUB_TOKEN", "test-token")
+    monkeypatch.setenv("READWISE_BOOKS_TOKEN", "bwpub_test")
     return tmp_path
 
 
@@ -61,7 +65,7 @@ def _patch_sources(monkeypatch, writing=WRITING):
     monkeypatch.setattr(sources, "fetch_podcast", lambda: WRITING)
     monkeypatch.setattr(sources, "fetch_activity", lambda token: SHIPPED)
     monkeypatch.setattr(sources, "fetch_talks", lambda: TALKS)
-    monkeypatch.setattr(sources, "fetch_goodreads", lambda: list(BOOKS))
+    monkeypatch.setattr(sources, "fetch_readwise", lambda token: list(BOOKS))
     monkeypatch.setattr(build, "_download_cover", lambda url: dict(COVER))
 
 
@@ -321,7 +325,7 @@ def test_tile_contexts_treats_missing_books_as_empty():
     tiles = build.tile_contexts({"reading": {"books": [], "cover": None}})
     reading = next(t for t in tiles if t["key"] == "reading")
     assert reading["lines"] == build.EMPTY_LINES
-    assert reading["url"] == sources.GOODREADS_SHELF
+    assert reading["url"] == build.SITE
 
 
 def test_shipped_card_shortens_metadata_without_losing_link_detail():
@@ -335,18 +339,18 @@ def test_shipped_card_shortens_metadata_without_losing_link_detail():
 def test_successful_empty_shelf_clears_previous_books(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     build.main()
-    monkeypatch.setattr(sources, "fetch_goodreads", list)
+    monkeypatch.setattr(sources, "fetch_readwise", lambda token: [])
     build.main()
     cache = json.loads(build.CACHE.read_text())
     assert cache["reading"] == {"books": [], "cover": None}
     assert cache["source_status"]["reading"]["state"] == "fresh"
 
 
-def test_reading_tile_uses_goodreads_books(workspace, monkeypatch):
+def test_reading_tile_uses_readwise_books(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     assert build.main() == 0
     readme = build.README.read_text(encoding="utf-8")
-    assert '<a href="https://gr/b">' in readme
+    assert '<a href="https://rw/b">' in readme
     cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
     assert cache["reading"]["books"] == BOOKS
     assert cache["reading"]["cover"]["url"] == "https://img/c.jpg"
@@ -369,39 +373,31 @@ def test_cover_reuses_cache_when_url_unchanged(workspace, monkeypatch):
     assert "data:image/jpeg;base64,QUJD" in svg
 
 
-GR = "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1l/"
-
-
-@pytest.mark.parametrize(
-    ("url", "sized"),
-    [
-        (GR + "53498823._SY475_.jpg", GR + "53498823._SY256_.jpg"),
-        (GR + "12345._SX318_.jpg", GR + "12345._SY256_.jpg"),
-        (GR + "125094495.jpg", GR + "125094495._SY256_.jpg"),
-        (GR + "3828902._SX50_SY75_.jpg", GR + "3828902._SY256_.jpg"),
-        ("https://img/c.jpg", "https://img/c.jpg"),
-    ],
-)
-def test_goodreads_covers_are_requested_at_card_size(url, sized):
-    assert build._sized_cover(url) == sized
-
-
-def test_reading_fetches_and_caches_the_sized_cover(workspace, monkeypatch):
+def test_reading_card_links_the_first_book_with_a_store_link(workspace, monkeypatch):
     _patch_sources(monkeypatch)
-    monkeypatch.setattr(
-        sources,
-        "fetch_goodreads",
-        lambda: [{**BOOKS[0], "image_url": GR + "53498823._SY475_.jpg"}],
-    )
-    requested = []
-    monkeypatch.setattr(
-        build,
-        "_download_cover",
-        lambda url: requested.append(url) or {**COVER, "url": url},
-    )
+    unlinked = {**BOOKS[0], "title": "Unmatched", "url": "", "image_url": ""}
+    monkeypatch.setattr(sources, "fetch_readwise", lambda token: [unlinked, *BOOKS])
     assert build.main() == 0
+    readme = build.README.read_text(encoding="utf-8")
+    assert '<p align="center">\n  <a href="https://rw/b"><picture>' in readme
+    assert "Unmatched</a>" not in readme
+    svg = (build.ASSETS / "reading-dark.svg").read_text(encoding="utf-8")
+    assert "Unmatched" in svg
+    assert "<image" not in svg
+
+
+def test_missing_readwise_token_serves_cached_books(workspace, monkeypatch):
+    _patch_sources(monkeypatch)
     assert build.main() == 0
-    assert requested == [GR + "53498823._SY256_.jpg"]
+    monkeypatch.delenv("READWISE_BOOKS_TOKEN")
+    monkeypatch.setenv("BUILD_DATE", "2026-06-11")
+    assert build.main() == 0
+    cache = json.loads(build.CACHE.read_text(encoding="utf-8"))
+    assert cache["reading"]["books"] == BOOKS
+    assert cache["source_status"]["reading"] == {
+        "state": "cached",
+        "last_success": "2026-06-10",
+    }
 
 
 def test_cover_failure_renders_text_only(workspace, monkeypatch):
@@ -416,10 +412,10 @@ def test_cover_failure_renders_text_only(workspace, monkeypatch):
 def test_old_yaml_cache_shape_treated_as_absent(workspace, monkeypatch):
     _patch_sources(monkeypatch)
 
-    def boom():
-        raise sources.SourceError("goodreads is down")
+    def boom(token):
+        raise sources.SourceError("readwise is down")
 
-    monkeypatch.setattr(sources, "fetch_goodreads", boom)
+    monkeypatch.setattr(sources, "fetch_readwise", boom)
     build.ASSETS.mkdir(parents=True, exist_ok=True)
     build.CACHE.write_text(
         json.dumps({"reading": {"title": "Old Book", "author": "X"}}),
@@ -450,16 +446,57 @@ class _FakeStream:
             yield self._content[i : i + chunk]
 
 
+def _jpeg(width: int, height: int) -> bytes:
+    out = io.BytesIO()
+    Image.new("RGB", (width, height), "teal").save(out, "JPEG")
+    return out.getvalue()
+
+
 def test_download_cover_aborts_oversized_stream(monkeypatch):
-    big = b"x" * (build.COVER_MAX_BYTES + 1)
+    big = b"x" * (build.COVER_DOWNLOAD_MAX_BYTES + 1)
     monkeypatch.setattr(build.httpx, "stream", lambda *a, **k: _FakeStream(big))
     assert build._download_cover("https://img/big.jpg") is None
 
 
-def test_download_cover_encodes_within_cap(monkeypatch):
-    monkeypatch.setattr(build.httpx, "stream", lambda *a, **k: _FakeStream(b"ABC"))
+def test_download_cover_resizes_untyped_covers_to_card_height(monkeypatch):
+    raw = _jpeg(1000, 1500)
+    monkeypatch.setattr(
+        build.httpx,
+        "stream",
+        lambda *a, **k: _FakeStream(raw, "binary/octet-stream"),
+    )
+    cover = build._download_cover("https://img/c")
+    assert cover["url"] == "https://img/c"
+    assert cover["mime"] == "image/jpeg"
+    with Image.open(io.BytesIO(base64.b64decode(cover["b64"]))) as img:
+        assert (img.format, img.height) == ("JPEG", build.COVER_HEIGHT)
+        assert img.width == round(1000 * build.COVER_HEIGHT / 1500)
+
+
+def test_download_cover_keeps_small_covers_small(monkeypatch):
+    monkeypatch.setattr(
+        build.httpx, "stream", lambda *a, **k: _FakeStream(_jpeg(60, 90))
+    )
     cover = build._download_cover("https://img/c.jpg")
-    assert cover == {"url": "https://img/c.jpg", "b64": "QUJD", "mime": "image/jpeg"}
+    with Image.open(io.BytesIO(base64.b64decode(cover["b64"]))) as img:
+        assert img.size == (60, 90)
+
+
+def test_download_cover_rejects_undecodable_bytes(monkeypatch):
+    monkeypatch.setattr(
+        build.httpx,
+        "stream",
+        lambda *a, **k: _FakeStream(b"<svg/>", "application/octet-stream"),
+    )
+    assert build._download_cover("https://img/c") is None
+
+
+def test_download_cover_rejects_pixel_bombs(monkeypatch):
+    monkeypatch.setattr(build, "COVER_MAX_PIXELS", 100)
+    monkeypatch.setattr(
+        build.httpx, "stream", lambda *a, **k: _FakeStream(_jpeg(20, 20))
+    )
+    assert build._download_cover("https://img/c.jpg") is None
 
 
 def test_download_cover_rejects_svg_covers(monkeypatch):
@@ -486,21 +523,21 @@ def test_download_cover_handles_malformed_url(monkeypatch):
     assert build._download_cover("ht!tp:::not-a-url") is None
 
 
-def test_goodreads_outage_serves_new_shape_cache(workspace, monkeypatch):
+def test_readwise_outage_serves_new_shape_cache(workspace, monkeypatch):
     _patch_sources(monkeypatch)
     assert build.main() == 0
 
-    def boom():
-        raise sources.SourceError("goodreads is down")
+    def boom(token):
+        raise sources.SourceError("readwise is down")
 
     _patch_sources(monkeypatch)
-    monkeypatch.setattr(sources, "fetch_goodreads", boom)
+    monkeypatch.setattr(sources, "fetch_readwise", boom)
     assert build.main() == 0
     svg = (build.ASSETS / "reading-dark.svg").read_text(encoding="utf-8")
     assert "Book" in svg
     assert "data:image/jpeg;base64,QUJD" in svg
     readme = build.README.read_text(encoding="utf-8")
-    assert '<a href="https://gr/b">' in readme
+    assert '<a href="https://rw/b">' in readme
 
 
 def test_build_prunes_svgs_it_no_longer_writes(workspace, monkeypatch):

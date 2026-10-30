@@ -100,7 +100,7 @@ CASES = {
             4,
             header="ON MY BOOKSHELF",
             action="EXPLORE",
-            aria="Currently-reading shelf on Goodreads: Fixture book (Fixture author)",
+            aria="Currently reading: Fixture book (Fixture author)",
         ),
     ),
     "tile-reading-cover-dark.svg": (
@@ -111,10 +111,10 @@ CASES = {
             [{"primary": "Fixture book", "secondary": "Fixture author"}],
             4,
             cover={"mime": "image/png", "b64": TINY_PNG_B64},
-            header_note="via Goodreads",
+            header_note="via Readwise",
             header="ON MY BOOKSHELF",
             action="EXPLORE",
-            aria="Currently-reading shelf on Goodreads: Fixture book (Fixture author)",
+            aria="Currently reading: Fixture book (Fixture author)",
         ),
     ),
     "chip-bluesky-dark.svg": (

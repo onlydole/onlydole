@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="176" viewBox="0 0 1200 176" role="img" aria-label="Currently-reading shelf on Goodreads: Fixture book (Fixture author)">
-  <title>Currently-reading shelf on Goodreads: Fixture book (Fixture author)</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="176" viewBox="0 0 1200 176" role="img" aria-label="Currently reading: Fixture book (Fixture author)">
+  <title>Currently reading: Fixture book (Fixture author)</title>
   <style>
     .icon { fill: none; stroke: #ff9d76; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
     .fit { transform-box: fill-box; transform-origin: center; }
@@ -60,7 +60,7 @@
 
   <path d="M150 24 V152" stroke="#ff9d76" stroke-opacity="0.36"/>
   <text x="174" y="51" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2.6" fill="#ff9d76">ON MY BOOKSHELF</text>
-  <text x="1162" y="51" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="14" letter-spacing="0.4" fill="#b9a69c">via Goodreads</text>
+  <text x="1162" y="51" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Helvetica, Arial, sans-serif" font-size="14" letter-spacing="0.4" fill="#b9a69c">via Readwise</text>
 
   <text x="174" y="92" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="29" font-weight="700" fill="#f7efe5">Fixture book</text>
 

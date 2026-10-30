@@ -11,7 +11,7 @@ from generator.sources import (
     SourceError,
     _entry_date,
     parse_activity,
-    parse_goodreads,
+    parse_readwise,
     parse_substack,
     parse_talks,
 )
@@ -88,7 +88,7 @@ def test_substack_both_endpoints_blocked_raise(monkeypatch):
         "get",
         lambda url, **kwargs: httpx.Response(403, request=httpx.Request("GET", url)),
     )
-    with pytest.raises(SourceError, match="Substack and public RSS relay unavailable"):
+    with pytest.raises(SourceError, match="Substack unavailable"):
         sources.fetch_substack()
 
 
@@ -109,27 +109,27 @@ def _responses(monkeypatch, *outcomes):
 
 def test_send_retries_server_errors_and_dropped_connections(monkeypatch):
     calls = _responses(monkeypatch, 500, httpx.ConnectError("refused"), 200)
-    assert sources._send("GET", "https://relay").text == "ok"
+    assert sources._send("GET", "https://feed").text == "ok"
     assert len(calls) == 3
 
 
 def test_send_retries_a_connection_reset_mid_request(monkeypatch):
     calls = _responses(monkeypatch, httpx.ReadError("reset"), 200)
-    assert sources._send("GET", "https://relay").text == "ok"
+    assert sources._send("GET", "https://feed").text == "ok"
     assert len(calls) == 2
 
 
 def test_send_does_not_retry_timeouts(monkeypatch):
     calls = _responses(monkeypatch, httpx.ReadTimeout("slow"))
     with pytest.raises(httpx.ReadTimeout):
-        sources._send("GET", "https://relay")
+        sources._send("GET", "https://feed")
     assert len(calls) == 1
 
 
 def test_send_gives_up_after_the_last_retry(monkeypatch):
     calls = _responses(monkeypatch, 503, 502, 500)
     with pytest.raises(httpx.HTTPStatusError):
-        sources._send("GET", "https://relay")
+        sources._send("GET", "https://feed")
     assert len(calls) == len(sources.RETRY_DELAYS) + 1
 
 
@@ -138,66 +138,6 @@ def test_send_does_not_retry_a_block(monkeypatch):
     with pytest.raises(httpx.HTTPStatusError):
         sources._send("GET", "https://substack")
     assert len(calls) == 1
-
-
-def test_relay_recovers_from_a_transient_500(monkeypatch):
-    payload = {
-        "status": "ok",
-        "feed": {"url": sources.SUBSTACK_FEED},
-        "items": [
-            {
-                "title": "New",
-                "link": "https://onlydole.substack.com/p/new",
-                "pubDate": "2026-09-05 15:50:36",
-            }
-        ],
-    }
-    replies = iter([500, 200])
-
-    def get(url, **kwargs):
-        return httpx.Response(
-            next(replies), request=httpx.Request("GET", url), json=payload
-        )
-
-    monkeypatch.setattr(sources.httpx, "get", get)
-    assert sources.fetch_substack_relay(sources.SUBSTACK_FEED)[0]["title"] == "New"
-
-
-def test_substack_relay_checks_publication_and_sorts(monkeypatch):
-    payload = {
-        "status": "ok",
-        "feed": {"url": sources.SUBSTACK_FEED},
-        "items": [
-            {
-                "title": "Old",
-                "link": "https://onlydole.substack.com/p/old",
-                "pubDate": "2026-02-14 02:25:34",
-            },
-            {
-                "title": "New",
-                "link": "https://onlydole.substack.com/p/new",
-                "pubDate": "2026-09-05 15:50:36",
-            },
-            {
-                "title": "Bad link",
-                "link": "https://unrelated.example/p/new",
-                "pubDate": "2026-09-06 15:50:36",
-            },
-        ],
-    }
-    monkeypatch.setattr(
-        sources.httpx,
-        "get",
-        lambda url, **kwargs: httpx.Response(
-            200, request=httpx.Request("GET", url), json=payload
-        ),
-    )
-    posts = sources.fetch_substack_relay(sources.SUBSTACK_FEED)
-    assert [p["title"] for p in posts] == ["New", "Old"]
-    assert posts[0]["via"] == "rss2json"
-    payload["feed"]["url"] = sources.PODCAST_FEED
-    with pytest.raises(SourceError, match="different publication"):
-        sources.fetch_substack_relay(sources.SUBSTACK_FEED)
 
 
 def test_public_search_is_used_before_private_activity_can_crowd_it_out():
@@ -240,17 +180,6 @@ def test_substack_orders_same_day_and_keeps_newest_duplicate():
         + "</channel></rss>"
     )
     assert [p["title"] for p in parse_substack(feed)] == ["Evening", "Morning"]
-
-
-def test_empty_goodreads_shelf_is_valid():
-    assert (
-        parse_goodreads(
-            "<rss><channel><title>Currently reading</title></channel></rss>"
-        )
-        == []
-    )
-    with pytest.raises(SourceError, match="not an RSS channel"):
-        parse_goodreads("<html><body>Service unavailable</body></html>")
 
 
 def test_parse_activity_merges_sorts_and_caps():
@@ -470,140 +399,90 @@ def test_activity_query_requests_multiple_releases_per_repo():
     assert "releases(first: 3" in ACTIVITY_QUERY
 
 
-def test_parse_goodreads_extracts_books():
-    books = parse_goodreads((FIXTURES / "goodreads.xml").read_text(encoding="utf-8"))
-    assert len(books) == 2
-    assert books[0]["title"] == (
-        "Obviously Awesome: How to Nail Product Positioning "
-        "so Customers Get it, Buy it, Love it"
-    )
-    assert books[0]["author"] == "April Dunford"
-    assert books[0]["url"].startswith("https://www.goodreads.com/review/show/")
-    assert books[0]["image_url"].endswith("_SY475_.jpg")
+def _readwise_page() -> dict:
+    return json.loads((FIXTURES / "readwise.json").read_text(encoding="utf-8"))
 
 
-def test_parse_goodreads_garbage_raises():
-    with pytest.raises(SourceError):
-        parse_goodreads("complete garbage, not xml")
+def test_parse_readwise_keeps_feed_order_and_links():
+    books = parse_readwise(_readwise_page())
+    assert [b["title"] for b in books] == [
+        "Vibe",
+        "A Parade of Horribles: Dungeon Crawler Carl, Book 8",
+    ]
+    assert books[0] == {
+        "title": "Vibe",
+        "author": "Adam Grant",
+        "url": "https://readwise.io/books/9798217059713/",
+        "image_url": "https://bookwise.com/product/cover/577209404860507229/vibe-adam-grant",
+    }
 
 
-def test_parse_goodreads_caps_at_three():
-    item = (
-        "<item><title>B{i}</title><author_name>A</author_name>"
-        "<link>https://x/{i}</link></item>"
-    )
-    feed = (
-        "<rss><channel>"
-        + "".join(item.format(i=i) for i in range(5))
-        + "</channel></rss>"
-    )
-    assert len(parse_goodreads(feed)) == 3
+def test_readwise_book_without_product_has_no_link_or_cover():
+    book = parse_readwise(_readwise_page())[1]
+    assert book["url"] == ""
+    assert book["image_url"] == ""
+    assert book["author"] == "Matt Dinniman"
 
 
-def _goodreads_feed(*items: tuple[str, str | None]) -> str:
-    """Build a shelf feed from (title, pubDate) pairs; None omits pubDate."""
-    body = ""
-    for title, pub_date in items:
-        date_el = f"<pubDate>{pub_date}</pubDate>" if pub_date else ""
-        body += (
-            f"<item><title>{title}</title><author_name>A</author_name>"
-            f"<link>https://x/{title}</link>{date_el}</item>"
+def test_readwise_caps_at_three_and_skips_other_shelves_and_untitled():
+    book = _readwise_page()["results"][1]
+    page = {
+        "results": [
+            {**book, "title": "Done", "status": "finished"},
+            {**book, "title": "  "},
+            *({**book, "title": f"B{i}"} for i in range(4)),
+        ]
+    }
+    assert [b["title"] for b in parse_readwise(page)] == ["B0", "B1", "B2"]
+
+
+def test_readwise_falls_back_to_product_title_and_drops_non_https_links():
+    page = _readwise_page()
+    first = page["results"][0]
+    first["title"] = None
+    first["author"] = None
+    first["product"]["store_url"] = "javascript:alert(1)"
+    first["product"]["cover_url"] = "http://insecure/cover.jpg"
+    book = parse_readwise(page)[0]
+    assert (book["title"], book["author"]) == ("Vibe", "Adam Grant")
+    assert book["url"] == book["image_url"] == ""
+
+
+def test_empty_readwise_shelf_is_valid():
+    assert parse_readwise({"results": [], "next": None}) == []
+
+
+@pytest.mark.parametrize("payload", [None, [], {"detail": "Invalid token."}])
+def test_readwise_rejects_responses_without_results(payload):
+    with pytest.raises(SourceError, match="no results list"):
+        parse_readwise(payload)
+
+
+def test_fetch_readwise_sends_token_and_shelf(monkeypatch):
+    sent = {}
+
+    def get(url, **kwargs):
+        sent.update(url=url, **kwargs)
+        return httpx.Response(
+            200, request=httpx.Request("GET", url), json=_readwise_page()
         )
-    return f"<rss><channel>{body}</channel></rss>"
+
+    monkeypatch.setattr(sources.httpx, "get", get)
+    assert sources.fetch_readwise("bwpub_test")[0]["title"] == "Vibe"
+    assert sent["url"] == sources.READWISE_FEED
+    assert sent["headers"]["Books-Public-Token"] == "bwpub_test"
+    assert sent["params"] == {
+        "status": "currently_reading",
+        "order": "-started_reading_at",
+        "limit": 3,
+    }
 
 
-def test_parse_goodreads_takes_most_recently_shelved():
-    feed = _goodreads_feed(
-        ("Oldest", "Mon, 01 Jun 2026 09:00:00 -0700"),
-        ("Newest", "Sat, 04 Jul 2026 10:45:34 -0700"),
-        ("Fourth", "Fri, 01 May 2026 09:00:00 -0700"),
-        ("Middle", "Thu, 04 Jun 2026 00:38:25 -0700"),
+def test_fetch_readwise_wraps_auth_failures(monkeypatch):
+    monkeypatch.setattr(
+        sources.httpx,
+        "get",
+        lambda url, **kwargs: httpx.Response(401, request=httpx.Request("GET", url)),
     )
-    assert [b["title"] for b in parse_goodreads(feed)] == [
-        "Newest",
-        "Middle",
-        "Oldest",
-    ]
-
-
-def test_parse_goodreads_orders_same_day_shelvings_by_time():
-    feed = _goodreads_feed(
-        ("Morning", "Sat, 27 Jun 2026 08:33:59 -0700"),
-        ("Evening", "Sat, 27 Jun 2026 19:54:16 -0700"),
-    )
-    assert [b["title"] for b in parse_goodreads(feed)] == ["Evening", "Morning"]
-
-
-def test_parse_goodreads_compares_across_timezone_offsets():
-    # 16:00 -0700 is 23:00 UTC, so it is newer than 20:00 +0000 the same day.
-    feed = _goodreads_feed(
-        ("Utc", "Sat, 27 Jun 2026 20:00:00 +0000"),
-        ("Pacific", "Sat, 27 Jun 2026 16:00:00 -0700"),
-    )
-    assert [b["title"] for b in parse_goodreads(feed)] == ["Pacific", "Utc"]
-
-
-def test_parse_goodreads_undated_items_sort_last_in_feed_order():
-    feed = _goodreads_feed(
-        ("NoDate1", None),
-        ("Dated", "Mon, 01 Jun 2026 09:00:00 -0700"),
-        ("NoDate2", "not a date at all"),
-    )
-    assert [b["title"] for b in parse_goodreads(feed)] == [
-        "Dated",
-        "NoDate1",
-        "NoDate2",
-    ]
-
-
-def test_parse_goodreads_image_falls_back_to_small():
-    feed = (
-        "<rss><channel><item><title>B</title><author_name>A</author_name>"
-        "<link>https://x</link><book_image_url>small.jpg</book_image_url>"
-        "</item></channel></rss>"
-    )
-    assert parse_goodreads(feed)[0]["image_url"] == "small.jpg"
-
-
-def test_goodreads_prefers_update_date_to_original_shelving():
-    feed = _goodreads_feed(
-        ("Reopened", "Mon, 01 Jun 2026 09:00:00 -0700"),
-        ("Added", "Sat, 04 Jul 2026 10:45:34 -0700"),
-    ).replace(
-        "<title>Reopened</title>",
-        "<title>Reopened</title><user_date_updated>Mon, 07 Sep 2026 12:00:00 GMT</user_date_updated>",
-    )
-    assert [b["title"] for b in parse_goodreads(feed)] == ["Reopened", "Added"]
-
-
-def test_goodreads_filters_other_shelves_and_finished_books():
-    feed = _goodreads_feed(("Finished", None), ("Wanted", None), ("Reading", None))
-    feed = feed.replace(
-        "<title>Finished</title>",
-        "<title>Finished</title><user_read_at>Mon, 07 Sep 2026 12:00:00 GMT</user_read_at>",
-    )
-    feed = feed.replace(
-        "<title>Wanted</title>",
-        "<title>Wanted</title><user_shelves>to-read</user_shelves>",
-    )
-    assert [b["title"] for b in parse_goodreads(feed)] == ["Reading"]
-
-
-def test_goodreads_keeps_explicit_current_rereads():
-    feed = _goodreads_feed(("Rereading", None)).replace(
-        "<title>Rereading</title>",
-        "<title>Rereading</title><user_shelves>favorites,currently-reading</user_shelves>"
-        "<user_read_at>Mon, 01 Jun 2026 09:00:00 GMT</user_read_at>",
-    )
-    assert parse_goodreads(feed)[0]["title"] == "Rereading"
-
-
-def test_parse_goodreads_rejects_doctype_and_entities():
-    bomb = (
-        '<?xml version="1.0"?><!DOCTYPE lolz [<!ENTITY lol "lol">]>'
-        "<rss><channel><item><title>&lol;</title>"
-        "<author_name>A</author_name><link>https://x</link>"
-        "</item></channel></rss>"
-    )
-    with pytest.raises(SourceError):
-        parse_goodreads(bomb)
+    with pytest.raises(SourceError, match="readwise fetch failed"):
+        sources.fetch_readwise("revoked")

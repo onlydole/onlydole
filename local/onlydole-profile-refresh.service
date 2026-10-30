@@ -1,0 +1,12 @@
+[Unit]
+Description=Refresh the onlydole GitHub profile from a network Substack answers
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# systemd's user PATH omits Homebrew, where uv lives on this machine.
+Environment=PATH=%h/.local/bin:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=%h/.local/bin/onlydole-profile-refresh
+Nice=10
+IOSchedulingClass=idle

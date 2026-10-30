@@ -39,9 +39,13 @@ jobs:
       - name: Test generator before rebuilding
         run: uv run --locked --project generator pytest tests/ -q
 
+      # Substack blocks hosted runners, so its cards serve the cache here and
+      # local/refresh.sh refreshes them. If that job stops, their last success
+      # ages past the budget and "Check source freshness" fails.
       - name: Rebuild dashboard
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          READWISE_BOOKS_TOKEN: ${{ secrets.READWISE_BOOKS_TOKEN }}
         run: uv run --locked --project generator python generator/build.py
 
       # The ruleset on main requires verified signatures, which rejects plain
