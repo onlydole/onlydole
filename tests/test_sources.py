@@ -242,15 +242,14 @@ def test_substack_orders_same_day_and_keeps_newest_duplicate():
     assert [p["title"] for p in parse_substack(feed)] == ["Evening", "Morning"]
 
 
-def test_empty_goodreads_shelf_is_valid():
-    assert (
-        parse_goodreads(
-            "<rss><channel><title>Currently reading</title></channel></rss>"
-        )
-        == []
-    )
-    with pytest.raises(SourceError, match="not an RSS channel"):
-        parse_goodreads("<html><body>Service unavailable</body></html>")
+def test_empty_currently_reading_box_is_valid():
+    page = '<div id="currentlyReadingReviews"><div class="clear"></div></div>'
+    assert parse_goodreads(page) == []
+
+
+def test_goodreads_page_without_the_box_raises():
+    with pytest.raises(SourceError, match="no Currently Reading box"):
+        parse_goodreads("<html><body>Sign in to Goodreads</body></html>")
 
 
 def test_parse_activity_merges_sorts_and_caps():
@@ -470,140 +469,71 @@ def test_activity_query_requests_multiple_releases_per_repo():
     assert "releases(first: 3" in ACTIVITY_QUERY
 
 
-def test_parse_goodreads_extracts_books():
-    books = parse_goodreads((FIXTURES / "goodreads.xml").read_text(encoding="utf-8"))
-    assert len(books) == 2
-    assert books[0]["title"] == (
-        "Obviously Awesome: How to Nail Product Positioning "
-        "so Customers Get it, Buy it, Love it"
+def _profile() -> str:
+    return (FIXTURES / "goodreads-profile.html").read_text(encoding="utf-8")
+
+
+def test_parse_goodreads_reads_the_currently_reading_box():
+    books = parse_goodreads(_profile())
+    assert books[0] == {
+        "title": "First Fixture Book",
+        "author": "Ada Writer",
+        "url": "https://www.goodreads.com/book/show/101-first-fixture-book",
+        "image_url": "https://i.gr-assets.com/images/S/compressed.photo"
+        ".goodreads.com/books/1l/101._SX98_.jpg",
+    }
+    assert books[1]["title"] == "Second & Fixture"
+    assert books[1]["url"] == "https://www.goodreads.com/book/show/202.Second_Fixture"
+
+
+def test_parse_goodreads_skips_off_site_links_and_caps_at_three():
+    titles = [b["title"] for b in parse_goodreads(_profile())]
+    assert titles == ["First Fixture Book", "Second & Fixture", "Third Fixture"]
+
+
+def test_parse_goodreads_ignores_books_outside_the_box():
+    titles = {b["title"] for b in parse_goodreads(_profile())}
+    assert "After the Box" not in titles
+    assert "Decoy" not in titles
+
+
+def test_parse_goodreads_raises_when_no_book_is_usable():
+    page = (
+        '<div id="currentlyReadingReviews"><div class="Updates">'
+        '<a class="bookTitle" href="https://example.com/x">X</a>'
+        '<a class="authorName" href="/author/show/1">A</a></div></div>'
     )
-    assert books[0]["author"] == "April Dunford"
-    assert books[0]["url"].startswith("https://www.goodreads.com/review/show/")
-    assert books[0]["image_url"].endswith("_SY475_.jpg")
+    with pytest.raises(SourceError, match="no usable books"):
+        parse_goodreads(page)
 
 
-def test_parse_goodreads_garbage_raises():
-    with pytest.raises(SourceError):
-        parse_goodreads("complete garbage, not xml")
-
-
-def test_parse_goodreads_caps_at_three():
-    item = (
-        "<item><title>B{i}</title><author_name>A</author_name>"
-        "<link>https://x/{i}</link></item>"
+def test_parse_goodreads_drops_non_https_covers():
+    page = (
+        '<div id="currentlyReadingReviews"><div class="Updates">'
+        '<img src="javascript:alert(1)" />'
+        '<a class="bookTitle" href="/book/show/7-x">X</a>'
+        '<a class="authorName" href="/author/show/1">A</a></div></div>'
     )
-    feed = (
-        "<rss><channel>"
-        + "".join(item.format(i=i) for i in range(5))
-        + "</channel></rss>"
+    assert parse_goodreads(page)[0]["image_url"] == ""
+
+
+def test_fetch_goodreads_reads_the_public_profile(monkeypatch):
+    seen = []
+
+    def get(url, **kwargs):
+        seen.append(url)
+        return httpx.Response(200, request=httpx.Request("GET", url), text=_profile())
+
+    monkeypatch.setattr(sources.httpx, "get", get)
+    assert sources.fetch_goodreads()[0]["title"] == "First Fixture Book"
+    assert seen == ["https://www.goodreads.com/user/show/22801001"]
+
+
+def test_fetch_goodreads_wraps_http_errors(monkeypatch):
+    monkeypatch.setattr(
+        sources.httpx,
+        "get",
+        lambda url, **kwargs: httpx.Response(404, request=httpx.Request("GET", url)),
     )
-    assert len(parse_goodreads(feed)) == 3
-
-
-def _goodreads_feed(*items: tuple[str, str | None]) -> str:
-    """Build a shelf feed from (title, pubDate) pairs; None omits pubDate."""
-    body = ""
-    for title, pub_date in items:
-        date_el = f"<pubDate>{pub_date}</pubDate>" if pub_date else ""
-        body += (
-            f"<item><title>{title}</title><author_name>A</author_name>"
-            f"<link>https://x/{title}</link>{date_el}</item>"
-        )
-    return f"<rss><channel>{body}</channel></rss>"
-
-
-def test_parse_goodreads_takes_most_recently_shelved():
-    feed = _goodreads_feed(
-        ("Oldest", "Mon, 01 Jun 2026 09:00:00 -0700"),
-        ("Newest", "Sat, 04 Jul 2026 10:45:34 -0700"),
-        ("Fourth", "Fri, 01 May 2026 09:00:00 -0700"),
-        ("Middle", "Thu, 04 Jun 2026 00:38:25 -0700"),
-    )
-    assert [b["title"] for b in parse_goodreads(feed)] == [
-        "Newest",
-        "Middle",
-        "Oldest",
-    ]
-
-
-def test_parse_goodreads_orders_same_day_shelvings_by_time():
-    feed = _goodreads_feed(
-        ("Morning", "Sat, 27 Jun 2026 08:33:59 -0700"),
-        ("Evening", "Sat, 27 Jun 2026 19:54:16 -0700"),
-    )
-    assert [b["title"] for b in parse_goodreads(feed)] == ["Evening", "Morning"]
-
-
-def test_parse_goodreads_compares_across_timezone_offsets():
-    # 16:00 -0700 is 23:00 UTC, so it is newer than 20:00 +0000 the same day.
-    feed = _goodreads_feed(
-        ("Utc", "Sat, 27 Jun 2026 20:00:00 +0000"),
-        ("Pacific", "Sat, 27 Jun 2026 16:00:00 -0700"),
-    )
-    assert [b["title"] for b in parse_goodreads(feed)] == ["Pacific", "Utc"]
-
-
-def test_parse_goodreads_undated_items_sort_last_in_feed_order():
-    feed = _goodreads_feed(
-        ("NoDate1", None),
-        ("Dated", "Mon, 01 Jun 2026 09:00:00 -0700"),
-        ("NoDate2", "not a date at all"),
-    )
-    assert [b["title"] for b in parse_goodreads(feed)] == [
-        "Dated",
-        "NoDate1",
-        "NoDate2",
-    ]
-
-
-def test_parse_goodreads_image_falls_back_to_small():
-    feed = (
-        "<rss><channel><item><title>B</title><author_name>A</author_name>"
-        "<link>https://x</link><book_image_url>small.jpg</book_image_url>"
-        "</item></channel></rss>"
-    )
-    assert parse_goodreads(feed)[0]["image_url"] == "small.jpg"
-
-
-def test_goodreads_prefers_update_date_to_original_shelving():
-    feed = _goodreads_feed(
-        ("Reopened", "Mon, 01 Jun 2026 09:00:00 -0700"),
-        ("Added", "Sat, 04 Jul 2026 10:45:34 -0700"),
-    ).replace(
-        "<title>Reopened</title>",
-        "<title>Reopened</title><user_date_updated>Mon, 07 Sep 2026 12:00:00 GMT</user_date_updated>",
-    )
-    assert [b["title"] for b in parse_goodreads(feed)] == ["Reopened", "Added"]
-
-
-def test_goodreads_filters_other_shelves_and_finished_books():
-    feed = _goodreads_feed(("Finished", None), ("Wanted", None), ("Reading", None))
-    feed = feed.replace(
-        "<title>Finished</title>",
-        "<title>Finished</title><user_read_at>Mon, 07 Sep 2026 12:00:00 GMT</user_read_at>",
-    )
-    feed = feed.replace(
-        "<title>Wanted</title>",
-        "<title>Wanted</title><user_shelves>to-read</user_shelves>",
-    )
-    assert [b["title"] for b in parse_goodreads(feed)] == ["Reading"]
-
-
-def test_goodreads_keeps_explicit_current_rereads():
-    feed = _goodreads_feed(("Rereading", None)).replace(
-        "<title>Rereading</title>",
-        "<title>Rereading</title><user_shelves>favorites,currently-reading</user_shelves>"
-        "<user_read_at>Mon, 01 Jun 2026 09:00:00 GMT</user_read_at>",
-    )
-    assert parse_goodreads(feed)[0]["title"] == "Rereading"
-
-
-def test_parse_goodreads_rejects_doctype_and_entities():
-    bomb = (
-        '<?xml version="1.0"?><!DOCTYPE lolz [<!ENTITY lol "lol">]>'
-        "<rss><channel><item><title>&lol;</title>"
-        "<author_name>A</author_name><link>https://x</link>"
-        "</item></channel></rss>"
-    )
-    with pytest.raises(SourceError):
-        parse_goodreads(bomb)
+    with pytest.raises(SourceError, match="goodreads fetch failed"):
+        sources.fetch_goodreads()
