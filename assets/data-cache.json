@@ -123,8 +123,9 @@
       "via": "rss2json"
     },
     "podcast": {
-      "state": "cached",
-      "last_success": "2026-11-01"
+      "state": "fresh",
+      "last_success": "2026-11-02",
+      "via": "rss2json"
     },
     "shipped": {
       "state": "fresh",
