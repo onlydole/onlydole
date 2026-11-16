@@ -15,7 +15,7 @@
   <a href="https://creators.spotify.com/pod/profile/alexagriffith/episodes/Paying-Attention-in-the-Age-of-Agents-e3m9i24"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/stage-dark.svg"><img src="assets/stage-light.svg" width="100%" alt="On stage: Paying Attention in the Age of Agents (Alexa&#x27;s Input (AI), panel episode · 2026-07-20); Lambda&#x27;s Long Game, Claude&#x27;s Complexity, and the AI Adoption Gap (LogiCast, Season 5 Episode 16 · 2026-04-29); Shaping the Future of Documentation. OSS, Knowledge, and Dosu (Software Plaza · 2025-12-05)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://www.goodreads.com/book/show/248284963-vibe"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Currently-reading shelf on Goodreads: Vibe: The Secrets of Strong Connections in a Lonely World (Adam Grant); Built to Grow: A Handbook for High-Performance Sales Teams (Stephanie Friedman); Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed (Veritas Paperbacks) (James C. Scott)"></picture></a>
+  <a href="https://www.goodreads.com/book/show/30228592-moral-letters-to-lucilius"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/reading-dark.svg"><img src="assets/reading-light.svg" width="100%" alt="Currently-reading shelf on Goodreads: Moral Letters to Lucilius (Seneca); Vibe: The Secrets of Strong Connections in a Lonely World (Adam Grant); Built to Grow: A Handbook for High-Performance Sales Teams (Stephanie Friedman)"></picture></a>
 </p>
 <details>
 <summary>Browse all field notes and individual links</summary>
@@ -50,9 +50,9 @@
 </li>
 <li><strong>On My Bookshelf</strong>
 <ul>
+<li><a href="https://www.goodreads.com/book/show/30228592-moral-letters-to-lucilius">Moral Letters to Lucilius</a> · Seneca</li>
 <li><a href="https://www.goodreads.com/book/show/248284963-vibe">Vibe: The Secrets of Strong Connections in a Lonely World</a> · Adam Grant</li>
 <li><a href="https://www.goodreads.com/book/show/253970329-built-to-grow">Built to Grow: A Handbook for High-Performance Sales Teams</a> · Stephanie Friedman</li>
-<li><a href="https://www.goodreads.com/book/show/53498823-seeing-like-a-state">Seeing Like a State: How Certain Schemes to Improve the Human Condition Have Failed (Veritas Paperbacks)</a> · James C. Scott</li>
 </ul>
 </li>
 </ul>
