@@ -95,6 +95,13 @@
   "updated": "2026-11-18",
   "podcast": [
     {
+      "title": "Will we be high-fiving robots at the next KubeCon?",
+      "url": "https://attentiondeficitpod.substack.com/p/will-we-be-high-fiving-robots-at",
+      "date": "2026-11-17",
+      "published_at": "2026-11-17T18:51:52+00:00",
+      "via": "rss2json"
+    },
+    {
       "title": "Attention Deficit Ep. 8 – GPT-6 Luna vs Sol. Can a harness close the gap?",
       "url": "https://attentiondeficitpod.substack.com/p/attention-deficit-ep-8-gpt-6-luna",
       "date": "2026-10-21",
@@ -106,13 +113,6 @@
       "url": "https://attentiondeficitpod.substack.com/p/attention-deficit-ep-7-who-let-the",
       "date": "2026-09-07",
       "published_at": "2026-09-07T19:38:35+00:00",
-      "via": "rss2json"
-    },
-    {
-      "title": "Attention Deficit Ep. 6 – Sixteen Adversarial Reviewers",
-      "url": "https://attentiondeficitpod.substack.com/p/attention-deficit-ep-6-sixteen-adversarial",
-      "date": "2026-08-30",
-      "published_at": "2026-08-30T16:03:12+00:00",
       "via": "rss2json"
     }
   ],
