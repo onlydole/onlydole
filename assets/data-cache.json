@@ -92,7 +92,7 @@
       "mime": "image/jpeg"
     }
   },
-  "updated": "2026-11-24",
+  "updated": "2026-11-25",
   "podcast": [
     {
       "title": "Will we be high-fiving robots at the next KubeCon?",
@@ -119,25 +119,25 @@
   "source_status": {
     "writing": {
       "state": "fresh",
-      "last_success": "2026-11-24",
+      "last_success": "2026-11-25",
       "via": "rss2json"
     },
     "podcast": {
       "state": "fresh",
-      "last_success": "2026-11-24",
+      "last_success": "2026-11-25",
       "via": "rss2json"
     },
     "shipped": {
       "state": "fresh",
-      "last_success": "2026-11-24"
+      "last_success": "2026-11-25"
     },
     "stage": {
       "state": "fresh",
-      "last_success": "2026-11-24"
+      "last_success": "2026-11-25"
     },
     "reading": {
       "state": "fresh",
-      "last_success": "2026-11-24"
+      "last_success": "2026-11-25"
     }
   }
 }
