@@ -6,7 +6,7 @@
   <a href="https://onlydole.substack.com/p/git-with-the-times"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/writing-dark.svg"><img src="assets/writing-light.svg" width="100%" alt="Latest writing: Git with the times (2026-09-21); What you can change when your agent is open source (2026-09-05); I let AI fix my printer (2026-02-14)"></picture></a>
 </p>
 <p align="center">
-  <a href="https://attentiondeficitpod.substack.com/p/will-we-be-high-fiving-robots-at"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/podcast-dark.svg"><img src="assets/podcast-light.svg" width="100%" alt="Attention Deficit, with Alexa Griffith: Will we be high-fiving robots at the next KubeCon? (2026-11-17); Attention Deficit Ep. 8 – GPT-6 Luna vs Sol. Can a harness close the gap? (2026-10-21); Attention Deficit Ep. 7 – Be Like a Data Center (2026-09-07)"></picture></a>
+  <a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-9-think-before"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/podcast-dark.svg"><img src="assets/podcast-light.svg" width="100%" alt="Attention Deficit, with Alexa Griffith: Attention Deficit Ep. 9 – Think Before You Automate (2026-11-24); Will we be high-fiving robots at the next KubeCon? (2026-11-17); Attention Deficit Ep. 8 – GPT-6 Luna vs Sol. Can a harness close the gap? (2026-10-21)"></picture></a>
 </p>
 <p align="center">
   <a href="https://github.com/onlydole/tailord/releases/tag/v1.3.2"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/shipped-dark.svg"><img src="assets/shipped-light.svg" width="100%" alt="Recently shipped: tailord v1.3.2 (release · 2026-05-09); tailord v1.3.1 (release · 2026-05-09); tailord v1.3.0 (release · 2026-05-09)"></picture></a>
@@ -29,9 +29,9 @@
 </li>
 <li><strong>Attention Deficit</strong>
 <ul>
+<li><a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-9-think-before">Attention Deficit Ep. 9 – Think Before You Automate</a> · 2026-11-24</li>
 <li><a href="https://attentiondeficitpod.substack.com/p/will-we-be-high-fiving-robots-at">Will we be high-fiving robots at the next KubeCon?</a> · 2026-11-17</li>
 <li><a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-8-gpt-6-luna">Attention Deficit Ep. 8 – GPT-6 Luna vs Sol. Can a harness close the gap?</a> · 2026-10-21</li>
-<li><a href="https://attentiondeficitpod.substack.com/p/attention-deficit-ep-7-who-let-the">Attention Deficit Ep. 7 – Be Like a Data Center</a> · 2026-09-07</li>
 </ul>
 </li>
 <li><strong>Recently Shipped</strong>
