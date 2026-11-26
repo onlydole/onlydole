@@ -4,19 +4,22 @@
       "title": "Git with the times",
       "url": "https://onlydole.substack.com/p/git-with-the-times",
       "date": "2026-09-21",
-      "published_at": "2026-09-21T03:13:28+00:00"
+      "published_at": "2026-09-21T03:13:28+00:00",
+      "via": "rss2json"
     },
     {
       "title": "What you can change when your agent is open source",
       "url": "https://onlydole.substack.com/p/goose-open-source-agent-customization",
       "date": "2026-09-05",
-      "published_at": "2026-09-05T15:50:36+00:00"
+      "published_at": "2026-09-05T15:50:36+00:00",
+      "via": "rss2json"
     },
     {
       "title": "I let AI fix my printer",
       "url": "https://onlydole.substack.com/p/i-let-ai-fix-my-printer",
       "date": "2026-02-14",
-      "published_at": "2026-02-14T02:25:34+00:00"
+      "published_at": "2026-02-14T02:25:34+00:00",
+      "via": "rss2json"
     }
   ],
   "shipped": [
@@ -89,47 +92,52 @@
       "mime": "image/jpeg"
     }
   },
-  "updated": "2026-11-25",
+  "updated": "2026-11-26",
   "podcast": [
     {
       "title": "Attention Deficit Ep. 9 – Think Before You Automate",
       "url": "https://attentiondeficitpod.substack.com/p/attention-deficit-ep-9-think-before",
       "date": "2026-11-24",
-      "published_at": "2026-11-24T19:46:27+00:00"
+      "published_at": "2026-11-24T19:46:27+00:00",
+      "via": "rss2json"
     },
     {
       "title": "Will we be high-fiving robots at the next KubeCon?",
       "url": "https://attentiondeficitpod.substack.com/p/will-we-be-high-fiving-robots-at",
       "date": "2026-11-17",
-      "published_at": "2026-11-17T18:51:52+00:00"
+      "published_at": "2026-11-17T18:51:52+00:00",
+      "via": "rss2json"
     },
     {
       "title": "Attention Deficit Ep. 8 – GPT-6 Luna vs Sol. Can a harness close the gap?",
       "url": "https://attentiondeficitpod.substack.com/p/attention-deficit-ep-8-gpt-6-luna",
       "date": "2026-10-21",
-      "published_at": "2026-10-21T13:04:23+00:00"
+      "published_at": "2026-10-21T13:04:23+00:00",
+      "via": "rss2json"
     }
   ],
   "source_status": {
     "writing": {
       "state": "fresh",
-      "last_success": "2026-11-25"
+      "last_success": "2026-11-26",
+      "via": "rss2json"
     },
     "podcast": {
       "state": "fresh",
-      "last_success": "2026-11-25"
+      "last_success": "2026-11-26",
+      "via": "rss2json"
     },
     "shipped": {
       "state": "fresh",
-      "last_success": "2026-11-25"
+      "last_success": "2026-11-26"
     },
     "stage": {
       "state": "fresh",
-      "last_success": "2026-11-25"
+      "last_success": "2026-11-26"
     },
     "reading": {
       "state": "fresh",
-      "last_success": "2026-11-25"
+      "last_success": "2026-11-26"
     }
   }
 }
